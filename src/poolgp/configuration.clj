@@ -1,14 +1,15 @@
 (ns poolgp.configuration
   (:require [poolgp.structs :as stateprotocol]
             [poolgp.evalserver.server :as eval]
-            [poolgp.simulation.window :as demo])
+            [poolgp.simulation.window :as demo]
+            [clojure.tools.cli :refer [parse-opts]])
   (:import poolgp.structs.SystemState)
   (:import poolgp.structs.Ball)
   (:import poolgp.structs.GameState)
   (:gen-class))
 
 (def eval-mode (SystemState. #(eval/init-server %)))
-(def demo-mode (SystemState. #(demo/init-demo %)))
+(def demo-mode (SystemState. #(demo/init-demo % "Pool GP" 1400 700)))
 
 (defn starting-gamestate
   [trace]
@@ -20,14 +21,20 @@
     )
   )
 
-(def default-listen-port 9999)
+(def opts
+  [["-p" "--port PORT" "Port number"
+    :default 9999
+    :parse-fn #(Integer/parseInt %)
+    :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]
+   ["-d" nil "Demo mode"
+    :id :demo
+    :default false]
+   ["-h" "--help"]])
 
 (defn start
   "start system on cmd line args"
   [args]
-  (if
-    (empty? args) (stateprotocol/init demo-mode (starting-gamestate ""))
-
-    ;(stateprotocol/init eval-mode default-listen-port)
-
-    ))
+  (let [run-config (:options (parse-opts args opts))]
+      (cond
+        (:demo run-config) (stateprotocol/init demo-mode (starting-gamestate ""))
+        :else (stateprotocol/init eval-mode (:port run-config)))))

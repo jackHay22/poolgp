@@ -34,4 +34,6 @@
 ;
 (defn init-server
   "start a listening server on port"
-  [port])
+  [port]
+  (println "Starting server...")
+  )

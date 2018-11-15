@@ -42,6 +42,6 @@
 
 (defn init-demo
   "start demo window"
-  [state]
+  [state title width height]
   (manager/init (assoc state :repaint
-      (start-window "Pool GP" 400 200))))
+      (start-window title width height))))
