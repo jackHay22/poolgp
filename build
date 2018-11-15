@@ -1,0 +1,75 @@
+#!/bin/bash
+
+#reset getopts
+OPTIND=1
+
+lein_build () {
+  lein deps
+  lein uberjar || exit 1
+}
+
+start_docker() {
+  open -a Docker || exit 1
+  i=0
+  while ! docker system info &>/dev/null; do
+    (( i++ == 0 )) && printf "Waiting for Docker daemon" %s || printf "."
+    sleep 1
+  done
+  (( i )) && printf '\n'
+  docker build --tag poolgp_server .
+}
+
+lein_install() {
+  brew install leiningen || exit 1 #note: this is not the preferred way to install lein
+  lein_build
+}
+
+#check lein installation
+if command -v lein >/dev/null 2>&1; then
+  lein_build
+else
+  if command -v brew >/dev/null 2>&1; then
+    lein_install
+  else
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    lein_install
+  fi
+fi
+
+#optional build args
+SERVER=0
+RELEASE=""
+
+while getopts ":r:s" opt; do
+  case $opt in
+    r)
+      RELEASE="$OPTARG"
+      ;;
+    s)
+      SERVER=1
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+[ "${1:-}" = "--" ] && shift
+
+#optionally release package
+if [ "$RELEASE" != "" ]; then
+  #TODO
+  echo "TODO"
+fi
+
+if [ $SERVER -eq 1 ]; then
+  docker build --tag poolgp_server . || start_docker
+  docker run poolgp_server:latest
+fi
