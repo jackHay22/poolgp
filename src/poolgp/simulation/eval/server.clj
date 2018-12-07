@@ -1,4 +1,4 @@
-(ns poolgp.evalserver.server
+(ns poolgp.simulation.eval.server
   (:require [clojure.java.io :as io])
   (:import [java.net ServerSocket])
   (:gen-class))

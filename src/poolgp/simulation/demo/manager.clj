@@ -1,5 +1,5 @@
-(ns poolgp.simulation.manager
-  (:require [poolgp.structs :as pgp-protocols])
+(ns poolgp.simulation.demo.manager
+  (:require [poolgp.simulation.structs :as pgp-protocols])
   (:gen-class))
 
 ;Game State

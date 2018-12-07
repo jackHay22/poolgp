@@ -1,5 +1,5 @@
-(ns poolgp.structs
-  (:require [poolgp.utils :as utils])
+(ns poolgp.simulation.structs
+  (:require [poolgp.simulation.utils :as utils])
   (:gen-class))
 
 (defprotocol StateInterface (init [s c]))

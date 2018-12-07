@@ -1,5 +1,5 @@
-(ns poolgp.simulation.window
-  (:require [poolgp.simulation.manager :as manager])
+(ns poolgp.simulation.demo.window
+  (:require [poolgp.simulation.demo.manager :as manager])
   (:gen-class))
 
 (import java.awt.image.BufferedImage)

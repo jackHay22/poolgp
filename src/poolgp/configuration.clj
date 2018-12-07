@@ -1,11 +1,11 @@
 (ns poolgp.configuration
-  (:require [poolgp.structs :as stateprotocol]
-            [poolgp.evalserver.server :as eval]
-            [poolgp.simulation.window :as demo]
+  (:require [poolgp.simulation.structs :as stateprotocol]
+            [poolgp.simulation.eval.server :as eval]
+            [poolgp.simulation.demo.window :as demo]
             [clojure.tools.cli :refer [parse-opts]])
-  (:import poolgp.structs.SystemState)
-  (:import poolgp.structs.Ball)
-  (:import poolgp.structs.GameState)
+  (:import poolgp.simulation.structs.SystemState)
+  (:import poolgp.simulation.structs.Ball)
+  (:import poolgp.simulation.structs.GameState)
   (:gen-class))
 
 (def eval-mode (SystemState. #(eval/init-server %)))

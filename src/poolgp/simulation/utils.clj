@@ -1,6 +1,6 @@
-(ns poolgp.utils
+(ns poolgp.simulation.utils
   (:gen-class))
-  
+
 (defn draw-image
   [gr x y img]
   (try
