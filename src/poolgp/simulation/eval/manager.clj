@@ -11,6 +11,6 @@
   (assoc indiv :test true)
 )
 
-(defn eval-init [port])
+(defn eval-init [config])
 (defn eval-update [state])
 (defn eval-render [state _])

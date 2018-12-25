@@ -1,5 +1,5 @@
 (ns poolgp.simulation.demo.window
-  (:require [poolgp.simulation.demo.manager :as manager])
+  (:require [poolgp.simulation.structs :as structs])
   (:gen-class))
 
 (import java.awt.image.BufferedImage)
@@ -16,8 +16,8 @@
 (def STATE (atom nil))
 
 (defn graphical-panel
-  "-extends JPanel, implements Runnable and KeyListener-"
-  [width height target-delay]
+  "-extends JPanel, implements Runnable-"
+  [sys-state-record width height target-delay]
   (let [base-image (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)
         g (cast Graphics2D (.createGraphics base-image))]
      (proxy [JPanel Runnable] []
@@ -27,24 +27,27 @@
                       (reset! SYSTEM-THREAD (.start (Thread. this))))))
             (paintComponent [^Graphics panel-graphics]
               (proxy-super paintComponent panel-graphics)
-              (manager/demo-render @STATE g)
+              (structs/render sys-state-record @STATE g)
               (.drawImage panel-graphics base-image 0 0 width height nil))
             (run [] (loop []
                       (let [render-start (System/nanoTime)]
-                      (do (reset! STATE (manager/demo-update @STATE))
+                      (do (reset! STATE (structs/update-state sys-state-record @STATE))
                           (.repaint this)
                           (Thread/sleep target-delay)))
                     (recur))))))
 
 (defn start-window
   "start JFrame and add JPanel extension as content"
-  [state title width height framerate]
-  (let [panel (graphical-panel width height
-                  (/ SLEEP-TICKS-PER-SECOND framerate))
-        window (JFrame. title)]
-        (reset! STATE state)
+  [sys-state-record state-path window-setup]
+  ;initialize state and store
+  (reset! STATE (structs/init-state sys-state-record state-path))
+  (let [panel (graphical-panel sys-state-record
+                  (:width window-setup) (:height window-setup)
+                  (/ SLEEP-TICKS-PER-SECOND (:fps window-setup)))
+        window (JFrame. (:title window-setup))]
         (doto panel
-          (.setPreferredSize (Dimension. width height))
+          (.setPreferredSize
+            (Dimension. (:width window-setup) (:height window-setup)))
           (.setFocusable true)
           (.requestFocus))
         (doto window

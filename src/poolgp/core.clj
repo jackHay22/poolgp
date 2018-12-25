@@ -2,7 +2,4 @@
   (:require [poolgp.manager :as manager])
   (:gen-class))
 
-(defn -main
-  "Entrypoint"
-  [& args]
-  (manager/start args))
+(defn -main [& args] (manager/start args))

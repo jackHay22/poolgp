@@ -1,5 +1,6 @@
 (ns poolgp.simulation.demo.manager
-  (:require [poolgp.simulation.structs :as pgp-protocols])
+  (:require [poolgp.simulation.structs :as pgp-protocols]
+            [poolgp.simulation.utils :as utils])
   (:import poolgp.simulation.structs.Ball)
   (:import poolgp.simulation.structs.GameState)
   (:import poolgp.simulation.structs.Player)
@@ -31,5 +32,10 @@
 (defn demo-init
   "load from path, return state"
   [state-path]
-  ;returns GameState
-  )
+  (let [loaded (utils/read-state state-path)]
+    (if (record? loaded)
+      loaded
+      (doall
+        (utils/write-log
+          (str "File \"" state-path "\" does not appear to contain game state"))
+        (System/exit 1)))))

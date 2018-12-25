@@ -1,6 +1,7 @@
 (ns poolgp.simulation.eval.server
   (:require [clojure.java.io :as io]
-            [clojure.core.async :as async])
+            [clojure.core.async :as async]
+            [poolgp.simulation.structs :as structs])
   (:import [java.net ServerSocket SocketException])
   (:gen-class))
 
@@ -41,9 +42,9 @@
 
   )
 
-(defn init-server
+(defn start-server
   "start a persistent socket server"
-  [port eval-fn]
+  [sys-state-record port config]
   (let [socket (ServerSocket. port)]
-    (async-persistent-server socket)
-    (println "started server...")))
+    ;(structs/init sys-state-record config)
+    (async-persistent-server socket)))
