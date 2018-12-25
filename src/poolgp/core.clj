@@ -1,8 +1,8 @@
 (ns poolgp.core
-  (:require [poolgp.configuration :as config])
+  (:require [poolgp.manager :as manager])
   (:gen-class))
 
 (defn -main
   "Entrypoint"
   [& args]
-  (config/start args))
+  (manager/start args))

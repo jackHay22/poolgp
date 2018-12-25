@@ -12,3 +12,11 @@
   "load an image from resources"
   [path]
   (javax.imageio.ImageIO/read (clojure.java.io/resource path)))
+
+(defn path?
+  "determine if valid path"
+  [path]
+  true)
+
+(defn load-state-from-file
+  [path])

@@ -9,22 +9,40 @@
 (import java.awt.Graphics)
 (import java.awt.Dimension)
 
-(defn get-drawable-panel
-  "get a jpanel that passes Graphics2D obj to manager on repaint"
-  [w h]
-  (let [base-image (BufferedImage. w h BufferedImage/TYPE_INT_ARGB)
+(def SYSTEM-THREAD (atom nil))
+(def SLEEP-TICKS-PER-SECOND 1000)
+
+;keeps track of state
+(def STATE (atom nil))
+
+(defn graphical-panel
+  "-extends JPanel, implements Runnable and KeyListener-"
+  [width height target-delay]
+  (let [base-image (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)
         g (cast Graphics2D (.createGraphics base-image))]
-        (proxy [JPanel] []
-          (paintComponent [^Graphics panel-graphics]
-            (proxy-super paintComponent panel-graphics)
-            (manager/render g)
-            (.drawImage panel-graphics base-image 0 0 w h nil)))))
+     (proxy [JPanel Runnable] []
+            (addNotify []
+              (do (proxy-super addNotify)
+                  (if (= @SYSTEM-THREAD nil)
+                      (reset! SYSTEM-THREAD (.start (Thread. this))))))
+            (paintComponent [^Graphics panel-graphics]
+              (proxy-super paintComponent panel-graphics)
+              (manager/demo-render @STATE g)
+              (.drawImage panel-graphics base-image 0 0 width height nil))
+            (run [] (loop []
+                      (let [render-start (System/nanoTime)]
+                      (do (reset! STATE (manager/demo-update @STATE))
+                          (.repaint this)
+                          (Thread/sleep target-delay)))
+                    (recur))))))
 
 (defn start-window
   "start JFrame and add JPanel extension as content"
-  [title width height]
-  (let [panel (get-drawable-panel width height)
+  [state title width height framerate]
+  (let [panel (graphical-panel width height
+                  (/ SLEEP-TICKS-PER-SECOND framerate))
         window (JFrame. title)]
+        (reset! STATE state)
         (doto panel
           (.setPreferredSize (Dimension. width height))
           (.setFocusable true)
@@ -36,12 +54,4 @@
           (.pack)
           (.setVisible true)
           (.validate)
-          (.repaint))
-    ;return repaint handler
-    #(.repaint panel)))
-
-(defn init-demo
-  "start demo window"
-  [state title width height]
-  (manager/init (assoc state :repaint
-      (start-window title width height))))
+          (.repaint))))
