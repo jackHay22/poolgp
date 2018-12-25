@@ -1,1 +1,0 @@
-#poolgp.simulation.structs.GameState{:p1 #poolgp.simulation.structs.Player{:type :interactive, :strategy nil, :fitness 0}, :p2 #poolgp.simulation.structs.Player{:type :genetic, :strategy (), :fitness 0}, :current :p1, :stripes (#poolgp.simulation.structs.Ball{:x 10, :y 10, :img ""}), :solids (#poolgp.simulation.structs.Ball{:x 20, :y 20, :img ""}), :pocketed ()}
