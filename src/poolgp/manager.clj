@@ -4,15 +4,16 @@
             [poolgp.simulation.eval.manager :as eval]
             [poolgp.simulation.eval.server :as eval-server]
             [poolgp.simulation.utils :as utils]
+            [poolgp.config :as config]
             [clojure.tools.cli :refer [parse-opts]])
   (:import poolgp.simulation.structs.SystemState)
   (:gen-class))
 
 (def WINDOW-SETUP
-    {:title "Pool GP"
-     :width 1400
-     :height 700
-     :fps 60})
+    {:title config/WINDOW-TITLE
+     :width config/WINDOW-WIDTH-PX
+     :height config/WINDOW-HEIGHT-PX
+     :fps config/WINDOW-FPS})
 
 (def EVAL-SETUP
     {:id 1
@@ -29,7 +30,7 @@
 
 (def opts
   [["-p" "--port PORT" "Port number"
-    :default 9999
+    :default config/DEFAULT-PORT
     :parse-fn #(Integer/parseInt %)
     :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]
    ["-d" "--demo PATH" "Demo file"
