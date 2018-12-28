@@ -64,7 +64,7 @@
   (assoc-in
     (doto-balls gs #(assoc % :img ((:id %) resources/BALL-IMAGES)))
     [:table :bg]
-    (:bg resources/TABLE-IMAGES)))
+    resources/TABLE-BG))
 
 (defn load-images
   "load gs images from resource paths"

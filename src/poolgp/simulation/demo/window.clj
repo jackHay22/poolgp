@@ -8,6 +8,7 @@
 (import java.awt.Graphics2D)
 (import java.awt.Graphics)
 (import java.awt.Dimension)
+(import java.awt.event.MouseListener)
 
 (def SYSTEM-THREAD (atom nil))
 (def SLEEP-TICKS-PER-SECOND 1000)
