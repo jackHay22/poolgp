@@ -35,9 +35,10 @@
               (.drawImage panel-graphics base-image 0 0 width height nil))
             (run [] (loop []
                       (let [render-start (System/nanoTime)]
-                      (do (reset! STATE (structs/update-state sys-state-record @STATE))
-                          (.repaint this)
-                          (Thread/sleep target-delay)))
+                        (if (not @config/PAUSED?)
+                          (do (reset! STATE (structs/update-state sys-state-record @STATE))
+                              (.repaint this)
+                              (Thread/sleep target-delay))))
                     (recur))))))
 
 (defn start-window

@@ -33,3 +33,7 @@
 (def CUE-MASS-G 170)
 
 (def DEFAULT-PORT 9999)
+
+;STATE VARS
+
+(def PAUSED? (atom false))
