@@ -61,20 +61,19 @@
   "strip loaded images from gamestate and
   replace with resource path"
   [gs]
-  (assoc-in
-    (doto-balls gs #(assoc % :img ((:id %) resources/BALL-IMAGES)))
-    [:table :bg]
-    resources/TABLE-BG))
+  (reduce #(assoc-in %1 [:table %2] (%2 resources/TABLE-IMAGES))
+          (doto-balls gs #(assoc % :img ((:id %) resources/BALL-IMAGES)))
+          (list :surface :raised)))
 
 (defn load-images
   "load gs images from resource paths"
   [gs]
-  (update-in
-    (doto-balls gs
-        #(update-in % [:img]
-          (fn [img-p] (scale-image-width
-                        (load-image img-p) (* (:r %) 2)))))
-    [:table :bg] load-image))
+  (reduce #(update-in %1 [:table %2] load-image)
+            (doto-balls gs
+                #(update-in % [:img]
+                  (fn [img-p] (scale-image-width
+                      (load-image img-p) (* (:r %) 2)))))
+            (list :surface :raised)))
 
 (defn read-state
   "load entities state from save file, take list of config states to merge with"

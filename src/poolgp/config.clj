@@ -1,8 +1,12 @@
 (ns poolgp.config (:gen-class))
 
+(def POOL-WIDTH-PX 1200)
+(def POOL-HEIGHT-PX 600)
+(def INFO-HEIGHT-PX 100)
+
 ;demo window configuration values
 (def WINDOW-WIDTH-PX 1200)
-(def WINDOW-HEIGHT-PX 600)
+(def WINDOW-HEIGHT-PX (+ POOL-HEIGHT-PX INFO-HEIGHT-PX))
 (def WINDOW-FPS 60)
 (def WINDOW-TITLE "Pool GP")
 

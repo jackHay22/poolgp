@@ -9,12 +9,6 @@
   (:import poolgp.simulation.structs.SystemState)
   (:gen-class))
 
-(def WINDOW-SETUP
-    {:title config/WINDOW-TITLE
-     :width config/WINDOW-WIDTH-PX
-     :height config/WINDOW-HEIGHT-PX
-     :fps config/WINDOW-FPS})
-
 (def EVAL-SETUP
     {:id 1
       })
@@ -46,5 +40,5 @@
         errors (:errors run-args)]
       (cond
         (> (count errors) 0) (println (first errors))
-        (:demo config) (demo-window/start-window demo-mode (:demo config) WINDOW-SETUP)
+        (:demo config) (demo-window/start-window demo-mode (:demo config))
         :else          (eval-server/start-server eval-mode (:port config) EVAL-SETUP))))

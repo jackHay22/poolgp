@@ -25,7 +25,9 @@
    :14 "pool/test_ball.png"
    :15 "pool/test_ball.png"})
 
-(def TABLE-BG "pool/table.png")
+(def TABLE-IMAGES
+  {:surface "pool/table_surface.png"
+   :raised "pool/table_raised.png"})
 
 (def BALLS
   (list
@@ -101,7 +103,8 @@
             (list LEFT-WALL RIGHT-WALL
                   BOTTOM-LEFT-WALL BOTTOM-RIGHT-WALL
                   TOP-LEFT-WALL TOP-RIGHT-WALL)
-            TABLE-BG))
+            (:surface TABLE-IMAGES)
+            (:raised TABLE-IMAGES)))
 
 (def EXAMPLE-STATE
   (GameState.

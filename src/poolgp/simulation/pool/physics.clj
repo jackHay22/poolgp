@@ -98,4 +98,4 @@
   "determine if ball is in a pocket"
   [b table]
   (reduce #(if (> (:r %2) (distance b %2))
-                (reduced true) %1) false (:pockets table)))
+               (reduced true) %1) false (:pockets table)))

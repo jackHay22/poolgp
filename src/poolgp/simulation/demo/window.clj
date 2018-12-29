@@ -1,5 +1,7 @@
 (ns poolgp.simulation.demo.window
-  (:require [poolgp.simulation.structs :as structs])
+  (:require [poolgp.simulation.structs :as structs]
+            [poolgp.config :as config]
+            [poolgp.simulation.demo.infopanel :as info])
   (:gen-class))
 
 (import java.awt.image.BufferedImage)
@@ -9,6 +11,7 @@
 (import java.awt.Graphics)
 (import java.awt.Dimension)
 (import java.awt.event.MouseListener)
+(import javax.swing.BoxLayout)
 
 (def SYSTEM-THREAD (atom nil))
 (def SLEEP-TICKS-PER-SECOND 1000)
@@ -39,21 +42,25 @@
 
 (defn start-window
   "start JFrame and add JPanel extension as content"
-  [sys-state-record state-path window-setup]
+  [sys-state-record state-path]
   ;initialize state and store
   (reset! STATE (structs/init-state sys-state-record state-path))
   (let [panel (graphical-panel sys-state-record
-                  (:width window-setup) (:height window-setup)
-                  (/ SLEEP-TICKS-PER-SECOND (:fps window-setup)))
-        window (JFrame. (:title window-setup))]
+                  config/POOL-WIDTH-PX config/POOL-HEIGHT-PX
+                  (/ SLEEP-TICKS-PER-SECOND config/WINDOW-FPS))
+        window (JFrame. config/WINDOW-TITLE)]
         (doto panel
           (.setPreferredSize
-            (Dimension. (:width window-setup) (:height window-setup)))
+            (Dimension. config/POOL-WIDTH-PX config/POOL-HEIGHT-PX))
           (.setFocusable true)
           (.requestFocus))
         (doto window
-          (.setContentPane panel)
+          (.setLayout (BoxLayout. (.getContentPane window) BoxLayout/PAGE_AXIS))
+          (.add panel)
+          (.add (info/get-info-panel))
           (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
+          ; (.setPreferredSize
+          ;   (Dimension. config/WINDOW-WIDTH-PX config/WINDOW-HEIGHT-PX))
           (.setResizable false)
           (.pack)
           (.setVisible true)

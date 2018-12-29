@@ -77,24 +77,18 @@
 ;   :points (list Vector)
 ; }
 
-(defrecord Wall [points]
-  Renderable
-  (render [w c g]
-
-    ))
+(defrecord Wall [points])
 
 ;Table
 ; {
 ;   :r int
 ;   :pockets (list Vector)
 ;   :walls (list Wall)
+;   :surface "" -> img
+;   :raised "" -> img
 ; }
 
-(defrecord Table [r pockets walls bg]
-  Renderable
-  (render [t c g]
-    (.drawImage g (:bg t) 0 0 nil)
-    (map render walls)))
+(defrecord Table [r pockets walls surface raised])
 
 ;GameState
 ; {

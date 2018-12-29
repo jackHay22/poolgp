@@ -11,8 +11,9 @@
   [state g]
   (let [render #(structs/render % nil g)]
     (do
-      (structs/render (:table state) nil g)
-      (doall (map render (:balls state))))))
+      (utils/draw-image g 0 0 (:surface (:table state)))
+      (doall (map render (:balls state)))
+      (utils/draw-image g 0 0 (:raised (:table state))))))
 
 (defn demo-update
   "update game state, returns game state"
@@ -23,7 +24,7 @@
 (defn demo-init
   "load from path, return state"
   [state-path]
-    ;(utils/write-state resources/EXAMPLE-STATE))
+  ;  (utils/write-state resources/EXAMPLE-STATE))
   (let [loaded (utils/read-state state-path)]
     (if (record? loaded)
       loaded ;return
