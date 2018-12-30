@@ -20,12 +20,15 @@
 
 ;Player
 ; {
+;   :id :p1/:p2
 ;   :type :genetic/:interactive
 ;   :strategy (push code)
 ;   :fitness int
+;   :score int
+;   :ball-type :solid/:striped/:unassigned
 ; }
 
-(defrecord Player [type strategy fitness])
+(defrecord Player [id type strategy fitness score ball-type])
 
 
 (defprotocol VecOps
@@ -56,11 +59,12 @@
 
 ;Ball
 ; {
-;   :center Point.
+;   :center Vector.
 ;   :r int (radius)
 ;   :vector Vector. (dx dy)
 ;   :mass int
 ;   :id int
+;   :type :solid/:striped
 ;   :img "" -> image
 ; }
 
@@ -94,11 +98,12 @@
 ; {
 ;   :p1 (Player.)
 ;   :p2 (Player.)
-;   :cue (Ball.)
 ;   :current :p1/:p2
+;   :waiting :p1/:p2
+;   :cue (Ball.)
 ;   :balls [(Ball.) (Ball.)]
 ;   :pocketed [(Ball.) (Ball.)]
 ;   :table Table.
 ; }
 
-(defrecord GameState [p1 p2 current cue balls pocketed ^Table table])
+(defrecord GameState [^Player p1 ^Player p2 current waiting ^Ball cue balls pocketed ^Table table])

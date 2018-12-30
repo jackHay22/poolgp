@@ -108,9 +108,10 @@
 
 (def EXAMPLE-STATE
   (GameState.
-    (Player. :genetic (list) 0)
-    (Player. :genetic (list) 0)
+    (Player. :p1 :genetic (list) 0 0 :unassigned)
+    (Player. :p2 :genetic (list) 0 0 :unassigned)
     :p1
+    :p2
     CUE
     BALLS
     (list)

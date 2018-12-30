@@ -7,6 +7,9 @@
 ;speed at which a ball is considered to be stopped
 (def SPEED-TOLERANCE 0.5)
 
+(def NOT-BALL-TYPE {:striped :solid :solid :striped})
+(def NOT-PLAYER-TYPE {:p1 :p2 :p2 :p1})
+
 (defn distance
   "Distance formula"
   ([P1 P2] (distance (:x P1) (:y P1)
@@ -60,33 +63,25 @@
 (defn do-collisions
   "determine if ball has collided with a wall
   update ball accordingly"
-  [balls table]
-  (map (fn [b]
-    ;check ball collisions
-    (reduce (fn [current other]
-              (if (and (not (= (:id current) (:id other)))
-                       (ball-collision? current other))
-                  (do-ball-collision current other)
-                  current))
-    ;check wall collisions
-    (reduce (fn [ball wall]
-                  (if (wall-collision? ball wall)
-                      (reduced
-                        (do-wall-collision ball wall))
-                      ball))
-              b (:walls table))
-      balls))
-    balls))
-
-(defn update-balls
-  "update balls on table"
-  [balls table]
-  (map (fn [b]
-          (update-in
-            (update-in b
-              [:center] #(structs/plus % (:vector b)))
-              [:vector] #(structs/scale % config/SURFACE-FRICTION))) ;TODO
-       (do-collisions balls table)))
+  [state]
+  (update-in state [:balls]
+    (fn [balls]
+      (map (fn [b]
+        ;check ball collisions
+        (reduce (fn [current other]
+                  (if (and (not (= (:id current) (:id other)))
+                           (ball-collision? current other))
+                      (do-ball-collision current other)
+                      current))
+        ;check wall collisions
+        (reduce (fn [ball wall]
+                      (if (wall-collision? ball wall)
+                          (reduced
+                            (do-wall-collision ball wall))
+                          ball))
+                  b (:walls (:table state)))
+          balls))
+        balls))))
 
 (defn balls-stopped?
   "check if all balls have stopped moving"
@@ -97,5 +92,66 @@
 (defn pocketed?
   "determine if ball is in a pocket"
   [b table]
-  (reduce #(if (> (:r %2) (distance b %2))
-               (reduced true) %1) false (:pockets table)))
+  (reduce #(if (> (:r table) (distance (:center b) %2))
+               (reduced true) %1)
+          false (:pockets table)))
+
+(defn do-game-state
+  "check game status and ball type assignments"
+  [state]
+  (if (not (empty? (:pocketed state)))
+    (cond
+      (= (:ball-type ((:current state) state)) :unassigned)
+        ;do ball type assignments (based on first ball in pocketed list)
+        (let [pocketed-type (:type (first (:pocketed state)))]
+          (assoc-in
+            (assoc-in state
+              [(:current state) :ball-type] pocketed-type)
+              [(:waiting state) :ball-type] (pocketed-type NOT-BALL-TYPE)))
+      :else state
+  )
+  state)
+  )
+
+(defn do-turn-state
+  "check criteria for changing turns"
+  [state]
+  (if (balls-stopped? (:balls state))
+    (let [current (:current state)
+          waiting (:waiting state)]
+          ;TODO don't change if current pocketed balls on current turn
+          (assoc state :current waiting :waiting current)
+          ) state))
+
+(defn do-pockets
+  "if ball pocketed, remove from table"
+  [state]
+  (reduce (fn [s b]
+    (if (pocketed? b (:table s))
+        (update-in
+          (update-in s
+            [:pocketed] conj b)
+            [:balls] (fn [b-list]
+                          (filter #(not (= (:id b) (:id %)))
+                          b-list))) s))
+    state (:balls state)))
+
+(defn update-ball-positions
+  "update the positions of balls"
+  [balls]
+  (map (fn [b]
+          (update-in
+            (update-in b
+              [:center] #(structs/plus % (:vector b)))
+              [:vector] #(structs/scale % config/SURFACE-FRICTION))) ;TODO
+       balls))
+
+(defn update-state
+  "update balls on table"
+  [state]
+  (update-in
+    (do-turn-state
+      (do-game-state
+        (do-pockets
+          (do-collisions state)))) [:balls]
+    update-ball-positions))

@@ -60,8 +60,6 @@
           (.add panel)
           (.add (info/get-info-panel))
           (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
-          ; (.setPreferredSize
-          ;   (Dimension. config/WINDOW-WIDTH-PX config/WINDOW-HEIGHT-PX))
           (.setResizable false)
           (.pack)
           (.setVisible true)

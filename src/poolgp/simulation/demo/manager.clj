@@ -18,8 +18,7 @@
 (defn demo-update
   "update game state, returns game state"
   [state]
-  (update-in state
-    [:balls] #(physics/update-balls % (:table state))))
+  (physics/update-state state))
 
 (defn demo-init
   "load from path, return state"
