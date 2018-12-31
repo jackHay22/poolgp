@@ -37,7 +37,8 @@
   (scale [v s])
   (plus [v1 v2])
   (minus [v1 v2])
-  (len-sqrd [v]))
+  (len-sqrd [v])
+  (normalize [v]))
 
 ;Vector
 ; {
@@ -50,6 +51,10 @@
   (dot [v1 v2]
     (+ (* (:x v1) (:x v2))
        (* (:y v1) (:y v2))))
+  (normalize [v]
+    (let [mag (Math/sqrt (+ (* (:x v) (:x v))
+                            (* (:y v) (:y v))))]
+              (Vector. (/ (:x v) mag) (/ (:y v) mag))))
   (scale [v s]
     (Vector. (* s (:x v)) (* s (:y v))))
   (plus [v1 v2]

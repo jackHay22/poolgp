@@ -5,10 +5,9 @@
   (:gen-class))
 
 ;speed at which a ball is considered to be stopped
-(def SPEED-TOLERANCE 0.5)
+(def SPEED-TOLERANCE 0.1)
 
 (def NOT-BALL-TYPE {:striped :solid :solid :striped})
-(def NOT-PLAYER-TYPE {:p1 :p2 :p2 :p1})
 
 (defn distance
   "Distance formula"
@@ -42,8 +41,8 @@
   (let [dx (- (:x v2) (:x v1))
         dy (- (:y v2) (:y v1))]
         (list
-          (Vector. (- dy) dx)
-          (Vector. dy (- dx)))))
+          (structs/normalize (Vector. (- dy) dx))
+          (structs/normalize (Vector. dy (- dx))))))
 
 (defn **2 [x] (* x x))
 
@@ -54,10 +53,10 @@
   (let [cx (:x (:center ball))
         cy (:y (:center ball))
         r (:r ball)
-        ax (:x (first pts))
-        ay (:y (first pts))
-        bx (:x (second pts))
-        by (:y (second pts))
+        ax (- (:x (first pts)) cx) ;makes equation easier
+        ay (- (:y (first pts)) cy)
+        bx (- (:x (second pts)) cx)
+        by (- (:y (second pts)) cy)
         a (- (+ (**2 ax) (**2 ay)) (**2 r))
         b (* 2 (+ (* ax (- bx ax)) (* ay (- by ay))))
         c (+ (**2 (- bx ax)) (**2 (- by ay)))
@@ -75,9 +74,13 @@
   "take ball and intersecting segment pts
   and recompute ball movement vector"
   [ball pts]
-  (println "Collided")
-  ball
-  )
+  (let [surface-normals (segment-surface-normals
+                          (first pts) (second pts) nil)
+        ;TODO: determine correct surface normal
+        norm (first surface-normals)]
+        (assoc ball :vector (structs/minus (:vector ball)
+                              (structs/scale norm
+                                (* 2 (structs/dot (:vector ball) norm)))))))
 
 (defn check-wall-collisions
   "check if ball has collided with any walls
