@@ -35,57 +35,62 @@
 
         (assoc b1 :vector (Vector. velx vely))))
 
-(defn segment-surface-normal
+(defn segment-surface-normals
   "Vector (pt), Vector (pt), facing  -> Vector
   calculate surface normal of line segment"
   [v1 v2 facing]
-  ;TODO: determine correct normal of two
-  (Vector. (- (:y v2) (:y v1)) (- (:x v2) (:x v1)))
-  )
+  (let [dx (- (:x v2) (:x v1))
+        dy (- (:y v2) (:y v1))]
+        (list
+          (Vector. (- dy) dx)
+          (Vector. dy (- dx)))))
 
 (defn **2 [x] (* x x))
 
 (defn ball-intersects-segment?
   "check if the ball intersects with the line segment
   CITE: https://math.stackexchange.com/questions/275529/check-if-line-intersects-with-circles-perimeter"
-  [ball v1 v2]
+  [ball pts]
   (let [cx (:x (:center ball))
         cy (:y (:center ball))
         r (:r ball)
-        ax (:x v1)
-        ay (:y v1)
-        bx (:x v2)
-        by (:y v2)
+        ax (:x (first pts))
+        ay (:y (first pts))
+        bx (:x (second pts))
+        by (:y (second pts))
         a (- (+ (**2 ax) (**2 ay)) (**2 r))
         b (* 2 (+ (* ax (- bx ax)) (* ay (- by ay))))
         c (+ (**2 (- bx ax)) (**2 (- by ay)))
         disc (- (**2 b) (* 4 a c))]
         (if (<= disc 0)
             false
+            ;TODO Fix
             (let [sqrt-disc (Math/sqrt disc)
                   t1 (/ (+ (- b) sqrt-disc) (* 2 a))
                   t2 (/ (- (- b) sqrt-disc) (* 2 a))]
                   (or (and (> t1 0) (> 1 t1))
                           (and (> t2 0) (> 1 t2)))))))
 
+(defn do-segment-collision
+  "take ball and intersecting segment pts
+  and recompute ball movement vector"
+  [ball pts]
+  (println "Collided")
+  ball
+  )
+
 (defn check-wall-collisions
   "check if ball has collided with any walls
   and update velocity accordingly"
   [ball walls]
-  ; (reduce (fn [b w]
-  ;           (reduce
-  ;             (fn [p1 p2]
-  ;                 (if (ball-intersects-segment? b p1 p2)
-  ;                   ;calculate new ball velocity
-  ;                   (reduced nil)
-  ;                   p2
-  ;                 )
-  ;                 ;TODO: doesn;t return ball correctly
-  ;             ) (:points w))
-  ;
-  ;   ) b walls)
-  ball
-  )
+  (reduce (fn [b w]
+        (reduce (fn [b pts]
+          (if (ball-intersects-segment? b pts)
+              (reduced
+                (do-segment-collision b pts))
+              b))
+    b (partition 2 (:points w))))
+  ball walls))
 
 (defn ball-collision?
   "determine if collision between balls"
@@ -138,7 +143,7 @@
               [(:current state) :ball-type] pocketed-type)
               [(:waiting state) :ball-type] (pocketed-type NOT-BALL-TYPE)))
       :else state)
-  state))
+    state))
 
 (defn do-turn-state
   "check criteria for changing turns"
@@ -147,8 +152,8 @@
     (let [current (:current state)
           waiting (:waiting state)]
           ;TODO don't change if current pocketed balls on current turn
-          (assoc state :current waiting :waiting current)
-          ) state))
+          (assoc state :current waiting :waiting current))
+    state))
 
 (defn do-pockets
   "if ball pocketed, remove from table"
@@ -160,7 +165,8 @@
             [:pocketed] conj b)
             [:balls] (fn [b-list]
                           (filter #(not (= (:id b) (:id %)))
-                          b-list))) s))
+                          b-list)))
+        s))
     state (:balls state)))
 
 (defn update-ball-positions
@@ -169,8 +175,8 @@
   (map (fn [b]
           (update-in
             (update-in b
-              [:center] #(structs/plus % (:vector b)))
-              [:vector] #(structs/scale % config/SURFACE-FRICTION))) ;TODO
+              [:center] structs/plus (:vector b))
+              [:vector] structs/scale config/SURFACE-FRICTION)) ;TODO
        balls))
 
 (defn update-state

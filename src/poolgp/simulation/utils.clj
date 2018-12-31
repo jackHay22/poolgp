@@ -34,11 +34,11 @@
   (let [scaled (BufferedImage. (int (* s (.getWidth buffered-image)))
                                (int (* s (.getHeight buffered-image)))
                                BufferedImage/TYPE_INT_ARGB)
-                g2d (.createGraphics scaled)
-                transform (AffineTransform/getScaleInstance s s)]
+        g2d (.createGraphics scaled)
+        transform (AffineTransform/getScaleInstance s s)]
       (do
         (.setRenderingHint g2d RenderingHints/KEY_INTERPOLATION
-                               RenderingHints/VALUE_INTERPOLATION_BICUBIC)
+                           RenderingHints/VALUE_INTERPOLATION_BICUBIC)
         (.drawImage g2d buffered-image transform nil)
         (.dispose g2d)
         scaled)))

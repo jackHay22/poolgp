@@ -9,7 +9,7 @@
   "Render scene on graphics 2D object and state
   returns nothing"
   [state g]
-  (let [render #(structs/render % nil g)]
+  (let [render #(structs/render % false g)] ;true for shadows
     (do
       (utils/draw-image g 0 0 (:surface (:table state)))
       (doall (map render (:balls state)))

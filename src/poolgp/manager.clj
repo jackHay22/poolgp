@@ -3,6 +3,7 @@
             [poolgp.simulation.demo.window :as demo-window]
             [poolgp.simulation.eval.manager :as eval]
             [poolgp.simulation.eval.server :as eval-server]
+            [poolgp.simulation.resources :as resources]
             [poolgp.simulation.utils :as utils]
             [poolgp.config :as config]
             [clojure.tools.cli :refer [parse-opts]])
@@ -30,6 +31,8 @@
    ["-d" "--demo PATH" "Demo file"
     :default false
     :validate [utils/path? "Must be a valid filepath"]]
+   ["-s" "--state" "Write State"
+    :default false]
    ["-h" "--help"]])
 
 (defn start
@@ -41,4 +44,5 @@
       (cond
         (> (count errors) 0) (println (first errors))
         (:demo config) (demo-window/start-window demo-mode (:demo config))
+        (:state config) (utils/write-state resources/EXAMPLE-STATE)
         :else          (eval-server/start-server eval-mode (:port config) EVAL-SETUP))))

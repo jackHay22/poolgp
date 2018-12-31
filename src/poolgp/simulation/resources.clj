@@ -54,6 +54,8 @@
     (list
       (Vector. 28 53)
       (Vector. 51 88)
+      (Vector. 51 88)
+      (Vector. 51 512)
       (Vector. 51 512)
       (Vector. 28 549))))
 
@@ -62,6 +64,8 @@
     (list
       (Vector. 53 28)
       (Vector. 78 50)
+      (Vector. 78 50)
+      (Vector. 567 50)
       (Vector. 567 50)
       (Vector. 580 28))))
 
@@ -70,6 +74,8 @@
     (list
       (Vector. 622 28)
       (Vector. 633 50)
+      (Vector. 633 50)
+      (Vector. 1119 50)
       (Vector. 1119 50)
       (Vector. 1146 28))))
 
@@ -78,6 +84,8 @@
     (list
       (Vector. 1172 52)
       (Vector. 1150 86)
+      (Vector. 1150 86)
+      (Vector. 1150 511)
       (Vector. 1150 511)
       (Vector. 1172 548))))
 
@@ -86,6 +94,8 @@
     (list
       (Vector. 1145 572)
       (Vector. 1122 550)
+      (Vector. 1122 550)
+      (Vector. 632 550)
       (Vector. 632 550)
       (Vector. 621 572))))
 
@@ -94,6 +104,8 @@
     (list
       (Vector. 580 572)
       (Vector. 568 550)
+      (Vector. 568 550)
+      (Vector. 79 550)
       (Vector. 79 550)
       (Vector. 53 572))))
 

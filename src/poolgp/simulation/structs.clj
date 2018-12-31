@@ -73,9 +73,10 @@
   Renderable
   (render [b c g]
     (do
-      (renderutils/render-ball-shadow g
-        (- (:x (:center b)) (:r b))
-        (- (:y (:center b)) (:r b)) (:r b))
+      (if c
+        (renderutils/render-ball-shadow g
+          (- (:x (:center b)) (:r b))
+          (- (:y (:center b)) (:r b)) (:r b)))
       (.drawImage g (:img b)
         (int (- (:x (:center b)) (:r b)))
         (int (- (:y (:center b)) (:r b))) nil))))
