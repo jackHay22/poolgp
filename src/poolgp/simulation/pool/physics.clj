@@ -24,12 +24,6 @@
   [b1 b2]
   (let [b1-speed (:vector b1)
         b2-speed (:vector b2)
-        ; cx (/ (+ (* (:x b1) (:r b2))
-        ;          (* (:x b2) (:r b1)))
-        ;       (+ (:r b1) (:r b2)))
-        ; cy (/ (+ (* (:y b1) (:r b2))
-        ;          (* (:y b2) (:r b1)))
-        ;       (+ (:r b1) (:r b2)))
         velx (/ (+ (* (:x b1-speed)
                       (- (:mass b1) (:mass b2)))
                    (* 2 (:mass b2) (:x b2-speed)))
@@ -41,24 +35,64 @@
 
         (assoc b1 :vector (Vector. velx vely))))
 
-(defn do-wall-collision
-  "recalculate movement vectors on collision with wall"
-  [b wall]
+(defn segment-surface-normal
+  "Vector (pt), Vector (pt), facing  -> Vector
+  calculate surface normal of line segment"
+  [v1 v2 facing]
+  ;TODO: determine correct normal of two
+  (Vector. (- (:y v2) (:y v1)) (- (:x v2) (:x v1)))
   )
 
-(defn wall-collision?
-  "https://bitlush.com/blog/circle-vs-polygon-collision-detection-in-c-sharp"
-  [b wall]
-  (let [radius-sqrd (* (:r b) (:r b))]
+(defn **2 [x] (* x x))
 
-  ))
+(defn ball-intersects-segment?
+  "check if the ball intersects with the line segment
+  CITE: https://math.stackexchange.com/questions/275529/check-if-line-intersects-with-circles-perimeter"
+  [ball v1 v2]
+  (let [cx (:x (:center ball))
+        cy (:y (:center ball))
+        r (:r ball)
+        ax (:x v1)
+        ay (:y v1)
+        bx (:x v2)
+        by (:y v2)
+        a (- (+ (**2 ax) (**2 ay)) (**2 r))
+        b (* 2 (+ (* ax (- bx ax)) (* ay (- by ay))))
+        c (+ (**2 (- bx ax)) (**2 (- by ay)))
+        disc (- (**2 b) (* 4 a c))]
+        (if (<= disc 0)
+            false
+            (let [sqrt-disc (Math/sqrt disc)
+                  t1 (/ (+ (- b) sqrt-disc) (* 2 a))
+                  t2 (/ (- (- b) sqrt-disc) (* 2 a))]
+                  (or (and (> t1 0) (> 1 t1))
+                          (and (> t2 0) (> 1 t2)))))))
+
+(defn check-wall-collisions
+  "check if ball has collided with any walls
+  and update velocity accordingly"
+  [ball walls]
+  ; (reduce (fn [b w]
+  ;           (reduce
+  ;             (fn [p1 p2]
+  ;                 (if (ball-intersects-segment? b p1 p2)
+  ;                   ;calculate new ball velocity
+  ;                   (reduced nil)
+  ;                   p2
+  ;                 )
+  ;                 ;TODO: doesn;t return ball correctly
+  ;             ) (:points w))
+  ;
+  ;   ) b walls)
+  ball
+  )
 
 (defn ball-collision?
   "determine if collision between balls"
   [b1 b2]
   (> (+ (:r b1) (:r b2))
-    (distance
-      (:center b1) (:center b2))))
+     (distance
+       (:center b1) (:center b2))))
 
 (defn do-collisions
   "determine if ball has collided with a wall
@@ -74,12 +108,7 @@
                       (do-ball-collision current other)
                       current))
         ;check wall collisions
-        (reduce (fn [ball wall]
-                      (if (wall-collision? ball wall)
-                          (reduced
-                            (do-wall-collision ball wall))
-                          ball))
-                  b (:walls (:table state)))
+        (check-wall-collisions b (:walls (:table state)))
           balls))
         balls))))
 
@@ -108,10 +137,8 @@
             (assoc-in state
               [(:current state) :ball-type] pocketed-type)
               [(:waiting state) :ball-type] (pocketed-type NOT-BALL-TYPE)))
-      :else state
-  )
-  state)
-  )
+      :else state)
+  state))
 
 (defn do-turn-state
   "check criteria for changing turns"

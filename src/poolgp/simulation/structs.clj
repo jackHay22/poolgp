@@ -1,4 +1,5 @@
 (ns poolgp.simulation.structs
+  (:require [poolgp.simulation.demo.renderutils :as renderutils])
   (:gen-class))
 
 (defprotocol StateInterface
@@ -71,9 +72,13 @@
 (defrecord Ball [^Vector center r ^Vector vector mass id type img]
   Renderable
   (render [b c g]
-    (.drawImage g (:img b)
-      (int (- (:x (:center b)) (:r b)))
-      (int (- (:y (:center b)) (:r b))) nil)))
+    (do
+      (renderutils/render-ball-shadow g
+        (- (:x (:center b)) (:r b))
+        (- (:y (:center b)) (:r b)) (:r b))
+      (.drawImage g (:img b)
+        (int (- (:x (:center b)) (:r b)))
+        (int (- (:y (:center b)) (:r b))) nil))))
 
 ;Wall
 ;(polygon)
