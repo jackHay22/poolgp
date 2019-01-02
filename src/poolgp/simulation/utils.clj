@@ -7,6 +7,8 @@
 (import java.awt.image.BufferedImage)
 (import java.awt.geom.AffineTransform)
 (import java.awt.RenderingHints)
+(import java.awt.geom.AffineTransform)
+(import java.awt.image.AffineTransformOp)
 
 (def write-log (fn [msg] (println "poolgp =>" msg)))
 
@@ -22,6 +24,14 @@
     (.drawImage gr img x y nil)
     (catch Exception e
       (write-log (str "Failed to render image:" img "\n" (.getMessage e))))))
+
+(defn draw-image-rotate
+  "rotate image (radians)"
+  [gr x y img angle]
+  (let [tx (AffineTransform/getRotateInstance angle
+                (/ (.getWidth img) 2) (/ (.getHeight img) 2))
+        operation (AffineTransformOp. tx AffineTransformOp/TYPE_BILINEAR)]
+        (.drawImage gr (.filter operation img nil) x y nil)))
 
 (defn load-image
   "load an image from resources"

@@ -2,7 +2,8 @@
   (:require [poolgp.simulation.structs :as structs]
             [poolgp.simulation.utils :as utils]
             [poolgp.simulation.resources :as resources]
-            [poolgp.simulation.pool.physics :as physics])
+            [poolgp.simulation.pool.physics :as physics]
+            [poolgp.simulation.demo.interactionutils :as interaction])
   (:gen-class))
 
 (defn demo-render
@@ -13,12 +14,14 @@
     (do
       (utils/draw-image g 0 0 (:surface (:table state)))
       (doall (map render (:balls state)))
-      (utils/draw-image g 0 0 (:raised (:table state))))))
+      (utils/draw-image g 0 0 (:raised (:table state)))
+      (interaction/render-interaction state g))))
 
 (defn demo-update
   "update game state, returns game state"
   [state]
-  (physics/update-state state))
+  (physics/update-state
+    (interaction/update-interaction state)))
 
 (defn demo-init
   "load from path, return state"

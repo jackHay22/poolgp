@@ -121,7 +121,7 @@
             (:surface TABLE-IMAGES)
             (:raised TABLE-IMAGES)))
 
-(def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 false (:cue TABLE-IMAGES)))
+(def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES)))
 
 (def EXAMPLE-STATE
   (GameState.

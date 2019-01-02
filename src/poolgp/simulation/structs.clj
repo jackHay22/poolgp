@@ -113,11 +113,12 @@
 ;   :mouse-entered? true/false
 ;   :mouse (Vector.)
 ;   :force int
+;   :angle int (radians)
 ;   :release? true/false
 ;   :cue path -> img
 ; }
 
-(defrecord ControllerInterface [mouse-entered? ^Vector mouse force release? cue])
+(defrecord ControllerInterface [mouse-entered? ^Vector mouse force angle release? cue])
 
 ;GameState
 ; {

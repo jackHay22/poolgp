@@ -17,6 +17,19 @@
     (let [xdif (- x2 x1) ydif (- y2 y1)]
       (Math/sqrt (+ (* xdif xdif) (* ydif ydif))))))
 
+(defn vector-from-angle
+  "create dx/dy vector from force/angle"
+  [a f]
+  (Vector. (- (int (* f (Math/cos a))))
+           (- (int (* f (Math/sin a))))))
+
+(defn pts-angle-radians
+  "get angle of line from pt1 to pt2"
+  [v1 v2]
+  (Math/atan2
+      (- (:y v2) (:y v1))
+      (- (:x v2) (:x v1))))
+
 (defn do-ball-collision
   "recalculate movement vectors on collision
   https://gamedevelopment.tutsplus.com/tutorials/when-worlds-collide-simulating-circle-circle-collisions--gamedev-769"
