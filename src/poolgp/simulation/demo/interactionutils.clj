@@ -19,14 +19,7 @@
 (defn clicked
   "set clicked (release)"
   [e state]
-  (let [force (:force (:controller state))
-        angle (:angle (:controller state))]
-  (update-in state [:balls]
-    #(map (fn [b] (if (= (:id b) :cue)
-                      (assoc b :vector
-                        (physics/vector-from-angle angle force))
-                      b))
-          %))))
+  (assoc-in state [:controller :release?] true))
 
 (defn entered
   "set entered panel"
@@ -38,6 +31,22 @@
   [e state]
   (assoc-in state [:controller :mouse-entered?] false))
 
+(defn cue-strike
+  [state]
+  (if (:release? (:controller state))
+      (let [force (:force (:controller state))
+            angle (:angle (:controller state))]
+      (assoc-in
+        (update-in state [:balls]
+          #(map (fn [b]
+                    (if (= (:id b) :cue)
+                        (assoc b :vector
+                            (physics/vector-from-angle angle force))
+                        b))
+                %))
+        [:controller :release?] false))
+      state))
+
 (defn update-interaction
   "update user interaction state"
   [state]
@@ -48,14 +57,15 @@
             mouse-pt (.getLocation (MouseInfo/getPointerInfo))
             mouse-loc (Vector. (int (.getX mouse-pt)) (int (.getY mouse-pt)))
             dist (physics/distance mouse-loc cue-ball-loc)]
-            (reduce #(assoc-in %1 (first %2) (second %2)) state
+            (cue-strike
+              (reduce #(assoc-in %1 (first %2) (second %2)) state
                     (partition 2
                       (list [:controller :angle]
-                            (physics/pts-angle-radians cue-ball-loc mouse-loc)
-                          [:controller :mouse]
-                            mouse-loc
-                          [:controller :force]
-                            (int (* (- dist 230) 0.1))))))
+                              (physics/pts-angle-radians cue-ball-loc mouse-loc)
+                            [:controller :mouse]
+                              mouse-loc
+                            [:controller :force]
+                              (int (* (- dist 230) 0.1)))))))
       state))
 
 (defn render-interaction
@@ -63,8 +73,15 @@
   [state g]
   (if (:mouse-entered? (:controller state))
       (let [mouse-loc (:mouse (:controller state))
-            half-cue-dim (int (/ (.getWidth (:cue (:controller state))) 2))]
-      (utils/draw-image-rotate g (- (:x mouse-loc) half-cue-dim)
-                                 (- (:y mouse-loc) half-cue-dim)
+            half-cue-dim (int (/ (.getWidth (:cue (:controller state))) 2))
+            cue-x (if (:release? (:controller state))
+            ;TODO: move cue towards ball
+                      (- (:x mouse-loc) (int (/ half-cue-dim 2)))
+                      (- (:x mouse-loc) half-cue-dim))
+            cue-y (if (:release? (:controller state))
+            ;TODO: move cue towards ball
+                      (- (:y mouse-loc) (int (/ half-cue-dim 2)))
+                      (- (:y mouse-loc) half-cue-dim))]
+      (utils/draw-image-rotate g cue-x cue-y
                                  (:cue (:controller state))
                                  (:angle (:controller state))))))
