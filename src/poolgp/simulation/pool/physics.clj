@@ -31,7 +31,6 @@
                       (- (:mass b1) (:mass b2)))
                    (* 2 (:mass b2) (:y b2-speed)))
                 (+ (:mass b1) (:mass b2)))]
-
         (assoc b1 :vector (Vector. velx vely))))
 
 (defn segment-surface-normals
@@ -74,13 +73,14 @@
   "take ball and intersecting segment pts
   and recompute ball movement vector"
   [ball pts]
-  (let [surface-normals (segment-surface-normals
-                          (first pts) (second pts) nil)
-        ;TODO: determine correct surface normal
-        norm (first surface-normals)]
-        (assoc ball :vector (structs/minus (:vector ball)
-                              (structs/scale norm
-                                (* 2 (structs/dot (:vector ball) norm)))))))
+  ball)
+  ; (let [surface-normals (segment-surface-normals
+  ;                         (first pts) (second pts) nil)
+  ;       ;TODO: determine correct surface normal
+  ;       norm (first surface-normals)]
+  ;       (assoc ball :vector (structs/minus (:vector ball)
+  ;                             (structs/scale norm
+  ;                               (* 2 (structs/dot (:vector ball) norm)))))))
 
 (defn check-wall-collisions
   "check if ball has collided with any walls

@@ -29,8 +29,8 @@
 (def BALL-RADIUS-PX (* BALL-RADIUS-M M-PX-RATIO))
 
 ;ball masses in grams
-(def BALL-MASS-G 160)
-(def CUE-MASS-G 170)
+(def BALL-MASS-G 160) ;160
+(def CUE-MASS-G 170) ;170
 
 (def DEFAULT-PORT 9999)
 

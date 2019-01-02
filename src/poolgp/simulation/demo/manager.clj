@@ -9,7 +9,7 @@
   "Render scene on graphics 2D object and state
   returns nothing"
   [state g]
-  (let [render #(structs/render % false g)] ;true for shadows
+  (let [render #(structs/render % true g)] ;true for shadows
     (do
       (utils/draw-image g 0 0 (:surface (:table state)))
       (doall (map render (:balls state)))
@@ -23,7 +23,6 @@
 (defn demo-init
   "load from path, return state"
   [state-path]
-  ;  (utils/write-state resources/EXAMPLE-STATE))
   (let [loaded (utils/read-state state-path)]
     (if (record? loaded)
       loaded ;return

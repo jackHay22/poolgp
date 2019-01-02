@@ -54,26 +54,28 @@
   (reduce (fn [state current]
         (update-in state [current]
             (fn [ball-list]
-              (map f ball-list))))
+              (if (list? ball-list)
+                (map f ball-list)
+                (f ball-list)))))
     gs (list :balls :pocketed)))
 
 (defn strip-images
   "strip loaded images from gamestate and
   replace with resource path"
   [gs]
-  (reduce #(assoc-in %1 [:table %2] (%2 resources/TABLE-IMAGES))
+  (reduce #(assoc-in %1 %2 ((last %2) resources/TABLE-IMAGES))
           (doto-balls gs #(assoc % :img ((:id %) resources/BALL-IMAGES)))
-          (list :surface :raised)))
+          (list [:table :surface] [:table :raised] [:controller :cue])))
 
 (defn load-images
   "load gs images from resource paths"
   [gs]
-  (reduce #(update-in %1 [:table %2] load-image)
+  (reduce #(update-in %1 %2 load-image)
             (doto-balls gs
                 #(update-in % [:img]
                   (fn [img-p] (scale-image-width
                       (load-image img-p) (* (:r %) 2)))))
-            (list :surface :raised)))
+            (list [:table :surface] [:table :raised] [:controller :cue])))
 
 (defn read-state
   "load entities state from save file, take list of config states to merge with"

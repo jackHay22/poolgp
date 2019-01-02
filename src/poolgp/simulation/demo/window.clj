@@ -1,7 +1,8 @@
 (ns poolgp.simulation.demo.window
   (:require [poolgp.simulation.structs :as structs]
             [poolgp.config :as config]
-            [poolgp.simulation.demo.infopanel :as info])
+            [poolgp.simulation.demo.infopanel :as info]
+            [poolgp.simulation.demo.interactionutils :as interaction])
   (:gen-class))
 
 (import java.awt.image.BufferedImage)
@@ -24,11 +25,16 @@
   [sys-state-record width height target-delay]
   (let [base-image (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)
         g (cast Graphics2D (.createGraphics base-image))]
-     (proxy [JPanel Runnable] []
+     (proxy [JPanel Runnable MouseListener] []
             (addNotify []
               (do (proxy-super addNotify)
                   (if (= @SYSTEM-THREAD nil)
                       (reset! SYSTEM-THREAD (.start (Thread. this))))))
+            (mouseClicked [e] (reset! STATE (interaction/clicked e @STATE)))
+            (mouseEntered [e] (reset! STATE (interaction/entered e @STATE)))
+            (mouseExited [e] (reset! STATE (interaction/exited e @STATE)))
+            (mousePressed [e] ) ;TODO
+            (mouseReleased [e]) ;TODO
             (paintComponent [^Graphics panel-graphics]
               (proxy-super paintComponent panel-graphics)
               (structs/render sys-state-record @STATE g)
@@ -54,6 +60,7 @@
           (.setPreferredSize
             (Dimension. config/POOL-WIDTH-PX config/POOL-HEIGHT-PX))
           (.setFocusable true)
+          (.addMouseListener panel)
           (.requestFocus))
         (doto window
           (.setLayout (BoxLayout. (.getContentPane window) BoxLayout/PAGE_AXIS))

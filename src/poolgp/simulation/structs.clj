@@ -1,5 +1,6 @@
 (ns poolgp.simulation.structs
   (:require [poolgp.simulation.demo.renderutils :as renderutils])
+  (:import java.awt.geom.Ellipse2D$Float)
   (:gen-class))
 
 (defprotocol StateInterface
@@ -30,7 +31,6 @@
 ; }
 
 (defrecord Player [id type strategy fitness score ball-type])
-
 
 (defprotocol VecOps
   (dot [v1 v2])
@@ -84,7 +84,10 @@
           (- (:y (:center b)) (:r b)) (:r b)))
       (.drawImage g (:img b)
         (int (- (:x (:center b)) (:r b)))
-        (int (- (:y (:center b)) (:r b))) nil))))
+        (int (- (:y (:center b)) (:r b))) nil)
+      (.draw g (Ellipse2D$Float. (- (:x (:center b)) (:r b))
+                                 (- (:y (:center b)) (:r b))
+                                 (* 2 (:r b)) (* 2 (:r b)))))))
 
 ;Wall
 ;(polygon)
@@ -105,16 +108,28 @@
 
 (defrecord Table [r pockets walls surface raised])
 
+;ControllerInterface
+; {
+;   :mouse-entered? true/false
+;   :mouse (Vector.)
+;   :force int
+;   :release? true/false
+;   :cue path -> img
+; }
+
+(defrecord ControllerInterface [mouse-entered? ^Vector mouse force release? cue])
+
 ;GameState
 ; {
 ;   :p1 (Player.)
 ;   :p2 (Player.)
 ;   :current :p1/:p2
 ;   :waiting :p1/:p2
-;   :cue (Ball.)
 ;   :balls [(Ball.) (Ball.)]
 ;   :pocketed [(Ball.) (Ball.)]
 ;   :table Table.
+;   :controller (ControllerInterface.)
 ; }
 
-(defrecord GameState [^Player p1 ^Player p2 current waiting ^Ball cue balls pocketed ^Table table])
+(defrecord GameState [^Player p1 ^Player p2 current waiting balls pocketed
+                      ^Table table ^ControllerInterface controller])

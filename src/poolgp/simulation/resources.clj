@@ -6,48 +6,51 @@
   (:import poolgp.simulation.structs.Vector)
   (:import poolgp.simulation.structs.Ball)
   (:import poolgp.simulation.structs.Wall)
+  (:import poolgp.simulation.structs.ControllerInterface)
   (:gen-class))
 
 (def BALL-IMAGES
-  {:1 "pool/test_ball.png"
-   :2 "pool/test_ball.png"
-   :3 "pool/test_ball.png"
-   :4 "pool/test_ball.png"
-   :5 "pool/test_ball.png"
-   :6 "pool/test_ball.png"
-   :7 "pool/test_ball.png"
-   :8 "pool/test_ball.png"
-   :9 "pool/test_ball.png"
-   :10 "pool/test_ball.png"
-   :11 "pool/test_ball.png"
-   :12 "pool/test_ball.png"
-   :13 "pool/test_ball.png"
-   :14 "pool/test_ball.png"
-   :15 "pool/test_ball.png"})
+  {:1 "pool/balls/red_solid_blank.png"
+   :2 "pool/balls/red_solid_blank.png"
+   :3 "pool/balls/red_solid_blank.png"
+   :4 "pool/balls/red_solid_blank.png"
+   :5 "pool/balls/red_solid_blank.png"
+   :6 "pool/balls/red_solid_blank.png"
+   :7 "pool/balls/red_solid_blank.png"
+   :8 "pool/balls/red_solid_blank.png"
+   :9 "pool/balls/blue_solid_blank.png"
+   :10 "pool/balls/blue_solid_blank.png"
+   :11 "pool/balls/blue_solid_blank.png"
+   :12 "pool/balls/blue_solid_blank.png"
+   :13 "pool/balls/blue_solid_blank.png"
+   :14 "pool/balls/blue_solid_blank.png"
+   :15 "pool/balls/blue_solid_blank.png"
+   :cue "pool/balls/white_cue.png"})
 
 (def TABLE-IMAGES
   {:surface "pool/table_surface.png"
-   :raised "pool/table_raised.png"})
+   :raised "pool/table_raised.png"
+   :cue "pool/cue.png"})
+
 
 (def BALLS
   (list
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 3) 1)) config/BALL-MASS-G :1 :solid (:1 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 8) 1)) config/BALL-MASS-G :2 :solid (:2 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 3) 1)) config/BALL-MASS-G :3 :solid (:3 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 3) 1) (- (rand-int 8) 1)) config/BALL-MASS-G :4 :solid (:4 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 3) 1)) config/BALL-MASS-G :5 :solid (:5 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 3) 1) (- (rand-int 8) 1)) config/BALL-MASS-G :6 :solid (:6 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 8) 1)) config/BALL-MASS-G :7 :solid (:7 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 8) 1)) config/BALL-MASS-G :8 :solid (:8 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 3) 1) (- (rand-int 8) 1)) config/BALL-MASS-G :9 :striped (:9 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 3) 1)) config/BALL-MASS-G :10 :striped (:10 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 3) 1) (- (rand-int 3) 1)) config/BALL-MASS-G :11 :striped (:11 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 3) 1)) config/BALL-MASS-G :12 :striped (:12 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 3) 1) (- (rand-int 8) 1)) config/BALL-MASS-G :13 :striped (:13 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 8) 1) (- (rand-int 3) 1)) config/BALL-MASS-G :14 :striped (:14 BALL-IMAGES))
-    (Ball. (Vector. (rand-int 800) (rand-int 400)) config/BALL-RADIUS-PX (Vector. (- (rand-int 3) 1) (- (rand-int 3) 1)) config/BALL-MASS-G :15 :striped (:15 BALL-IMAGES))))
-
-(def CUE (Ball. (Vector. 600 600) config/BALL-RADIUS-PX (Vector. 0 0) config/CUE-MASS-G :cue :cue "pool/test_ball.png"))
+    (Ball. (Vector. 273 225) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :1 :solid (:1 BALL-IMAGES))
+    (Ball. (Vector. 273 250) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :2 :solid (:2 BALL-IMAGES))
+    (Ball. (Vector. 273 275) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :3 :solid (:3 BALL-IMAGES))
+    (Ball. (Vector. 273 300) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :4 :solid (:4 BALL-IMAGES))
+    (Ball. (Vector. 273 325) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :5 :solid (:5 BALL-IMAGES))
+    (Ball. (Vector. 298 240) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :6 :solid (:6 BALL-IMAGES))
+    (Ball. (Vector. 298 265) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :7 :solid (:7 BALL-IMAGES))
+    (Ball. (Vector. 298 290) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :8 :solid (:8 BALL-IMAGES))
+    (Ball. (Vector. 298 315) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :9 :striped (:9 BALL-IMAGES))
+    (Ball. (Vector. 325 255) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :10 :striped (:10 BALL-IMAGES))
+    (Ball. (Vector. 325 280) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :11 :striped (:11 BALL-IMAGES))
+    (Ball. (Vector. 325 305) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :12 :striped (:12 BALL-IMAGES))
+    (Ball. (Vector. 350 270) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :13 :striped (:13 BALL-IMAGES))
+    (Ball. (Vector. 600 273) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :14 :striped (:14 BALL-IMAGES))
+    (Ball. (Vector. 600 297) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :15 :striped (:15 BALL-IMAGES))
+    (Ball. (Vector. 880 285) config/BALL-RADIUS-PX (Vector. -1 0) config/CUE-MASS-G :cue :cue (:cue BALL-IMAGES))))
 
 (def LEFT-WALL
   (Wall.
@@ -118,13 +121,15 @@
             (:surface TABLE-IMAGES)
             (:raised TABLE-IMAGES)))
 
+(def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 false (:cue TABLE-IMAGES)))
+
 (def EXAMPLE-STATE
   (GameState.
     (Player. :p1 :genetic (list) 0 0 :unassigned)
     (Player. :p2 :genetic (list) 0 0 :unassigned)
     :p1
     :p2
-    CUE
     BALLS
     (list)
-    TABLE))
+    TABLE
+    CONTROLLER))
