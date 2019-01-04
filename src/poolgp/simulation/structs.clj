@@ -39,6 +39,8 @@
   (plus [v1 v2])
   (minus [v1 v2])
   (len-sqrd [v])
+  (len [v])
+  (proj [v1 v2])
   (normalize [v]))
 
 ;Vector
@@ -65,7 +67,10 @@
     (Vector. (+ (:x v1) (:x v2)) (+ (:y v1) (:y v2))))
   (minus [v1 v2]
     (Vector. (- (:x v1) (:x v2)) (- (:y v1) (:y v2))))
-  (len-sqrd [v] (+ (** (:x v)) (** (:y v)))))
+  (proj [v1 v2] (scale v1 (/ (dot v1 v2) (** (len v1)))))
+  (len-sqrd [v] (+ (** (:x v)) (** (:y v))))
+  (len [v] (Math/sqrt (+ (** (:x v))
+                         (** (:y v))))))
 
 ;Ball
 ; {

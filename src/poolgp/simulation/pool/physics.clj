@@ -9,13 +9,14 @@
 
 (def NOT-BALL-TYPE {:striped :solid :solid :striped})
 
+(defn ** [x] (* x x))
+
 (defn distance
   "Distance formula"
   ([P1 P2] (distance (:x P1) (:y P1)
                      (:x P2) (:y P2)))
   ([x1 y1 x2 y2]
-    (let [xdif (- x2 x1) ydif (- y2 y1)]
-      (Math/sqrt (+ (* xdif xdif) (* ydif ydif))))))
+    (Math/sqrt (+ (** (- x2 x1)) (** (- y2 y1))))))
 
 (defn vector-from-angle
   "create dx/dy vector from force/angle"
@@ -62,36 +63,35 @@
           (structs/normalize (Vector. (- dy) dx))
           (structs/normalize (Vector. dy (- dx))))))
 
-(defn ** [x] (* x x))
+(defn pt-on-segment
+  "check if a point is on a line segment"
+  [a b pt]
+
+  )
 
 (defn ball-intersects-segment?
   "check if the ball intersects with the line segment
-  CITE: https://math.stackexchange.com/questions/275529/check-if-line-intersects-with-circles-perimeter"
+  CITE: https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
+  (using vector projection)"
   [ball pts]
-  (let [cx (:x (:center ball))
-        cy (:y (:center ball))
-        r (:r ball)
-        ax (- (:x (first pts)) cx) ;makes equation easier
-        ay (- (:y (first pts)) cy)
-        bx (- (:x (second pts)) cx)
-        by (- (:y (second pts)) cy)
-        a (- (+ (** ax) (** ay)) (** r))
-        b (* 2 (+ (* ax (- bx ax)) (* ay (- by ay))))
-        c (+ (** (- bx ax)) (** (- by ay)))
-        disc (- (** b) (* 4 a c))]
-        (if (<= disc 0)
-            false
-            ;TODO Fix
-            (let [sqrt-disc (Math/sqrt disc)
-                  t1 (/ (+ (- b) sqrt-disc) (* 2 a))
-                  t2 (/ (- (- b) sqrt-disc) (* 2 a))]
-                  (or (and (> t1 0) (> 1 t1))
-                          (and (> t2 0) (> 1 t2)))))))
+  (let [epsilon 2
+        segment-vec (structs/minus (second pts) (first pts))
+        circle-vec (structs/minus (:center ball) (first pts))
+        proj-pt (structs/plus (first pts) (structs/proj segment-vec circle-vec))
+        segment-diff (- (distance (first pts) (second pts))
+                        (+ (distance proj-pt (first pts))
+                           (distance proj-pt (second pts))))]
+        (and
+          ;confirm that projection is on line segment
+          (> epsilon segment-diff)
+          (> segment-diff (- epsilon))
+          (> (:r ball) (distance proj-pt (:center ball))))))
 
 (defn do-segment-collision
   "take ball and intersecting segment pts
   and recompute ball movement vector"
   [ball pts]
+  ;TODO
   ball)
   ; (let [surface-normals (segment-surface-normals
   ;                         (first pts) (second pts) nil)
