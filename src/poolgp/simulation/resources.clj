@@ -48,9 +48,9 @@
     (Ball. (Vector. 325 280) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :11 :striped (:11 BALL-IMAGES))
     (Ball. (Vector. 325 305) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :12 :striped (:12 BALL-IMAGES))
     (Ball. (Vector. 350 270) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :13 :striped (:13 BALL-IMAGES))
-    (Ball. (Vector. 600 273) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :14 :striped (:14 BALL-IMAGES))
-    (Ball. (Vector. 600 297) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :15 :striped (:15 BALL-IMAGES))
-    (Ball. (Vector. 880 285) config/BALL-RADIUS-PX (Vector. -1 0) config/CUE-MASS-G :cue :cue (:cue BALL-IMAGES))))
+    (Ball. (Vector. 600 200) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :14 :striped (:14 BALL-IMAGES))
+    (Ball. (Vector. 600 400) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :15 :striped (:15 BALL-IMAGES))
+    (Ball. (Vector. 880 285) config/BALL-RADIUS-PX (Vector. -4 0) config/CUE-MASS-G :cue :cue (:cue BALL-IMAGES))))
 
 (def LEFT-WALL
   (Wall.
@@ -121,7 +121,7 @@
             (:surface TABLE-IMAGES)
             (:raised TABLE-IMAGES)))
 
-(def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES)))
+(def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES) nil (Vector. 0 0)))
 
 (def EXAMPLE-STATE
   (GameState.

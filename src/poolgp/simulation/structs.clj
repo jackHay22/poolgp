@@ -1,6 +1,7 @@
 (ns poolgp.simulation.structs
   (:require [poolgp.simulation.demo.renderutils :as renderutils])
   (:import java.awt.geom.Ellipse2D$Float)
+  (:import java.awt.image.AffineTransformOp)
   (:gen-class))
 
 (defprotocol StateInterface
@@ -116,9 +117,14 @@
 ;   :angle int (radians)
 ;   :release? true/false
 ;   :cue path -> img
+;   :rotate-op (AffineTransformOp.)/nil
+;   :cue-draw (Vector.)
 ; }
 
-(defrecord ControllerInterface [mouse-entered? ^Vector mouse force angle release? cue])
+(defrecord ControllerInterface [mouse-entered? ^Vector mouse
+                                force angle release? cue
+                                ^AffineTransformOp rotate-op
+                                ^Vector cue-draw])
 
 ;GameState
 ; {

@@ -1,5 +1,6 @@
 (ns poolgp.simulation.utils
   (:require [poolgp.simulation.resources :as resources])
+  (:import poolgp.simulation.structs.Vector)
   (:gen-class))
 
 (import java.util.Date)
@@ -9,6 +10,7 @@
 (import java.awt.RenderingHints)
 (import java.awt.geom.AffineTransform)
 (import java.awt.image.AffineTransformOp)
+(import java.awt.geom.Point2D$Double)
 
 (def write-log (fn [msg] (println "poolgp =>" msg)))
 
@@ -25,13 +27,24 @@
     (catch Exception e
       (write-log (str "Failed to render image:" img "\n" (.getMessage e))))))
 
+(defn get-rotation-op
+  "return affine transform on angle, anchor pt"
+  [angle anchor-x anchor-y]
+  (AffineTransformOp.
+    (AffineTransform/getRotateInstance angle anchor-x anchor-y)
+    AffineTransformOp/TYPE_BILINEAR))
+
 (defn draw-image-rotate
-  "rotate image (radians)"
-  [gr x y img angle]
-  (let [tx (AffineTransform/getRotateInstance angle
-                (/ (.getWidth img) 2) (/ (.getHeight img) 2))
-        operation (AffineTransformOp. tx AffineTransformOp/TYPE_BILINEAR)]
-        (.drawImage gr (.filter operation img nil) x y nil)))
+  "rotate image using affine transform operation"
+  [gr x y img op]
+  (.drawImage gr (.filter op img nil) (int x) (int y) nil))
+
+(defn get-pt-transform
+  "get transformed pt using affinetransformop"
+  [x y op]
+  (let [dest (Point2D$Double. 0 0)
+        pt2d (.getPoint2D op (Point2D$Double. (double x) (double y)) dest)]
+    (Vector. (.getX dest) (.getY dest))))
 
 (defn load-image
   "load an image from resources"

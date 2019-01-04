@@ -30,21 +30,27 @@
       (- (:y v2) (:y v1))
       (- (:x v2) (:x v1))))
 
+(defn do-normal-reflection
+  "perform a normal reflection of vector d on normal n
+  (n is normalized)"
+  [d n]
+  (structs/minus d
+    (structs/scale
+      (structs/scale n (structs/dot d n)) 2)))
+
 (defn do-ball-collision
   "recalculate movement vectors on collision
-  https://gamedevelopment.tutsplus.com/tutorials/when-worlds-collide-simulating-circle-circle-collisions--gamedev-769"
+  https://ericleong.me/research/circle-circle/#dynamic-circle-circle-collision"
   [b1 b2]
-  (let [b1-speed (:vector b1)
-        b2-speed (:vector b2)
-        velx (/ (+ (* (:x b1-speed)
-                      (- (:mass b1) (:mass b2)))
-                   (* 2 (:mass b2) (:x b2-speed)))
-                (+ (:mass b1) (:mass b2)))
-        vely (/ (+ (* (:y b1-speed)
-                      (- (:mass b1) (:mass b2)))
-                   (* 2 (:mass b2) (:y b2-speed)))
-                (+ (:mass b1) (:mass b2)))]
-        (assoc b1 :vector (Vector. velx vely))))
+  (let [norm (structs/normalize (structs/minus (:center b2) (:center b1)))
+        p (/ (* 2
+                (- (structs/dot (:vector b1) norm)
+                   (structs/dot (:vector b2) norm)))
+             (+ (:mass b1) (:mass b2)))]
+       (assoc b1 :vector
+          (structs/minus (:vector b1)
+              (structs/scale
+                  (structs/scale norm (:mass b1)) p)))))
 
 (defn segment-surface-normals
   "Vector (pt), Vector (pt), facing  -> Vector
