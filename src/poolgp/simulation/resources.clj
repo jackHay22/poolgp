@@ -50,7 +50,7 @@
     (Ball. (Vector. 350 270) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :13 :striped (:13 BALL-IMAGES))
     (Ball. (Vector. 600 200) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :14 :striped (:14 BALL-IMAGES))
     (Ball. (Vector. 600 400) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :15 :striped (:15 BALL-IMAGES))
-    (Ball. (Vector. 880 285) config/BALL-RADIUS-PX (Vector. -4 0) config/CUE-MASS-G :cue :cue (:cue BALL-IMAGES))))
+    (Ball. (Vector. 880 285) config/BALL-RADIUS-PX (Vector. -6 0) config/CUE-MASS-G :cue :cue (:cue BALL-IMAGES))))
 
 (def LEFT-WALL
   (Wall.

@@ -47,14 +47,17 @@
 ;   :y int
 ; }
 
+;square fn
+(defn ** [x] (* x x))
+
 (defrecord Vector [x y]
   VecOps
   (dot [v1 v2]
     (+ (* (:x v1) (:x v2))
        (* (:y v1) (:y v2))))
   (normalize [v]
-    (let [mag (Math/sqrt (+ (* (:x v) (:x v))
-                            (* (:y v) (:y v))))]
+    (let [mag (Math/sqrt (+ (** (:x v))
+                            (** (:y v))))]
               (Vector. (/ (:x v) mag) (/ (:y v) mag))))
   (scale [v s]
     (Vector. (* s (:x v)) (* s (:y v))))
@@ -62,7 +65,7 @@
     (Vector. (+ (:x v1) (:x v2)) (+ (:y v1) (:y v2))))
   (minus [v1 v2]
     (Vector. (- (:x v1) (:x v2)) (- (:y v1) (:y v2))))
-  (len-sqrd [v] (+ (* (:x v) (:x v)) (* (:y v) (:y v)))))
+  (len-sqrd [v] (+ (** (:x v)) (** (:y v)))))
 
 ;Ball
 ; {
@@ -86,9 +89,10 @@
       (.drawImage g (:img b)
         (int (- (:x (:center b)) (:r b)))
         (int (- (:y (:center b)) (:r b))) nil)
-      (.draw g (Ellipse2D$Float. (- (:x (:center b)) (:r b))
-                                 (- (:y (:center b)) (:r b))
-                                 (* 2 (:r b)) (* 2 (:r b)))))))
+      ; (.draw g (Ellipse2D$Float. (- (:x (:center b)) (:r b))
+      ;                            (- (:y (:center b)) (:r b))
+      ;                            (* 2 (:r b)) (* 2 (:r b))))
+                                 )))
 
 ;Wall
 ;(polygon)

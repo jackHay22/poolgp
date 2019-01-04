@@ -40,7 +40,7 @@
 
 (defn do-ball-collision
   "recalculate movement vectors on collision
-  https://ericleong.me/research/circle-circle/#dynamic-circle-circle-collision"
+  CITE: https://ericleong.me/research/circle-circle/#dynamic-circle-circle-collision"
   [b1 b2]
   (let [norm (structs/normalize (structs/minus (:center b2) (:center b1)))
         p (/ (* 2
@@ -62,7 +62,7 @@
           (structs/normalize (Vector. (- dy) dx))
           (structs/normalize (Vector. dy (- dx))))))
 
-(defn **2 [x] (* x x))
+(defn ** [x] (* x x))
 
 (defn ball-intersects-segment?
   "check if the ball intersects with the line segment
@@ -75,10 +75,10 @@
         ay (- (:y (first pts)) cy)
         bx (- (:x (second pts)) cx)
         by (- (:y (second pts)) cy)
-        a (- (+ (**2 ax) (**2 ay)) (**2 r))
+        a (- (+ (** ax) (** ay)) (** r))
         b (* 2 (+ (* ax (- bx ax)) (* ay (- by ay))))
-        c (+ (**2 (- bx ax)) (**2 (- by ay)))
-        disc (- (**2 b) (* 4 a c))]
+        c (+ (** (- bx ax)) (** (- by ay)))
+        disc (- (** b) (* 4 a c))]
         (if (<= disc 0)
             false
             ;TODO Fix
