@@ -37,8 +37,7 @@
 (def DEFAULT-PORT 9999)
 
 ;max ball velocity before it skips walls
-;TODO
-(def MAX-VELOCITY 20)
+(def MAX-VELOCITY 14)
 
 ;STATE VARS
 

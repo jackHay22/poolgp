@@ -34,6 +34,8 @@
   (assoc-in state [:controller :mouse-entered?] false))
 
 (defn cue-strike
+  "update cue ball velocity if hit"
+  ;TODO: should this be an event handler?
   [state]
   (if (:release? (:controller state))
       (let [force (:force (:controller state))
@@ -52,6 +54,7 @@
 (defn do-cue-draw-loc
   "calculate the x,y pt to draw the cue image"
   [state]
+  ;TODO
   (let [controller (:controller state)
         angle (:angle controller)
         mouse (:mouse controller)

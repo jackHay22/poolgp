@@ -12,6 +12,15 @@
 (defn ** ([x] (* x x))
          ([x p] (reduce * (repeat p x))))
 
+(defn throttle-speed
+  "trottle speed based on max speed"
+  [vector max]
+  (let [speed (Math/sqrt (+ (** (:x vector))
+                            (** (:y vector))))]
+        (if (> speed max)
+            (structs/scale vector (/ max speed))
+            vector)))
+
 (defn distance
   "Distance formula"
   ([P1 P2] (distance (:x P1) (:y P1)
@@ -192,10 +201,12 @@
   "update the positions of balls"
   [balls]
   (map (fn [b]
+        (update-in
           (update-in
             (update-in b
               [:center] structs/plus (:vector b))
-              [:vector] structs/scale config/SURFACE-FRICTION)) ;TODO
+              [:vector] structs/scale config/SURFACE-FRICTION)
+              [:vector] throttle-speed config/MAX-VELOCITY)) ;TODO
        balls))
 
 (defn update-state
