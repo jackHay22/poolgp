@@ -9,7 +9,8 @@
 
 (def NOT-BALL-TYPE {:striped :solid :solid :striped})
 
-(defn ** [x] (* x x))
+(defn ** ([x] (* x x))
+         ([x p] (reduce * (repeat p x))))
 
 (defn distance
   "Distance formula"
@@ -43,6 +44,7 @@
   "recalculate movement vectors on collision
   CITE: https://ericleong.me/research/circle-circle/#dynamic-circle-circle-collision"
   [b1 b2]
+  ;TODO: bug where balls are locked together
   (let [norm (structs/normalize (structs/minus (:center b2) (:center b1)))
         p (/ (* 2
                 (- (structs/dot (:vector b1) norm)
@@ -62,12 +64,6 @@
         (list
           (structs/normalize (Vector. (- dy) dx))
           (structs/normalize (Vector. dy (- dx))))))
-
-(defn pt-on-segment
-  "check if a point is on a line segment"
-  [a b pt]
-
-  )
 
 (defn ball-intersects-segment?
   "check if the ball intersects with the line segment
@@ -91,15 +87,15 @@
   "take ball and intersecting segment pts
   and recompute ball movement vector"
   [ball pts]
-  ;TODO
-  ball)
-  ; (let [surface-normals (segment-surface-normals
-  ;                         (first pts) (second pts) nil)
-  ;       ;TODO: determine correct surface normal
-  ;       norm (first surface-normals)]
-  ;       (assoc ball :vector (structs/minus (:vector ball)
-  ;                             (structs/scale norm
-  ;                               (* 2 (structs/dot (:vector ball) norm)))))))
+  (let [segment-vec (structs/minus (second pts) (first pts))
+        circle-vec (structs/minus (:center ball) (first pts))
+        proj-pt (structs/plus (first pts) (structs/proj segment-vec circle-vec))
+        norm (structs/normalize (structs/minus (:center ball) proj-pt))]
+        ;TODO: this calculation can be optimized considerably by choosing between
+        ;two standard surface normals
+        (update-in ball [:vector] do-normal-reflection norm)
+        ))
+
 
 (defn check-wall-collisions
   "check if ball has collided with any walls
@@ -181,7 +177,8 @@
   "if ball pocketed, remove from table"
   [state]
   (reduce (fn [s b]
-    (if (pocketed? b (:table s))
+    (if (and (pocketed? b (:table s))
+             (not (= (:id b) :cue)))
         (update-in
           (update-in s
             [:pocketed] conj b)

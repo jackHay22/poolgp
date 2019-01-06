@@ -36,6 +36,10 @@
 
 (def DEFAULT-PORT 9999)
 
+;max ball velocity before it skips walls
+;TODO
+(def MAX-VELOCITY 20)
+
 ;STATE VARS
 
-(def PAUSED? (atom false))
+(def PAUSED? (atom true))

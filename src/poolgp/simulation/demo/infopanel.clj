@@ -22,7 +22,7 @@
 (defn get-control-panel
   []
   (let [panel (JPanel.)
-        pause-button (JButton. "Pause")]
+        pause-button (JButton. "Start")]
   (.addActionListener pause-button pause)
   (doto panel
     (.setLayout (BoxLayout. panel BoxLayout/PAGE_AXIS))
