@@ -5,6 +5,8 @@
             [poolgp.config :as config])
   (:import poolgp.simulation.structs.GameState)
   (:import poolgp.simulation.structs.Player)
+  (:import poolgp.simulation.structs.Vector)
+  (:import poolgp.simulation.structs.Ball)
   (:gen-class))
 
 (import java.awt.image.BufferedImage)
@@ -46,7 +48,7 @@
 
 (defn display-selected-ball
   [gr b]
-  (.drawRect 0 0 20 20)
+  (.drawRect gr 0 0 20 20)
   (utils/draw-image gr 0 0 (:img b)))
 
 (defn render-builder-window
@@ -56,9 +58,25 @@
     (do
       (utils/draw-image gr 0 0 (:surface (:table gs)))
       (doall (map #(structs/render % true gr) (:balls gs)))
+      (utils/draw-image gr 0 0 (:raised (:table gs)))
       (if (not (= nil (:selected-ball edit-state)))
-        (display-selected-ball gr (:selected-ball edit-state)))
-      (utils/draw-image gr 0 0 (:raised (:table gs))))))
+        (display-selected-ball gr (:selected-ball edit-state))))))
+
+(defn add-ball-check-collisions!
+  "adds ball to state (true) or false"
+  [mouse-event]
+  (let [state @EDIT-STATE]
+    (if (not (nil? (:selected-ball state)))
+    ;TODO: check collisions
+    (do
+        (reset! EDIT-STATE
+          (assoc
+            (update-in state [:gs :balls]
+               conj (assoc-in (:selected-ball state) [:center]
+                     (Vector. (.getX e) (.getY e))))
+            :selected-ball nil)) true)
+
+            false)))
 
 (defn static-panel!
   "create a static, mouselistening panel"
@@ -66,7 +84,8 @@
   (let [base-image (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)
         g (cast Graphics2D (.createGraphics base-image))]
         (proxy [JPanel MouseListener] []
-               (mouseClicked [e])
+               (mouseClicked [e]
+                 (if (add-ball-check-collisions! e) (refresh!)))
                (mouseEntered [e])
                (mouseExited [e])
                (mousePressed [e])
@@ -76,30 +95,48 @@
                  (render-builder-window g @EDIT-STATE)
                  (.drawImage panel-graphics base-image 0 0 width height nil)))))
 
+(defn select-ball!
+  "add a new ball to the selected-ball field
+  of the edit state and refresh graphics"
+  [id]
+  (do
+    (reset! EDIT-STATE
+        (assoc @EDIT-STATE :selected-ball
+          (Ball.
+            (Vector. 0 0)
+            config/BALL-RADIUS-PX
+            (Vector. 0 0)
+            config/BALL-MASS-G
+            id :solid
+            (utils/load-image
+              (id resources/BALL-IMAGES)))))
+      (refresh!)))
+
 (def add-new-cue!
      (proxy [ActionListener] []
              (actionPerformed [event]
                 ;check if cue already added
-               )))
+                (select-ball! :cue))))
 
 (def add-new-ball!
       (proxy [ActionListener] []
               (actionPerformed [event]
-
-                )))
+                (select-ball! :1)))) ;TODO
 
 (def deselect!
       (proxy [ActionListener] []
               (actionPerformed [event]
-
-                )))
+                (do
+                  (reset! EDIT-STATE
+                    (assoc @EDIT-STATE :selected-ball nil))
+                    (refresh!)))))
 
 (def save!
-      (proxy [ActionListener] []
-              (actionPerformed [event]
-                (let [edit-state @EDIT-STATE]
-                (utils/write-state
-                  (:gs edit-state) (:filename edit-state))))))
+    (proxy [ActionListener] []
+            (actionPerformed [event]
+              (let [edit-state @EDIT-STATE]
+                  (utils/write-state
+                    (:gs edit-state) (:filename edit-state))))))
 
 (defn get-toolbar
   []
