@@ -30,6 +30,7 @@
 (def TABLE-IMAGES
   {:surface "pool/table_surface.png"
    :raised "pool/table_raised.png"
+   :holder "pool/ball_selected_holder.png"
    :cue "pool/cue.png"})
 
 
