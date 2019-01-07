@@ -3,16 +3,15 @@
             [poolgp.config :as config]
             [poolgp.simulation.demo.infopanel :as info]
             [poolgp.simulation.demo.interactionutils :as interaction])
+  (:import java.awt.image.BufferedImage)
+  (:import javax.swing.JPanel)
+  (:import javax.swing.JFrame)
+  (:import java.awt.Graphics2D)
+  (:import java.awt.Graphics)
+  (:import java.awt.Dimension)
+  (:import java.awt.event.MouseListener)
+  (:import javax.swing.BoxLayout)
   (:gen-class))
-
-(import java.awt.image.BufferedImage)
-(import javax.swing.JPanel)
-(import javax.swing.JFrame)
-(import java.awt.Graphics2D)
-(import java.awt.Graphics)
-(import java.awt.Dimension)
-(import java.awt.event.MouseListener)
-(import javax.swing.BoxLayout)
 
 (def SYSTEM-THREAD (atom nil))
 (def SLEEP-TICKS-PER-SECOND 1000)

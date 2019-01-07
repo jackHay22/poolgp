@@ -1,16 +1,15 @@
 (ns poolgp.simulation.utils
   (:require [poolgp.simulation.resources :as resources])
   (:import poolgp.simulation.structs.Vector)
+  (:import java.util.Date)
+  (:import java.text.SimpleDateFormat)
+  (:import java.awt.image.BufferedImage)
+  (:import java.awt.geom.AffineTransform)
+  (:import java.awt.RenderingHints)
+  (:import java.awt.geom.AffineTransform)
+  (:import java.awt.image.AffineTransformOp)
+  (:import java.awt.geom.Point2D$Double)
   (:gen-class))
-
-(import java.util.Date)
-(import java.text.SimpleDateFormat)
-(import java.awt.image.BufferedImage)
-(import java.awt.geom.AffineTransform)
-(import java.awt.RenderingHints)
-(import java.awt.geom.AffineTransform)
-(import java.awt.image.AffineTransformOp)
-(import java.awt.geom.Point2D$Double)
 
 (def write-log (fn [msg] (println "poolgp =>" msg)))
 

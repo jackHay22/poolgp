@@ -1,14 +1,13 @@
 (ns poolgp.simulation.demo.infopanel
   (:require [poolgp.config :as config])
+  (:import javax.swing.JPanel)
+  (:import java.awt.Dimension)
+  (:import java.awt.Color)
+  (:import javax.swing.BoxLayout)
+  (:import javax.swing.JLabel)
+  (:import javax.swing.JButton)
+  (:import java.awt.event.ActionListener)
   (:gen-class))
-
-(import javax.swing.JPanel)
-(import java.awt.Dimension)
-(import java.awt.Color)
-(import javax.swing.BoxLayout)
-(import javax.swing.JLabel)
-(import javax.swing.JButton)
-(import java.awt.event.ActionListener)
 
 (def pause (proxy [ActionListener] []
           (actionPerformed [event]

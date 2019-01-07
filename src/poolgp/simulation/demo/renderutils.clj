@@ -1,14 +1,13 @@
 (ns poolgp.simulation.demo.renderutils
   (:require [poolgp.config :as config])
+  (:import java.awt.geom.Point2D)
+  (:import java.awt.Color)
+  (:import java.awt.RadialGradientPaint)
+  (:import java.awt.Graphics2D)
+  (:import java.awt.AlphaComposite)
+  (:import java.awt.image.BufferedImage)
+  (:import java.awt.MultipleGradientPaint)
   (:gen-class))
-
-(import java.awt.geom.Point2D)
-(import java.awt.Color)
-(import java.awt.RadialGradientPaint)
-(import java.awt.Graphics2D)
-(import java.awt.AlphaComposite)
-(import java.awt.image.BufferedImage)
-(import java.awt.MultipleGradientPaint)
 
 (defn render-ball-shadow
   "render a shadow below a pool ball"

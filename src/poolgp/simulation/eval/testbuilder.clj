@@ -7,19 +7,18 @@
   (:import poolgp.simulation.structs.Player)
   (:import poolgp.simulation.structs.Vector)
   (:import poolgp.simulation.structs.Ball)
+  (:import java.awt.image.BufferedImage)
+  (:import javax.swing.JPanel)
+  (:import javax.swing.JFrame)
+  (:import java.awt.Graphics2D)
+  (:import java.awt.Graphics)
+  (:import java.awt.Dimension)
+  (:import java.awt.event.MouseListener)
+  (:import javax.swing.JMenu)
+  (:import javax.swing.JMenuBar)
+  (:import javax.swing.JMenuItem)
+  (:import java.awt.event.ActionListener)
   (:gen-class))
-
-(import java.awt.image.BufferedImage)
-(import javax.swing.JPanel)
-(import javax.swing.JFrame)
-(import java.awt.Graphics2D)
-(import java.awt.Graphics)
-(import java.awt.Dimension)
-(import java.awt.event.MouseListener)
-(import javax.swing.JMenu)
-(import javax.swing.JMenuBar)
-(import javax.swing.JMenuItem)
-(import java.awt.event.ActionListener)
 
 (def EDIT-STATE (atom nil))
 (def GRAPHICS-PANEL (atom nil))
@@ -64,7 +63,7 @@
 
 (defn add-ball-check-collisions!
   "adds ball to state (true) or false"
-  [mouse-event]
+  [e]
   (let [state @EDIT-STATE]
     (if (not (nil? (:selected-ball state)))
     ;TODO: check collisions
