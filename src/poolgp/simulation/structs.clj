@@ -149,3 +149,19 @@
 
 (defrecord GameState [^Player p1 ^Player p2 current waiting balls pocketed
                       ^Table table ^ControllerInterface controller])
+
+;Protocol for evaluating a pool-test
+(defprotocol Scorable (evaluate [test]))
+
+;PoolTest
+; {
+;   :gamestate (GameState.)
+;   :max-decisions int
+;   :eval-fn
+;   :player-target :p1/:p2
+; }
+
+(defrecord PoolTest [^GameState gamestate max-decisions eval-fn player-target]
+    Scorable
+    (evaluate [test]
+      ((:eval-fn test) (:gamestate test))))

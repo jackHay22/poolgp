@@ -77,9 +77,12 @@
   (reduce (fn [state current]
         (update-in state [current]
             (fn [ball-list]
-              (if (list? ball-list)
-                (map f ball-list)
-                (f ball-list)))))
+              (if (and (not (nil? ball-list))
+                       (not (empty? ball-list)))
+                  (if (list? ball-list)
+                      (map f ball-list)
+                      (f ball-list))
+                  ball-list))))
     gs (list :balls :pocketed)))
 
 (defn strip-images
@@ -109,6 +112,7 @@
 
 (defn write-state
   "write gamestate to file"
-  [gs]
-  (with-open [save-writer (clojure.java.io/writer (str (get-timestamp) ".txt"))]
-    (.write save-writer (pr-str (strip-images gs)))))
+  ([gs filename]
+    (with-open [save-writer (clojure.java.io/writer filename)]
+      (.write save-writer (pr-str (strip-images gs)))))
+  ([gs] (write-state gs (str (get-timestamp) ".txt"))))

@@ -3,6 +3,7 @@
             [poolgp.simulation.demo.window :as demo-window]
             [poolgp.simulation.eval.manager :as eval]
             [poolgp.simulation.eval.server :as eval-server]
+            [poolgp.simulation.eval.testbuilder :as testbuilder]
             [poolgp.simulation.resources :as resources]
             [poolgp.simulation.utils :as utils]
             [poolgp.config :as config]
@@ -31,6 +32,8 @@
    ["-d" "--demo PATH" "Demo file"
     :default false
     :validate [utils/path? "Must be a valid filepath"]]
+   ["-n" "--new FILENAME" "Save filename"
+    :default false]
    ["-s" "--state" "Write State"
     :default false]
    ["-h" "--help"]])
@@ -43,6 +46,7 @@
         errors (:errors run-args)]
       (cond
         (> (count errors) 0) (println (first errors))
-        (:demo config) (demo-window/start-window demo-mode (:demo config))
+        (:demo config)  (demo-window/start-window demo-mode (:demo config))
         (:state config) (utils/write-state resources/EXAMPLE-STATE)
-        :else          (eval-server/start-server eval-mode (:port config) EVAL-SETUP))))
+        (:new config)   (testbuilder/make-test (:new config))
+        :else           (eval-server/start-server eval-mode (:port config) EVAL-SETUP))))
