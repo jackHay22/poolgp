@@ -157,9 +157,12 @@
 ;   :max-iterations int
 ;   :current-iteration int
 ;   :connection socket/port etc...
-;   :endgame-fn (fn [analytics-states]) -> fitness
+;   :p1 Player.
+;   :p2 Player.
+;   :demo true/false
 ; }
 
 (defrecord SimulationState [analysis-states max-iterations
                             current-iteration connection
-                            watching ^Player p1 ^Player p2])
+                            watching ^Player p1 ^Player p2
+                            demo])

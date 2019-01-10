@@ -1,7 +1,7 @@
 (ns poolgp.core
   (:require [poolgp.peripherals.window.demowindow :as window]
             [poolgp.peripherals.server :as server]
-            [poolgp.peripherals.testbuilder :as testbuilder]
+            [poolgp.peripherals.tablebuilder :as tablebuilder]
             [poolgp.simulation.resources :as resources]
             [poolgp.simulation.utils :as utils]
             [poolgp.config :as config]
@@ -31,5 +31,5 @@
       (cond
         (> (count errors) 0) (println (first errors))
         (:demo options)  (window/start-window (:demo options))
-        ;(:new options)   (testbuilder/make-test (:new options))
+        (:new options)   (tablebuilder/make-test (:new options))
         :else            (server/start-server (:port options)))))

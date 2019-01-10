@@ -23,7 +23,8 @@
 
 (defn game-render
   "render game state"
-  [gamestate gr]
+  [gamestate gr demo?]
   ;TODO: render score and interaction
   (do
-    (table-manager/table-render (:table-state gamestate) gr)))
+    (if demo?
+      (table-manager/table-render (:table-state gamestate) gr))))

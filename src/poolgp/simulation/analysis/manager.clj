@@ -26,7 +26,7 @@
 
 (defn analysis-render
   "display gamestate and display analytics"
-  [analysis-state gr]
+  [analysis-state gr demo?]
   (do
-    (game-manager/game-render (:game-state analysis-state) gr)
+    (game-manager/game-render (:game-state analysis-state) gr demo?)
     (analytics/report-analytics analysis-state gr)))

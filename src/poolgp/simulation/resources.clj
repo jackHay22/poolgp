@@ -105,4 +105,4 @@
 (def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES) nil (Vector. 0 0)))
 
 ;_________________Analytics______________
-(def std-analytics (list))
+(def STD-ANALYTICS (list))

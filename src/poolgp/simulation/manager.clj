@@ -12,17 +12,18 @@
   through structure"
   [task-definition-path]
   (let [json-structure (utils/read-json-file task-definition-path)
-        demo? (:demo json-structure)
         simulation-json (:simulation json-structure)]
         (SimulationState.
           ;analysis states
-          (analysis-manager/analysis-init (:analysis simulation-json) demo?)
+          (analysis-manager/analysis-init
+            (:analysis simulation-json) (:demo simulation-json))
           (:max-iterations simulation-json)
           0
           (:port simulation-json)
           (:watching simulation-json)
           (player-manager/init-player (:p1 simulation-json) :p1)
-          (player-manager/init-player (:p2 simulation-json) :p2))))
+          (player-manager/init-player (:p2 simulation-json) :p2)
+          (:demo simulation-json))))
 
 (defn simulation-update
   "update transform on simulation state"
@@ -38,4 +39,4 @@
   (analysis-manager/analysis-render
     (nth (:analysis-states state)
           (min (:watching state) (count (:analysis-states state))))
-    gr))
+    gr (:demo state)))

@@ -81,3 +81,13 @@
       (json/read-str
         (clojure.string/join "\n" (line-seq save-reader))
         :key-fn keyword)))
+
+(defn write-json-file
+  [path structure]
+  (with-open [save-writer (clojure.java.io/writer path)]
+    (.write save-writer (json/write-str structure))))
+
+(defn get-edited-filename
+  [filename]
+  "test!.txt"
+  )
