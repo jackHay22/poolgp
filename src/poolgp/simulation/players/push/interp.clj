@@ -1,4 +1,4 @@
-(ns poolgp.simulation.analysis.game.push.interp
+(ns poolgp.simulation.players.push.interp
   (:gen-class))
 
 (defmacro definstr

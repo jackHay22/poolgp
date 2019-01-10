@@ -43,3 +43,6 @@
 ;STATE VARS
 
 (def PAUSED? (atom true))
+
+;TODO
+(def WATCHING (atom 0))

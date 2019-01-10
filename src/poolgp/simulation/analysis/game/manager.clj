@@ -1,6 +1,6 @@
 (ns poolgp.simulation.analysis.game.manager
   (:require [poolgp.simulation.analysis.game.table.manager :as table-manager]
-            [poolgp.simulation.analysis.game.playeroperations :as operations])
+            [poolgp.simulation.analysis.game.rules :as rules])
   (:import poolgp.simulation.structs.GameState)
   (:gen-class))
 
@@ -10,8 +10,6 @@
   (GameState.
     ;table state
     (table-manager/table-init (:table gamestate-json) images?)
-    (operations/init-player (:p1 gamestate-json) :p1)
-    (operations/init-player (:p2 gamestate-json) :p2)
     :p1 :p2 false
     nil ;TODO: controller
     ))
@@ -20,7 +18,7 @@
   "update gamestate"
   [gamestate]
   ;TODO update gamestate, controller?
-  (operations/update-operations
+  (rules/rules-update
     (update-in gamestate [:table-state] table-manager/table-update)))
 
 (defn game-render
@@ -28,5 +26,4 @@
   [gamestate gr]
   ;TODO: render score and interaction
   (do
-    (table-manager/table-render (:table-state gamestate) gr)
-    (operations/display-operations gamestate gr)))
+    (table-manager/table-render (:table-state gamestate) gr)))

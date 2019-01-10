@@ -50,3 +50,8 @@
 ;                           b-list)))
 ;         s))
 ;     state (:balls state)))
+
+(defn rules-update
+  [gamestate]
+gamestate
+  )

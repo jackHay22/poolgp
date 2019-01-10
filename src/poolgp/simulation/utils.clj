@@ -1,6 +1,5 @@
 (ns poolgp.simulation.utils
   (:require [clojure.data.json :as json])
-  ;(:import poolgp.simulation.structs.Vector)
   (:import java.util.Date)
   (:import java.text.SimpleDateFormat)
   (:import java.awt.image.BufferedImage)
@@ -38,13 +37,6 @@
   [gr x y img op]
   (.drawImage gr (.filter op img nil) (int x) (int y) nil))
 
-; (defn get-pt-transform
-;   "get transformed pt using affinetransformop"
-;   [x y op]
-;   (let [dest (Point2D$Double. 0 0)
-;         pt2d (.getPoint2D op (Point2D$Double. (double x) (double y)) dest)]
-;     (Vector. (.getX dest) (.getY dest))))
-
 (defn load-image
   "load an image from resources"
   [path]
@@ -55,6 +47,12 @@
   based on path vector(s)"
   [structure & path-vecs]
   (reduce #(update-in %1 %2 load-image) structure path-vecs))
+
+(defn updates-in
+  "expansion of update-in"
+  [structure & vec-fns]
+  (reduce #(update-in %1 (first %2) (second %2))
+          structure (partition 2 vec-fns)))
 
 (defn scale-image
   "scale buffered image"

@@ -7,13 +7,14 @@
 (defn analysis-init
   "initialize gamestate and analytics"
   [analysis-vec-json images?]
-  (map
-    #(AnalysisState.
-      ;game state
-      (game-manager/game-init (:game %) images?)
-      (:p1-analytics %)
-      (:p2-analytics %))
-    analysis-vec-json))
+  (doall
+    (map
+      #(AnalysisState.
+        ;game state
+        (game-manager/game-init (:game %) images?)
+        (:p1-analytics %)
+        (:p2-analytics %))
+    analysis-vec-json)))
 
 (defn analysis-update
   "take analytics state, update gamestate and

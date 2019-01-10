@@ -33,26 +33,6 @@
    :holder "images/ball_selected_holder.png"
    :cue "images/cue.png"})
 
-
-(def BALLS
-  (list
-    (Ball. (Vector. 273 225) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :1 :solid (:1 BALL-IMAGES))
-    (Ball. (Vector. 273 250) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :2 :solid (:2 BALL-IMAGES))
-    (Ball. (Vector. 273 275) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :3 :solid (:3 BALL-IMAGES))
-    (Ball. (Vector. 273 300) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :4 :solid (:4 BALL-IMAGES))
-    (Ball. (Vector. 273 325) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :5 :solid (:5 BALL-IMAGES))
-    (Ball. (Vector. 298 240) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :6 :solid (:6 BALL-IMAGES))
-    (Ball. (Vector. 298 265) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :7 :solid (:7 BALL-IMAGES))
-    (Ball. (Vector. 298 290) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :8 :solid (:8 BALL-IMAGES))
-    (Ball. (Vector. 298 315) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :9 :striped (:9 BALL-IMAGES))
-    (Ball. (Vector. 325 255) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :10 :striped (:10 BALL-IMAGES))
-    (Ball. (Vector. 325 280) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :11 :striped (:11 BALL-IMAGES))
-    (Ball. (Vector. 325 305) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :12 :striped (:12 BALL-IMAGES))
-    (Ball. (Vector. 350 270) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :13 :striped (:13 BALL-IMAGES))
-    (Ball. (Vector. 350 295) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :14 :striped (:14 BALL-IMAGES))
-    (Ball. (Vector. 375 285) config/BALL-RADIUS-PX (Vector. 0 0) config/BALL-MASS-G :15 :striped (:15 BALL-IMAGES))
-    (Ball. (Vector. 880 285) config/BALL-RADIUS-PX (Vector. -8 0) config/CUE-MASS-G :cue :cue (:cue BALL-IMAGES))))
-
 (def LEFT-WALL
   (Wall.
     (list
@@ -123,17 +103,6 @@
             (:raised TABLE-IMAGES)))
 
 (def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES) nil (Vector. 0 0)))
-
-; (def EXAMPLE-STATE
-;   (GameState.
-;     (Player. :p1 :genetic (list) 0 0 :unassigned)
-;     (Player. :p2 :genetic (list) 0 0 :unassigned)
-;     :p1
-;     :p2
-;     BALLS
-;     (list)
-;     TABLE
-;     CONTROLLER))
 
 ;_________________Analytics______________
 (def std-analytics (list))

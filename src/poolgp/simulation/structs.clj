@@ -114,8 +114,6 @@
 ;GameState
 ; {
 ;   :table-state (TableState.)
-;   :p1 (Player.)
-;   :p2 (Player.)
 ;   :current :p1/:p2
 ;   :waiting :p1/:p2
 ;   :changing-turn? true/false
@@ -123,34 +121,16 @@
 ; }
 
 (defrecord GameState [^TableState table-state
-                       ^Player p1 ^Player p2
                        current waiting changing-turn?
                        ^ControllerInterface controller])
-
-;Protocol for evaluating a pool-test
-(defprotocol Scorable (evaluate [test]))
-
-;PoolTest
-; {
-;   :game-state (GameState.)
-;   :max-decisions int
-;   :eval-fn
-;   :player-target :p1/:p2
-; }
-
-;TODO
-(defrecord PoolTest [^GameState game-state max-decisions eval-fn player-target]
-    Scorable
-    (evaluate [test]
-      ((:eval-fn test) (:gamestate test))))
 
 (defprotocol Analyzable (analyze [analytic state]))
 
 ; TurnAnalytic
 ; {
 ;   :name :identifier
-;   :value something
-;   :operation (fn [current-val gs]) -> new-value
+;   :value something (likely int)
+;   :operation (fn [current-val gamestate]) -> TurnAnalytic (with updated value)
 ; }
 
 (defrecord TurnAnalytic
@@ -159,9 +139,8 @@
   [name value operation]
   Analyzable
   (analyze [analytic gamestate]
-    (assoc analytic :value
-      ((:operation analytic)
-        (:value analytic) gamestate))))
+    (update-in analytic [:value]
+      (:operation analytic) gamestate)))
 
 ;AnalysisState
 ; {
@@ -182,4 +161,5 @@
 ; }
 
 (defrecord SimulationState [analysis-states max-iterations
-                            current-iteration connection])
+                            current-iteration connection
+                            watching ^Player p1 ^Player p2])

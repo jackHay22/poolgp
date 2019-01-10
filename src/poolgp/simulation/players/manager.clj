@@ -1,4 +1,4 @@
-(ns poolgp.simulation.analysis.game.playeroperations
+(ns poolgp.simulation.players.manager
   (:import poolgp.simulation.structs.Player)
   (:gen-class))
 

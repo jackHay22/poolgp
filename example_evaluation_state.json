@@ -4,14 +4,22 @@
     "analysis" : [
       {
         "game" : {
-          "p1" : {
-            "genetic" : true,
-            "strategy" : "()"
-          },
-          "p2" : {
-            "genetic" : true,
-            "strategy" : "()"
-          },
+          "table" : {
+            "balls" : [
+              {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"},
+              {"x" : 500, "y" : 285, "id" : "cue", "type" : "cue"}
+            ]
+          }
+        },
+        "p1-analytics" : [
+
+        ],
+        "p2-analytics" : [
+
+        ]
+      },
+      {
+        "game" : {
           "table" : {
             "balls" : [
               {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"}
@@ -27,37 +35,6 @@
       },
       {
         "game" : {
-          "p1" : {
-            "genetic" : true,
-            "strategy" : "()"
-          },
-          "p2" : {
-            "genetic" : true,
-            "strategy" : "()"
-          },
-          "table" : {
-            "balls" : [
-              {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"}
-            ]
-          }
-        },
-        "p1-analytics" : [
-
-        ],
-        "p2-analytics" : [
-
-        ]
-      },
-      {
-        "game" : {
-          "p1" : {
-            "genetic" : true,
-            "strategy" : "()"
-          },
-          "p2" : {
-            "genetic" : true,
-            "strategy" : "()"
-          },
           "table" : {
             "balls" : [
               {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"}
@@ -73,6 +50,15 @@
       }
     ],
     "max-iterations" : 1000,
-    "port": 9000
+    "port": 9000,
+    "watching" : 0,
+    "p1" : {
+      "genetic" : true,
+      "strategy" : "()"
+    },
+    "p2" : {
+      "genetic" : true,
+      "strategy" : "()"
+    }
   }
 }
