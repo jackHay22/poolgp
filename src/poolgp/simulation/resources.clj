@@ -10,28 +10,28 @@
   (:gen-class))
 
 (def BALL-IMAGES
-  {:1 "pool/balls/red_solid_blank.png"
-   :2 "pool/balls/red_solid_blank.png"
-   :3 "pool/balls/red_solid_blank.png"
-   :4 "pool/balls/red_solid_blank.png"
-   :5 "pool/balls/red_solid_blank.png"
-   :6 "pool/balls/red_solid_blank.png"
-   :7 "pool/balls/red_solid_blank.png"
-   :8 "pool/balls/red_solid_blank.png"
-   :9 "pool/balls/blue_solid_blank.png"
-   :10 "pool/balls/blue_solid_blank.png"
-   :11 "pool/balls/blue_solid_blank.png"
-   :12 "pool/balls/blue_solid_blank.png"
-   :13 "pool/balls/blue_solid_blank.png"
-   :14 "pool/balls/blue_solid_blank.png"
-   :15 "pool/balls/blue_solid_blank.png"
-   :cue "pool/balls/white_cue.png"})
+  {:1 "images/balls/red_solid_blank.png"
+   :2 "images/balls/red_solid_blank.png"
+   :3 "images/balls/red_solid_blank.png"
+   :4 "images/balls/red_solid_blank.png"
+   :5 "images/balls/red_solid_blank.png"
+   :6 "images/balls/red_solid_blank.png"
+   :7 "images/balls/red_solid_blank.png"
+   :8 "images/balls/red_solid_blank.png"
+   :9 "images/balls/blue_solid_blank.png"
+   :10 "images/balls/blue_solid_blank.png"
+   :11 "images/balls/blue_solid_blank.png"
+   :12 "images/balls/blue_solid_blank.png"
+   :13 "images/balls/blue_solid_blank.png"
+   :14 "images/balls/blue_solid_blank.png"
+   :15 "images/balls/blue_solid_blank.png"
+   :cue "images/balls/white_cue.png"})
 
 (def TABLE-IMAGES
-  {:surface "pool/table_surface.png"
-   :raised "pool/table_raised.png"
-   :holder "pool/ball_selected_holder.png"
-   :cue "pool/cue.png"})
+  {:surface "images/table_surface.png"
+   :raised "images/table_raised.png"
+   :holder "images/ball_selected_holder.png"
+   :cue "images/cue.png"})
 
 
 (def BALLS
@@ -124,13 +124,16 @@
 
 (def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES) nil (Vector. 0 0)))
 
-(def EXAMPLE-STATE
-  (GameState.
-    (Player. :p1 :genetic (list) 0 0 :unassigned)
-    (Player. :p2 :genetic (list) 0 0 :unassigned)
-    :p1
-    :p2
-    BALLS
-    (list)
-    TABLE
-    CONTROLLER))
+; (def EXAMPLE-STATE
+;   (GameState.
+;     (Player. :p1 :genetic (list) 0 0 :unassigned)
+;     (Player. :p2 :genetic (list) 0 0 :unassigned)
+;     :p1
+;     :p2
+;     BALLS
+;     (list)
+;     TABLE
+;     CONTROLLER))
+
+;_________________Analytics______________
+(def std-analytics (list))

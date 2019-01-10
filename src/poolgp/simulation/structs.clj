@@ -1,25 +1,6 @@
 (ns poolgp.simulation.structs
-  (:require [poolgp.simulation.demo.renderutils :as renderutils])
-  (:import java.awt.geom.Ellipse2D$Float)
   (:import java.awt.image.AffineTransformOp)
   (:gen-class))
-
-(defprotocol StateInterface
-  (init-state [s c])
-  (update-state [s c]))
-
-;render on object, context Graphics2D object
-(defprotocol Renderable (render [o c g]))
-
-(defrecord SystemState [init-handler update-handler render-handler]
-  StateInterface
-  (init-state [state context]
-    (init-handler context))
-  (update-state [state context]
-    (update-handler context))
-  Renderable
-  (render [state context graphics]
-    (render-handler context graphics)))
 
 ;Player
 ; {
@@ -83,21 +64,7 @@
 ;   :img "" -> image
 ; }
 
-(defrecord Ball [^Vector center r ^Vector vector mass id type img]
-  Renderable
-  (render [b c g]
-    (do
-      (if c
-        (renderutils/render-ball-shadow g
-          (- (:x (:center b)) (:r b))
-          (- (:y (:center b)) (:r b)) (:r b)))
-      (.drawImage g (:img b)
-        (int (- (:x (:center b)) (:r b)))
-        (int (- (:y (:center b)) (:r b))) nil)
-      ; (.draw g (Ellipse2D$Float. (- (:x (:center b)) (:r b))
-      ;                            (- (:y (:center b)) (:r b))
-      ;                            (* 2 (:r b)) (* 2 (:r b))))
-                                 )))
+(defrecord Ball [^Vector center r ^Vector vector mass id type img])
 
 ;Wall
 ;(polygon)
@@ -118,6 +85,15 @@
 
 (defrecord Table [r pockets walls surface raised])
 
+;TableState
+;{
+;   :balls [(Ball.) (Ball.)]
+;   :pocketed [(Ball.) (Ball.)]
+;   :table Table.
+;}
+
+(defrecord TableState [balls pocketed table])
+
 ;ControllerInterface
 ; {
 ;   :mouse-entered? true/false
@@ -137,31 +113,73 @@
 
 ;GameState
 ; {
+;   :table-state (TableState.)
 ;   :p1 (Player.)
 ;   :p2 (Player.)
 ;   :current :p1/:p2
 ;   :waiting :p1/:p2
-;   :balls [(Ball.) (Ball.)]
-;   :pocketed [(Ball.) (Ball.)]
-;   :table Table.
+;   :changing-turn? true/false
 ;   :controller (ControllerInterface.)
 ; }
 
-(defrecord GameState [^Player p1 ^Player p2 current waiting balls pocketed
-                      ^Table table ^ControllerInterface controller])
+(defrecord GameState [^TableState table-state
+                       ^Player p1 ^Player p2
+                       current waiting changing-turn?
+                       ^ControllerInterface controller])
 
 ;Protocol for evaluating a pool-test
 (defprotocol Scorable (evaluate [test]))
 
 ;PoolTest
 ; {
-;   :gamestate (GameState.)
+;   :game-state (GameState.)
 ;   :max-decisions int
 ;   :eval-fn
 ;   :player-target :p1/:p2
 ; }
 
-(defrecord PoolTest [^GameState gamestate max-decisions eval-fn player-target]
+;TODO
+(defrecord PoolTest [^GameState game-state max-decisions eval-fn player-target]
     Scorable
     (evaluate [test]
       ((:eval-fn test) (:gamestate test))))
+
+(defprotocol Analyzable (analyze [analytic state]))
+
+; TurnAnalytic
+; {
+;   :name :identifier
+;   :value something
+;   :operation (fn [current-val gs]) -> new-value
+; }
+
+(defrecord TurnAnalytic
+  ;record that defines a datapoint to record
+  ;when evaluating an individual (updated once per turn)
+  [name value operation]
+  Analyzable
+  (analyze [analytic gamestate]
+    (assoc analytic :value
+      ((:operation analytic)
+        (:value analytic) gamestate))))
+
+;AnalysisState
+; {
+;   :game-state GameState.
+;   :p1-analytics (list (TurnAnalytic.))
+;   :p2-analytics (list (TurnAnalytic.))
+; }
+
+(defrecord AnalysisState [^GameState game-state p1-analytics p2-analytics])
+
+;SimulationState
+; {
+;   :analytics-states (list (AnalyticsState.))
+;   :max-iterations int
+;   :current-iteration int
+;   :connection socket/port etc...
+;   :endgame-fn (fn [analytics-states]) -> fitness
+; }
+
+(defrecord SimulationState [analysis-states max-iterations
+                            current-iteration connection])

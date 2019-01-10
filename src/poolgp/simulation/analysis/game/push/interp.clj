@@ -1,4 +1,4 @@
-(ns poolgp.simulation.push.interp
+(ns poolgp.simulation.analysis.game.push.interp
   (:gen-class))
 
 (defmacro definstr
@@ -7,7 +7,7 @@
   )
 
 
-(defn eval
+(defn eval-push
   "evaluate push code based on gamestate"
   [gamestate push]
 

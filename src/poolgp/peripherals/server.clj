@@ -1,4 +1,4 @@
-(ns poolgp.simulation.eval.server
+(ns poolgp.peripherals.server
   (:require [clojure.java.io :as io]
             [clojure.core.async :as async]
             [poolgp.simulation.structs :as structs])
@@ -44,7 +44,7 @@
 
 (defn start-server
   "start a persistent socket server"
-  [sys-state-record port config]
+  [port]
   (let [socket (ServerSocket. port)]
     ;(structs/init sys-state-record config)
     (async-persistent-server socket)))

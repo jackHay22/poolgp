@@ -1,6 +1,6 @@
-(ns poolgp.simulation.demo.interactionutils
+(ns poolgp.peripherals.interaction.interactionutils
   (:require [poolgp.simulation.utils :as utils]
-            [poolgp.simulation.pool.physics :as physics]
+            [poolgp.simulation.analysis.game.table.physics :as physics]
             [poolgp.simulation.structs :as structs]
             [poolgp.config :as config])
   (:import java.awt.MouseInfo)
@@ -21,41 +21,41 @@
 (defn clicked
   "set clicked (release)"
   [e state]
-  (assoc-in state [:controller :release?] true))
+  (assoc-in state [:gs :controller :release?] true))
 
 (defn entered
   "set entered panel"
   [e state]
-  (assoc-in state [:controller :mouse-entered?] true))
+  (assoc-in state [:gs :controller :mouse-entered?] true))
 
 (defn exited
   "set exited panel"
   [e state]
-  (assoc-in state [:controller :mouse-entered?] false))
+  (assoc-in state [:gs :controller :mouse-entered?] false))
 
 (defn cue-strike
   "update cue ball velocity if hit"
   ;TODO: should this be an event handler?
   [state]
-  (if (:release? (:controller state))
-      (let [force (:force (:controller state))
-            angle (:angle (:controller state))]
+  (if (:release? (:controller (:gs state)))
+      (let [force (:force (:controller (:gs state)))
+            angle (:angle (:controller (:gs state)))]
       (assoc-in
-        (update-in state [:balls]
+        (update-in state [:gs :balls]
           #(map (fn [b]
                     (if (= (:id b) :cue)
                         (assoc b :vector
                             (physics/vector-from-angle angle force))
                         b))
                 %))
-        [:controller :release?] false))
+        [:gs :controller :release?] false))
       state))
 
 (defn do-cue-draw-loc
   "calculate the x,y pt to draw the cue image"
   [state]
   ;TODO
-  (let [controller (:controller state)
+  (let [controller (:controller (:gs state))
         angle (:angle controller)
         mouse (:mouse controller)
         end-x (- (:x mouse) (* config/CUE-HOLD-DIST (Math/cos angle)))
@@ -64,17 +64,17 @@
         offset-x (- half-img-size (* half-img-size (Math/cos angle)))
         offset-y (- half-img-size (* half-img-size (Math/sin angle)))]
         ;TODO
-        (assoc-in state [:controller :cue-draw]
+        (assoc-in state [:gs :controller :cue-draw]
           (Vector. (- end-x offset-x) (- end-y offset-y)))))
 
 (defn update-interaction
   "update user interaction state"
   [state]
-  (if (:mouse-entered? (:controller state))
-      (let [controller (:controller state)
+  (if (:mouse-entered? (:controller (:gs state)))
+      (let [controller (:controller (:gs state))
             cue-ball-loc (:center (reduce
                                     #(if (= (:id %2) :cue) (reduced %2) %1)
-                                    nil (:balls state)))
+                                    nil (:balls (:gs state))))
             mouse-pt (.getLocation (MouseInfo/getPointerInfo))
             mouse-loc (Vector. (int (.getX mouse-pt)) (int (.getY mouse-pt)))
             dist (physics/distance mouse-loc cue-ball-loc)
@@ -87,22 +87,24 @@
             (do-cue-draw-loc
               (reduce #(assoc-in %1 (first %2) (second %2)) state
                     (partition 2
-                      (list [:controller :angle]
+                      (list [:gs :controller :angle]
                               angle
-                            [:controller :mouse]
+                            [:gs :controller :mouse]
                               mouse-loc
-                            [:controller :force]
+                            [:gs :controller :force]
                             ;TODO
                               (int (* (- dist 230) 0.1))
-                            [:controller :rotate-op]
+                            [:gs :controller :rotate-op]
                               rotate-op))))))
       state))
 
 (defn render-interaction
   "render cue if mouse on table"
   [state g]
-  (if (:mouse-entered? (:controller state))
-      (let [controller (:controller state)]
+  (println state)
+  (System/exit 1)
+  (if (:mouse-entered? (:controller (:gs state)))
+      (let [controller (:controller (:gs state))]
       (if (not (= (:rotate-op controller) nil))
           (utils/draw-image-rotate g (:x (:cue-draw controller))
                                      (:y (:cue-draw controller))

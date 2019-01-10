@@ -1,4 +1,4 @@
-(ns poolgp.simulation.demo.infopanel
+(ns poolgp.peripherals.window.infopanel
   (:require [poolgp.config :as config])
   (:import javax.swing.JPanel)
   (:import java.awt.Dimension)

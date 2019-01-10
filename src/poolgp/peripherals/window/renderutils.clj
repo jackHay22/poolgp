@@ -1,4 +1,4 @@
-(ns poolgp.simulation.demo.renderutils
+(ns poolgp.peripherals.window.renderutils
   (:require [poolgp.config :as config])
   (:import java.awt.geom.Point2D)
   (:import java.awt.Color)

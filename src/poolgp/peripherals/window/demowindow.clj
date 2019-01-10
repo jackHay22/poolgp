@@ -1,8 +1,8 @@
-(ns poolgp.simulation.demo.window
-  (:require [poolgp.simulation.structs :as structs]
-            [poolgp.config :as config]
-            [poolgp.simulation.demo.infopanel :as info]
-            [poolgp.simulation.demo.interactionutils :as interaction])
+(ns poolgp.peripherals.window.demowindow
+  (:require [poolgp.config :as config]
+            [poolgp.peripherals.window.infopanel :as info]
+            [poolgp.peripherals.interaction.interactionutils :as interaction]
+            [poolgp.simulation.manager :as manager])
   (:import java.awt.image.BufferedImage)
   (:import javax.swing.JPanel)
   (:import javax.swing.JFrame)
@@ -21,7 +21,7 @@
 
 (defn graphical-panel
   "-extends JPanel, implements Runnable-"
-  [sys-state-record width height target-delay]
+  [width height target-delay]
   (let [base-image (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)
         g (cast Graphics2D (.createGraphics base-image))]
      (proxy [JPanel Runnable MouseListener] []
@@ -32,26 +32,25 @@
             (mouseClicked [e] (reset! STATE (interaction/clicked e @STATE)))
             (mouseEntered [e] (reset! STATE (interaction/entered e @STATE)))
             (mouseExited [e] (reset! STATE (interaction/exited e @STATE)))
-            (mousePressed [e] ) ;TODO
-            (mouseReleased [e]) ;TODO
+            (mousePressed [e])
+            (mouseReleased [e])
             (paintComponent [^Graphics panel-graphics]
               (proxy-super paintComponent panel-graphics)
-              (structs/render sys-state-record @STATE g)
+              (manager/simulation-render @STATE g)
               (.drawImage panel-graphics base-image 0 0 width height nil))
             (run [] (loop []
-                      (let [render-start (System/nanoTime)]
-                        (if (not @config/PAUSED?)
-                          (do (reset! STATE (structs/update-state sys-state-record @STATE))
-                              (.repaint this)
-                              (Thread/sleep target-delay))))
+                      (if (not @config/PAUSED?)
+                        (do (reset! STATE (manager/simulation-update @STATE))
+                            (.repaint this)
+                            (Thread/sleep target-delay)))
                     (recur))))))
 
 (defn start-window
   "start JFrame and add JPanel extension as content"
-  [sys-state-record state-path]
+  [state-path]
   ;initialize state and store
-  (reset! STATE (structs/init-state sys-state-record state-path))
-  (let [panel (graphical-panel sys-state-record
+  (reset! STATE (manager/simulation-init state-path))
+  (let [panel (graphical-panel
                   config/POOL-WIDTH-PX config/POOL-HEIGHT-PX
                   (/ SLEEP-TICKS-PER-SECOND config/WINDOW-FPS))
         window (JFrame. config/WINDOW-TITLE)]
