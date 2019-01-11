@@ -5,6 +5,13 @@
 ./build
 ```
 
+## Dependencies
+```clojure
+[org.clojure/tools.cli "0.4.1"]
+[org.clojure/core.async "0.4.490"]
+[org.clojure/data.json "0.2.6"]
+```
+
 ## Task Definition Structure
 ```json
 {
