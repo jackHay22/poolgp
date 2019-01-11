@@ -1,5 +1,6 @@
 (ns poolgp.simulation.utils
-  (:require [clojure.data.json :as json])
+  (:require [clojure.data.json :as json]
+            [clojure.string :as str])
   (:import java.util.Date)
   (:import java.text.SimpleDateFormat)
   (:import java.awt.image.BufferedImage)
@@ -85,9 +86,11 @@
 (defn write-json-file
   [path structure]
   (with-open [save-writer (clojure.java.io/writer path)]
-    (.write save-writer (json/write-str structure))))
+    (.write save-writer
+      (with-out-str (json/pprint structure)))))
 
 (defn get-edited-filename
+  "add a tilda to a filename to indicate edited version"
   [filename]
-  "test!.txt"
-  )
+  (let [components (str/split filename #"\.")]
+    (str (first components) "~." (second components))))
