@@ -17,10 +17,15 @@
           ;analysis states
           (analysis-manager/analysis-init
             (:analysis simulation-json) (:demo simulation-json))
-          (:max-iterations simulation-json)
+          ;supports a default value if not included
+          (if (:max-iterations simulation-json)
+              (:max-iterations simulation-json) config/DEFAULT-MAX-ITERATIONS)
+          ;current iteration
           0
-          (:port simulation-json)
-          (:watching simulation-json)
+          (if (:port simulation-json)
+              (:port simulation-json) config/DEFAULT-PORT)
+          (if (:watching simulation-json)
+              (:watching simulation-json) 0)
           (player-manager/init-player (:p1 simulation-json) :p1)
           (player-manager/init-player (:p2 simulation-json) :p2)
           (:demo simulation-json))))

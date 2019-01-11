@@ -48,9 +48,6 @@
         ]
       }
     ],
-    "max-iterations" : 100000,
-    "port": 9000,
-    "watching" : 0,
     "p1" : {
       "genetic" : true,
       "strategy" : "()"
