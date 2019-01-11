@@ -105,8 +105,8 @@
 (def EMPTY-CONFIG-STATE
   {:simulation {
     :analysis []
-    :max-iterations 10000
-    :port 90
+    :max-iterations config/DEFAULT-MAX-ITERATIONS
+    :port config/DEFAULT-PORT
     :watching 0
     :p1 {:genetic true :strategy "()"}
     :p2 {:genetic true :strategy "()"}

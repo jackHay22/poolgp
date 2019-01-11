@@ -16,8 +16,9 @@
    ["-d" "--demo PATH" "Demo file"
     :default false
     :validate [utils/path? "Must be a valid filepath"]]
-   ["-n" "--new FILENAME" "Save filename"
-    :default false]
+   ["-e" "--edit FILENAME" "Edit filename"
+    :default false
+    :validate [utils/path? "Must be a valid filepath"]]
    ["-b" "--blank FILENAME" "Write blank state"
     :default false]
    ["-h" "--help"]])
@@ -31,6 +32,6 @@
       (cond
         (> (count errors) 0) (println (first errors))
         (:demo options)  (window/start-window (:demo options))
-        (:new options)   (tablebuilder/make-test (:new options))
+        (:edit options)   (tablebuilder/edit-tables (:edit options))
         (:blank options) (utils/write-json-file (:blank options) resources/EMPTY-CONFIG-STATE)
         :else            (server/start-server (:port options)))))

@@ -48,7 +48,7 @@
         ]
       }
     ],
-    "max-iterations" : 1000,
+    "max-iterations" : 100000,
     "port": 9000,
     "watching" : 0,
     "p1" : {

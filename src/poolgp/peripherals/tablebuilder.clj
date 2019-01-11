@@ -24,6 +24,9 @@
 (def EDIT-STATE (atom nil))
 (def GRAPHICS-PANEL (atom nil))
 
+(def EMPTY-TABLE {:game {:table {:balls []}}
+                   :p1-analytics [] :p2-analytics []})
+
 (defrecord EditState [filename selected-ball
                       selected-holder surface
                       raised cue striped solid
@@ -40,17 +43,16 @@
       (utils/load-image (:surface resources/TABLE-IMAGES))
       (utils/load-image (:raised resources/TABLE-IMAGES))
       (utils/load-image (:cue resources/BALL-IMAGES))
-      (utils/load-image (:1 resources/BALL-IMAGES))
       (utils/load-image (:15 resources/BALL-IMAGES))
-      { :game { :table { :balls [] } }
-        :p1-analytics [] :p2-analytics []})))
+      (utils/load-image (:1 resources/BALL-IMAGES))
+      EMPTY-TABLE)))
 
 (defn on-write!
   "read current structure, add new structure, write back to file"
   [edit-state]
   (let [existing-json-struct (utils/read-json-file (:filename edit-state))]
     (if (map? existing-json-struct)
-      (utils/write-json-file (utils/get-edited-filename (:filename edit-state))
+      (utils/write-json-file (:filename edit-state)
         (update-in existing-json-struct [:simulation :analysis]
                     conj (:table-json-struct edit-state))))))
 
@@ -154,34 +156,53 @@
                     (assoc @EDIT-STATE :selected-ball nil))
                     (refresh!)))))
 
-(def save!
+(def write-current!
     (proxy [ActionListener] []
             (actionPerformed [event] (on-write! @EDIT-STATE))))
+
+(def clear!
+  (proxy [ActionListener] []
+          (actionPerformed [event]
+            (swap! EDIT-STATE #(assoc %1 :table-json-struct EMPTY-TABLE))
+            (refresh!))))
+
+(def edit-config!
+  (proxy [ActionListener] []
+          (actionPerformed [event]
+
+            )))
 
 (defn get-toolbar
   []
   (let [bar (JMenuBar.)
         file (JMenu. "File")
         edit (JMenu. "Edit")
-        save (JMenuItem. "Save")
+        write (JMenuItem. "Write current table")
+        clear (JMenuItem. "Clear current table")
         analytics (JMenuItem. "Add Analytic")
         add-cue (JMenuItem. "Add Cue")
         add-ball (JMenuItem. "Add Ball")
-        deselect (JMenuItem. "Deselect")]
+        deselect (JMenuItem. "Deselect")
+        edit-config (JMenuItem. "Edit Config")]
         (do
-          (.add file save)
-          (.addActionListener save save!)
+          (.add file write)
+          (.addActionListener write write-current!)
+          (.add file clear)
+          (.addActionListener clear clear!)
           (.add edit add-cue)
           (.addActionListener add-cue add-new-cue!)
           (.add edit add-ball)
           (.addActionListener add-ball (add-new-ball! :solid))
           (.add edit deselect)
           (.addActionListener deselect deselect!)
+          (.addSeparator edit)
+          (.add edit edit-config)
+          (.addActionListener edit-config edit-config!)
           (doto bar
             (.add file)
             (.add edit)))))
 
-(defn make-test
+(defn edit-tables
   "open graphical window for creating a new
   test state"
   [filename]

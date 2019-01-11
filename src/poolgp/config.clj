@@ -36,6 +36,7 @@
 (def CUE-HOLD-DIST 10)
 
 (def DEFAULT-PORT 9999)
+(def DEFAULT-MAX-ITERATIONS 100000)
 
 ;max ball velocity before it skips walls
 (def MAX-VELOCITY 14)
