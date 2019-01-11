@@ -102,6 +102,16 @@
             (:surface TABLE-IMAGES)
             (:raised TABLE-IMAGES)))
 
+(def EMPTY-CONFIG-STATE
+  {:simulation {
+    :analysis []
+    :max-iterations 10000
+    :port 90
+    :watching 0
+    :p1 {:genetic true :strategy "()"}
+    :p2 {:genetic true :strategy "()"}
+    :demo true}})
+
 (def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES) nil (Vector. 0 0)))
 
 ;_________________Analytics______________

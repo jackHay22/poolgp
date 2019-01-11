@@ -84,6 +84,7 @@
         :key-fn keyword)))
 
 (defn write-json-file
+  "write pprinted json to file"
   [path structure]
   (with-open [save-writer (clojure.java.io/writer path)]
     (.write save-writer
