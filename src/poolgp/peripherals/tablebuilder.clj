@@ -32,7 +32,7 @@
                       raised cue striped solid
                       table-json-struct])
 
-(defn set-new-es!
+(defn- set-new-es!
   "reset gs atom with new blank state"
   [filename]
   (reset! EDIT-STATE
@@ -47,7 +47,7 @@
       (utils/load-image (:1 resources/BALL-IMAGES))
       EMPTY-TABLE)))
 
-(defn on-write!
+(defn- on-write!
   "read current structure, add new structure, write back to file"
   [edit-state]
   (let [existing-json-struct (utils/read-json-file (:filename edit-state))]
@@ -56,9 +56,9 @@
         (update-in existing-json-struct [:simulation :analysis]
                     conj (:table-json-struct edit-state))))))
 
-(defn refresh! [] (.repaint @GRAPHICS-PANEL))
+(defn- refresh! [] (.repaint @GRAPHICS-PANEL))
 
-(defn display-ball
+(defn- display-ball
   "display a given ball (json structure)"
   [gr b-json edit-state]
   (utils/draw-image gr
@@ -66,13 +66,13 @@
             (- (:y b-json) config/BALL-RADIUS-PX)
             ((:type b-json) edit-state)))
 
-(defn display-selected-ball
+(defn- display-selected-ball
   "display new ball in selected holder"
   [gr edit-state]
   (utils/draw-image gr 0 0 (:selected-holder edit-state))
   (display-ball gr (:selected-ball edit-state) edit-state))
 
-(defn render-builder-window
+(defn- render-builder-window
   "render window components"
   [gr edit-state]
   (let [balls (:balls (:table (:game (:table-json-struct edit-state))))]
@@ -83,7 +83,7 @@
       (if (not (= nil (:selected-ball edit-state)))
         (display-selected-ball gr edit-state)))))
 
-(defn add-ball-check-collisions!
+(defn- add-ball-check-collisions!
   "adds ball to state (true) or false"
   [e]
   (let [state @EDIT-STATE
@@ -107,7 +107,7 @@
               can-place?)
             false)))
 
-(defn static-panel!
+(defn- static-panel!
   "create a static, mouselistening panel"
   [width height]
   (let [base-image (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)
@@ -124,7 +124,7 @@
                  (render-builder-window g @EDIT-STATE)
                  (.drawImage panel-graphics base-image 0 0 width height nil)))))
 
-(defn select-ball!
+(defn- select-ball!
   "add a new ball to the selected-ball field
   of the edit state and refresh graphics"
   [id type]
@@ -143,7 +143,7 @@
                   (if (empty? cue-added)
                       (select-ball! :cue :cue))))))
 
-(defn add-new-ball! [type]
+(defn- add-new-ball! [type]
       (proxy [ActionListener] []
               (actionPerformed [event]
                 (select-ball! :1 type))))
@@ -172,7 +172,7 @@
 
             )))
 
-(defn get-toolbar
+(defn- get-toolbar
   []
   (let [bar (JMenuBar.)
         file (JMenu. "File")

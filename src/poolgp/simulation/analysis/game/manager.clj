@@ -10,7 +10,9 @@
   (GameState.
     ;table state
     (table-manager/table-init (:table gamestate-json) images?)
-    :p1 :p2 false
+    :p1 :p2 true false
+    :unassigned :unassigned
+    0 0
     nil ;TODO: controller
     ))
 

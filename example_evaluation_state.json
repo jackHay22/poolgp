@@ -50,11 +50,11 @@
     ],
     "p1" : {
       "genetic" : true,
-      "strategy" : "()"
+      "strategy" : "(integer_**)"
     },
     "p2" : {
       "genetic" : true,
-      "strategy" : "()"
+      "strategy" : "(integer_+)"
     },
     "demo" : true
   }

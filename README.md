@@ -4,6 +4,7 @@
 ```
 ./build
 ```
+Optional: -r specifies a release and -s starts a docker container
 
 ## Dependencies
 ```clojure
@@ -11,6 +12,9 @@
 [org.clojure/core.async "0.4.490"]
 [org.clojure/data.json "0.2.6"]
 ```
+
+## Instruction Definitions
+Instructs are defined here: poolgp.simulation.players.push.instructions
 
 ## Task Definition Structure
 ```json
@@ -39,11 +43,11 @@
     "watching" : 0,             (optional)
     "p1" : {
       "genetic" : true,
-      "strategy" : "()"
+      "strategy" : "(integer_**)"
     },
     "p2" : {
       "genetic" : true,
-      "strategy" : "()"
+      "strategy" : "(integer_+)"
     },
     "demo" : true               (optional)
   }

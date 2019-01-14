@@ -20,8 +20,7 @@
           ;supports a default value if not included
           (if (:max-iterations simulation-json)
               (:max-iterations simulation-json) config/DEFAULT-MAX-ITERATIONS)
-          ;current iteration
-          0
+          0 ;current iteration
           (if (:port simulation-json)
               (:port simulation-json) config/DEFAULT-PORT)
           (if (:watching simulation-json)
@@ -33,9 +32,13 @@
 (defn simulation-update
   "update transform on simulation state"
   [state]
-  ;TODO: player updates for each analysis state
   (update-in state [:analysis-states]
-    #(map analysis-manager/analysis-update %)))
+      #(map (fn [a-state]
+              (analysis-manager/analysis-update
+                (update-in a-state [:game-state]
+                  (fn [gs]
+                    (player-manager/update-operations
+                      gs ((:current gs) state)))))) %)))
 
 (defn simulation-render
   "take simulation state and optionally

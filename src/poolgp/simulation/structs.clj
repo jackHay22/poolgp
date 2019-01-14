@@ -7,12 +7,9 @@
 ;   :id :p1/:p2
 ;   :type :genetic/:interactive
 ;   :strategy (push code)
-;   :fitness int
-;   :score int
-;   :ball-type :solid/:striped/:unassigned
 ; }
 
-(defrecord Player [id type strategy fitness score ball-type])
+(defrecord Player [id type strategy])
 
 (defprotocol VecOps
   (dot [v1 v2])
@@ -116,12 +113,20 @@
 ;   :table-state (TableState.)
 ;   :current :p1/:p2
 ;   :waiting :p1/:p2
-;   :changing-turn? true/false
+;   :ready? true/false -> balls stopped, time for player move
+;   :current-scored? true/false -> current player scored on turn
+;   :p1-balltype :solid/:striped/:unassigned
+;   :p2-balltype :solid/:striped/:unassigned
+;   :p1-score int
+;   :p2-score int
 ;   :controller (ControllerInterface.)
 ; }
 
 (defrecord GameState [^TableState table-state
-                       current waiting changing-turn?
+                       current waiting
+                       ready? current-scored?
+                       p1-balltype p2-balltype
+                       p1-score p2-score
                        ^ControllerInterface controller])
 
 (defprotocol Analyzable (analyze [analytic state]))
