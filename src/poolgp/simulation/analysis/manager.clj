@@ -12,8 +12,8 @@
       #(AnalysisState.
         ;game state
         (game-manager/game-init (:game %) images?)
-        (:p1-analytics %)
-        (:p2-analytics %))
+        (analytics/load-analytics (:p1-analytics %))
+        (analytics/load-analytics (:p2-analytics %)))
     analysis-vec-json)))
 
 (defn analysis-update

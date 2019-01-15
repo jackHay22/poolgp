@@ -20,6 +20,7 @@
   "perform push operation defined be instruction"
   [push-state in-stack-vec out-stack operation]
   (let [extract-args (reduce pop-if-exists (vector [] push-state) in-stack-vec)]
+        ;check arity against available
         (if (= (count (first extract-args)) (count in-stack-vec))
             (let [output (apply operation (first extract-args))]
                 (update (second extract-args) out-stack

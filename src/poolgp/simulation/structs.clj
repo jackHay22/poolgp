@@ -130,24 +130,6 @@
                        max-push-iterations
                        ^ControllerInterface controller])
 
-(defprotocol Analyzable (analyze [analytic state]))
-
-; TurnAnalytic
-; {
-;   :name :identifier
-;   :value something (likely int)
-;   :operation (fn [current-val gamestate]) -> TurnAnalytic (with updated value)
-; }
-
-(defrecord TurnAnalytic
-  ;record that defines a datapoint to record
-  ;when evaluating an individual (updated once per turn)
-  [name value operation]
-  Analyzable
-  (analyze [analytic gamestate]
-    (update-in analytic [:value]
-      (:operation analytic) gamestate)))
-
 ;AnalysisState
 ; {
 ;   :game-state GameState.

@@ -20,6 +20,7 @@
 
 (defn load-push
   "load push code from a string"
+  ;TODO: check if exists
   [push-str]
   (map #(if (or (boolean? %) (number? %)) %
             (resolve-loaded-name % "_"))

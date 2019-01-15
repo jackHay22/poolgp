@@ -12,7 +12,7 @@
           "max-push-iterations" : 1000
         },
         "p1-analytics" : [
-
+          "score"
         ],
         "p2-analytics" : [
 
