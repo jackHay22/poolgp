@@ -8,7 +8,8 @@
               {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"},
               {"x" : 500, "y" : 285, "id" : "cue", "type" : "cue"}
             ]
-          }
+          },
+          "max-push-iterations" : 1000
         },
         "p1-analytics" : [
 
@@ -22,6 +23,7 @@
           "table" : {
             "balls" : [
               {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"}
+              {"x" : 500, "y" : 285, "id" : "cue", "type" : "cue"}
             ]
           }
         },
@@ -37,6 +39,7 @@
           "table" : {
             "balls" : [
               {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"}
+              {"x" : 500, "y" : 285, "id" : "cue", "type" : "cue"}
             ]
           }
         },
@@ -50,7 +53,7 @@
     ],
     "p1" : {
       "genetic" : true,
-      "strategy" : "(integer_**)"
+      "strategy" : "(integer_** 2 4 integer_- vector_plus)"
     },
     "p2" : {
       "genetic" : true,

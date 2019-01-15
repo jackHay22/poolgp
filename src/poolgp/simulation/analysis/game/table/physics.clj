@@ -157,7 +157,8 @@
         (update-in
           (update-in
             (update-in b
-              [:center] structs/plus (:vector b))
+              [:center] structs/plus (throttle-speed
+                                        (:vector b) config/MAX-VELOCITY))
               [:vector] structs/scale config/SURFACE-FRICTION)
               [:vector] throttle-speed config/MAX-VELOCITY)) ;TODO
        balls))

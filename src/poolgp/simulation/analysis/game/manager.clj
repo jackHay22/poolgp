@@ -1,6 +1,7 @@
 (ns poolgp.simulation.analysis.game.manager
   (:require [poolgp.simulation.analysis.game.table.manager :as table-manager]
-            [poolgp.simulation.analysis.game.rules :as rules])
+            [poolgp.simulation.analysis.game.rules :as rules]
+            [poolgp.config :as config])
   (:import poolgp.simulation.structs.GameState)
   (:gen-class))
 
@@ -13,6 +14,9 @@
     :p1 :p2 true false
     :unassigned :unassigned
     0 0
+    (if (:max-push-iterations gamestate-json)
+        (:max-push-iterations gamestate-json)
+        config/MAX-PUSH-ITERATIONS)
     nil ;TODO: controller
     ))
 

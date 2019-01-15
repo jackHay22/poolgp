@@ -17,8 +17,11 @@
   return: gamestate with any decisions made"
   [gamestate current-player]
   (if (:ready? gamestate)
-      (update-in gamestate
-            [:table-state] push/eval-push (:strategy current-player))
+      (assoc
+        (update-in gamestate
+            [:table-state] push/eval-push (:strategy current-player)
+                                          (:max-push-iterations gamestate))
+        :ready? false)
       gamestate))
 
 (defn display-operations

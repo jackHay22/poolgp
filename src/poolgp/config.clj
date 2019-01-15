@@ -37,6 +37,7 @@
 
 (def DEFAULT-PORT 9999)
 (def DEFAULT-MAX-ITERATIONS 100000)
+(def MAX-PUSH-ITERATIONS 1000)
 
 ;max ball velocity before it skips walls
 (def MAX-VELOCITY 14)

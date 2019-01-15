@@ -28,7 +28,8 @@ Instructs are defined here: poolgp.simulation.players.push.instructions
               {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"},
               {"x" : 500, "y" : 285, "id" : "cue", "type" : "cue"}
             ]
-          }
+          },
+          "max-push-iterations" : 1000 (optional)
         },
         "p1-analytics" : [
 

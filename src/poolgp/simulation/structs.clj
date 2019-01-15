@@ -127,6 +127,7 @@
                        ready? current-scored?
                        p1-balltype p2-balltype
                        p1-score p2-score
+                       max-push-iterations
                        ^ControllerInterface controller])
 
 (defprotocol Analyzable (analyze [analytic state]))
