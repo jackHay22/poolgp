@@ -20,7 +20,8 @@
       (assoc
         (update-in gamestate
             [:table-state] push/eval-push (:strategy current-player)
-                                          (:max-push-iterations gamestate))
+                                          (:max-push-iterations gamestate)
+                                          (:push-inputs gamestate))
         :ready? false)
       gamestate))
 

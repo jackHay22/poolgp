@@ -128,6 +128,7 @@
                        p1-balltype p2-balltype
                        p1-score p2-score
                        max-push-iterations
+                       push-inputs
                        ^ControllerInterface controller])
 
 ;AnalysisState
@@ -152,5 +153,6 @@
 
 (defrecord SimulationState [analysis-states max-iterations
                             current-iteration connection
-                            watching ^Player p1 ^Player p2
+                            watching
+                            ^Player p1 ^Player p2
                             demo])

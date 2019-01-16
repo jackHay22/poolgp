@@ -53,7 +53,8 @@
 
 (defn eval-push
   "evaluate push code based on tablestate"
-  [ts push max-iterations]
+  [ts push max-iterations inputs]
+  ;TODO: use inputs
   (let [cue (filter #(= (:id %) :cue) (:balls ts))
         cue-location (:center cue)
         ball-locations (map :center (:balls ts))

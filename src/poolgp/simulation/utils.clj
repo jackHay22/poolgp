@@ -43,6 +43,11 @@
   [path]
   (javax.imageio.ImageIO/read (clojure.java.io/resource path)))
 
+(defn load-image-inputstream
+  "load an image input stream from resources"
+  [path]
+  (clojure.java.io/input-stream (clojure.java.io/resource path)))
+
 (defn load-structure-images
   "load an image in a structure
   based on path vector(s)"

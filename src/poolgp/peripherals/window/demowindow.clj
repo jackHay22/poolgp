@@ -1,7 +1,7 @@
 (ns poolgp.peripherals.window.demowindow
   (:require [poolgp.config :as config]
-            [poolgp.peripherals.window.infopanel :as info]
             [poolgp.peripherals.interaction.interactionutils :as interaction]
+            [poolgp.simulation.utils :as utils]
             [poolgp.simulation.manager :as manager])
   (:import java.awt.image.BufferedImage)
   (:import javax.swing.JPanel)
@@ -11,6 +11,11 @@
   (:import java.awt.Dimension)
   (:import java.awt.event.MouseListener)
   (:import javax.swing.BoxLayout)
+  (:import javax.swing.JMenu)
+  (:import javax.swing.JMenuBar)
+  (:import javax.swing.JMenuItem)
+  (:import javax.swing.ImageIcon)
+  (:import java.awt.event.ActionListener)
   (:gen-class))
 
 (def SYSTEM-THREAD (atom nil))
@@ -19,7 +24,7 @@
 ;keeps track of state
 (def STATE (atom nil))
 
-(defn graphical-panel
+(defn- graphical-panel
   "-extends JPanel, implements Runnable-"
   [width height target-delay]
   (let [base-image (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)
@@ -45,25 +50,42 @@
                             (Thread/sleep target-delay)))
                     (recur))))))
 
+(defn- control-bar
+  "jmenubar with demo controls"
+  []
+  (let [play (ImageIcon. (utils/load-image "images/play.png"))
+        pause (ImageIcon. (utils/load-image  "images/pause.png"))
+        controller (JMenuItem. "" play)]
+        (do
+          (.addActionListener controller
+              (proxy [ActionListener] []
+                      (actionPerformed [event]
+                        (do
+                          (swap! config/PAUSED? not)
+                          (.setIcon controller
+                            (if @config/PAUSED? play pause))))))
+          (doto (JMenuBar.) (.add controller)))))
+
 (defn start-window
   "start JFrame and add JPanel extension as content"
   [state-path]
   ;initialize state and store
   (reset! STATE (manager/simulation-init state-path))
   (let [panel (graphical-panel
-                  config/POOL-WIDTH-PX config/POOL-HEIGHT-PX
+                  config/WINDOW-WIDTH-PX config/WINDOW-HEIGHT-PX
                   (/ SLEEP-TICKS-PER-SECOND config/WINDOW-FPS))
         window (JFrame. config/WINDOW-TITLE)]
         (doto panel
           (.setPreferredSize
-            (Dimension. config/POOL-WIDTH-PX config/POOL-HEIGHT-PX))
+            (Dimension. config/WINDOW-WIDTH-PX config/WINDOW-HEIGHT-PX))
+          (.setOpaque true)
+          (.setBackground config/PANEL-BG-COLOR)
           (.setFocusable true)
           (.addMouseListener panel)
           (.requestFocus))
         (doto window
-          (.setLayout (BoxLayout. (.getContentPane window) BoxLayout/PAGE_AXIS))
-          (.add panel)
-          (.add (info/get-info-panel))
+          (.setContentPane panel)
+          (.setJMenuBar (control-bar))
           (.setDefaultCloseOperation JFrame/EXIT_ON_CLOSE)
           (.setResizable false)
           (.pack)

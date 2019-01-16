@@ -11,8 +11,7 @@
   "load task definition from json, parse components recursively
   through structure"
   [task-definition-path]
-  (let [json-structure (utils/read-json-file task-definition-path)
-        simulation-json (:simulation json-structure)]
+  (let [simulation-json (:simulation (utils/read-json-file task-definition-path))]
         (SimulationState.
           ;analysis states
           (analysis-manager/analysis-init
