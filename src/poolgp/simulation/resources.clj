@@ -9,6 +9,8 @@
   (:import poolgp.simulation.structs.ControllerInterface)
   (:gen-class))
 
+(def BREAK-PT (Vector. 500 285))
+
 (def BALL-IMAGES
   {:1 "images/balls/red_solid_blank.png"
    :2 "images/balls/red_solid_blank.png"

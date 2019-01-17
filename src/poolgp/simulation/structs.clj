@@ -107,26 +107,30 @@
                                 force angle release? cue
                                 ^AffineTransformOp rotate-op
                                 ^Vector cue-draw])
+;GamePlayer
+; {
+;   :id :p1/:p2
+;   :ball-type :striped/:solid/:unassigned
+;   :score int
+; }
+
+(defrecord GamePlayer [id ball-type score])
 
 ;GameState
 ; {
 ;   :table-state (TableState.)
-;   :current :p1/:p2
-;   :waiting :p1/:p2
+;   :current GamePlayer
+;   :waiting GamePlayer
 ;   :ready? true/false -> balls stopped, time for player move
 ;   :current-scored? true/false -> current player scored on turn
-;   :p1-balltype :solid/:striped/:unassigned
-;   :p2-balltype :solid/:striped/:unassigned
-;   :p1-score int
-;   :p2-score int
 ;   :controller (ControllerInterface.)
 ; }
 
 (defrecord GameState [^TableState table-state
-                       current waiting
+                       ^GamePlayer current
+                       ^GamePlayer waiting
                        ready? current-scored?
-                       p1-balltype p2-balltype
-                       p1-score p2-score
+                       scratched?
                        max-push-iterations
                        push-inputs
                        ^ControllerInterface controller])

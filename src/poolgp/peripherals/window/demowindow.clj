@@ -16,6 +16,7 @@
   (:import javax.swing.JMenuItem)
   (:import javax.swing.ImageIcon)
   (:import java.awt.event.ActionListener)
+  (:import java.awt.RenderingHints)
   (:gen-class))
 
 (def SYSTEM-THREAD (atom nil))
@@ -29,6 +30,8 @@
   [width height target-delay]
   (let [base-image (BufferedImage. width height BufferedImage/TYPE_INT_ARGB)
         g (cast Graphics2D (.createGraphics base-image))]
+      (.setRenderingHint g
+        RenderingHints/KEY_ANTIALIASING RenderingHints/VALUE_ANTIALIAS_ON)
      (proxy [JPanel Runnable MouseListener] []
             (addNotify []
               (do (proxy-super addNotify)

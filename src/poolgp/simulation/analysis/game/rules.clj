@@ -1,14 +1,11 @@
 (ns poolgp.simulation.analysis.game.rules
+  (:require [poolgp.simulation.resources :as resources]
+            [poolgp.simulation.analysis.game.table.physics :as physics])
   (:gen-class))
 
 ;TODO
 ;
-; (defn pocketed?
-;   "determine if ball is in a pocket"
-;   [b table]
-;   (reduce #(if (> (:r table) (distance (:center b) %2))
-;                (reduced true) %1)
-;           false (:pockets table)))
+
 ;
 ; (defn do-game-state
 ;   "check game status and ball type assignments"
@@ -35,23 +32,51 @@
 ;           ;TODO don't change if current pocketed balls on current turn
 ;           (assoc state :current waiting :waiting current))
 ;     state))
-;
-; (defn do-pockets
-;   "if ball pocketed, remove from table"
-;   [state]
-;   (reduce (fn [s b]
-;     (if (and (pocketed? b (:table s))
-;              (not (= (:id b) :cue)))
-;         (update-in
-;           (update-in s
-;             [:pocketed] conj b)
-;             [:balls] (fn [b-list]
-;                           (filter #(not (= (:id b) (:id %)))
-;                           b-list)))
-;         s))
-;     state (:balls state)))
+
+(defn pocketed?
+  "determine if ball is in a pocket"
+  [b table]
+  (reduce #(if (> (:r table) (physics/distance (:center b) %2))
+               (reduced true) %1)
+          false (:pockets table)))
+
+(defn move-ball-check-scoring
+  "check any score updates"
+  [gamestate]
+  (let [current-balltype (:ball-type (:current gamestate))
+        current-pocketed (:pocketed (:table-state gamestate))]
+  ))
+
+(defn move-pocketed
+  "take gamestate, check for balls in
+  pockets"
+  [gamestate]
+  (update-in gamestate [:table-state]
+    (fn [ts]
+      (reduce (fn [s b]
+                (if (pocketed? b (:table ts))
+                  (if (not (= (:id b) :cue))
+                    ;regular ball pocketed
+                    (update-in
+                      (update-in s
+                        [:pocketed] conj b)
+                        [:balls] (fn [balls]
+                                    (filter
+                                        #(not (= (:id %) (:id b)))
+                                        balls)))
+                    ;move cue to break point
+                    (update-in s [:balls]
+                      (fn [balls] (map #(if (= (:id %) :cue)
+                                      (assoc % :center resources/BREAK-PT)
+                                      %) balls))))
+                 s))
+              ts (:balls ts)))))
 
 (defn rules-update
+  "check rules and gamestate"
   [gamestate]
-gamestate
+  ;Check if any balls are in pockets
+  ;Check if pocketed ball is type of current player (assign if unassigned)
+  ; if balls stopped and no score during turn, set ready and change current
+    gamestate
   )

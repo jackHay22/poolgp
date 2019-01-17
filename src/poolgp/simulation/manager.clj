@@ -39,7 +39,7 @@
                   (update-in a-state [:game-state]
                     (fn [gs]
                       (player-manager/update-operations
-                        gs ((:current gs) state)))))) %))
+                        gs ((:id (:current gs)) state)))))) %))
       [:current-iteration] inc))
 
 (defn simulation-render

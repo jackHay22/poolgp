@@ -1,5 +1,7 @@
 (ns poolgp.config
   (:import java.awt.Color)
+  (:import java.awt.BasicStroke)
+  (:import java.awt.Font)
   (:gen-class))
 
 (def POOL-WIDTH-PX 1200)
@@ -9,7 +11,7 @@
 ;demo window configuration values
 (def WINDOW-WIDTH-PX 1200)
 (def WINDOW-HEIGHT-PX (+ POOL-HEIGHT-PX INFO-HEIGHT-PX))
-(def INSET-MARGIN 20)
+(def INSET-MARGIN 10)
 (def WINDOW-FPS 60)
 (def WINDOW-TITLE "Pool GP")
 (def EDIT-WINDOW-TITLE "PoolGP Test Builder")
@@ -38,14 +40,20 @@
 
 (def CUE-HOLD-DIST 10)
 
+;default configuration values
 (def DEFAULT-PORT 9999)
 (def DEFAULT-MAX-ITERATIONS 100000)
-(def MAX-PUSH-ITERATIONS 1000)
+(def DEFAULT-MAX-PUSH-ITERATIONS 1000)
 (def DEFAULT-PUSH-INPUTS (list :cue :balls :pockets))
 
 ;max ball velocity before it skips walls
 (def MAX-VELOCITY 14)
 
 (def PANEL-BG-COLOR (Color. 76 68 71))
+(def PANEL-INFO-COLOR (Color. 253 177 87))
+(def PANEL-INFO-STROKE-COLOR (Color. 255 200 134))
+(def PANEL-INFO-STROKE (BasicStroke. 2))
+
+(def PANEL-SCORE-FONT (Font. "TimesRoman" Font/BOLD 30))
 
 (def PAUSED? (atom true))
