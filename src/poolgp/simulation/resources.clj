@@ -9,7 +9,7 @@
   (:import poolgp.simulation.structs.ControllerInterface)
   (:gen-class))
 
-(def BREAK-PT (Vector. 500 285))
+(def BREAK-PT (Vector. 883 303))
 
 (def BALL-IMAGES
   {:1 "images/balls/red_solid_blank.png"
@@ -107,9 +107,6 @@
 (def EMPTY-CONFIG-STATE
   {:simulation {
     :analysis []
-    :max-iterations config/DEFAULT-MAX-ITERATIONS
-    :port config/DEFAULT-PORT
-    :watching 0
     :p1 {:genetic true :strategy "()"}
     :p2 {:genetic true :strategy "()"}
     :demo true}})

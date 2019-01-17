@@ -67,8 +67,8 @@
                     ;move cue to break point
                     (update-in s [:balls]
                       (fn [balls] (map #(if (= (:id %) :cue)
-                                      (assoc % :center resources/BREAK-PT)
-                                      %) balls))))
+                                          (assoc % :center resources/BREAK-PT) %)
+                                        balls))))
                  s))
               ts (:balls ts)))))
 

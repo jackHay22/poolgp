@@ -46,7 +46,8 @@
   "take simulation state and optionally
   Graphics2D context (demo mode)"
   [state gr]
-  (analysis-manager/analysis-render
-    (nth (:analysis-states state)
-          (min (:watching state) (count (:analysis-states state))))
-    gr (:demo state)))
+  (if (> (count (:analysis-states state)) 0)
+    (analysis-manager/analysis-render
+      (nth (:analysis-states state)
+            (min (:watching state) (count (:analysis-states state))))
+      gr (:demo state))))
