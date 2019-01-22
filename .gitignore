@@ -10,3 +10,5 @@ pom.xml.asc
 .hgignore
 .hg/
 *.txt
+*.json
+!example_evaluation_state.json
