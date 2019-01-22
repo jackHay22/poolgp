@@ -20,7 +20,7 @@
 (def TABLE-WIDTH-M 2.7)
 (def TABLE-HEIGHT-M 1.4)
 (def TABLE-RUNNER-M 0.15)
-(def SURFACE-FRICTION 0.995)
+(def SURFACE-FRICTION 0.99)
 
 ;pixels per meter ~400 at 1200 px width
 (def M-PX-RATIO (/ WINDOW-WIDTH-PX (+ TABLE-WIDTH-M

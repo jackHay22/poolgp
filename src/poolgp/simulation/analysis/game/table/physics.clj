@@ -102,8 +102,7 @@
         norm (structs/normalize (structs/minus (:center ball) proj-pt))]
         ;TODO: this calculation can be optimized considerably by choosing between
         ;two standard surface normals
-        (update-in ball [:vector] do-normal-reflection norm)
-        ))
+        (update-in ball [:vector] do-normal-reflection norm)))
 
 
 (defn check-wall-collisions

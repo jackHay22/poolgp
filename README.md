@@ -6,6 +6,12 @@
 ```
 Optional: -r specifies a release and -s starts a docker container
 
+## Options
+- `-d PATH` Runs in demo mode given configuration
+- `-p PORT` Runs in server mode with port specified [to be removed]
+- `-e FILENAME` Opens editing mode and writes to file provided (must exist)
+- `-b FILENAME` Creates a blank configuration file (with required fields) (this is meant to be subsequently edited)
+
 ## Dependencies
 ```clojure
 [org.clojure/tools.cli "0.4.1"]

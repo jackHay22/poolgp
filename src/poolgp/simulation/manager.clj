@@ -33,13 +33,17 @@
   [state]
   ;TODO: enforce max iterations
   (update-in
-    (update-in state [:analysis-states]
+    (update-in state
+      [:analysis-states]
         #(map (fn [a-state]
+          ;perform analysis updates
                 (analysis-manager/analysis-update
                   (update-in a-state [:game-state]
                     (fn [gs]
+                      ;update gamestate with current player
                       (player-manager/update-operations
                         gs ((:id (:current gs)) state)))))) %))
+      ;update current iteration
       [:current-iteration] inc))
 
 (defn simulation-render
@@ -50,4 +54,11 @@
     (analysis-manager/analysis-render
       (nth (:analysis-states state)
             (min (:watching state) (count (:analysis-states state))))
-      gr (:demo state))))
+      gr (:demo state))
+    ;display default notification
+    (doto gr
+      (.setColor config/PANEL-INFO-COLOR)
+      (.setFont config/PANEL-SCORE-FONT)
+      (.drawString "No games configured"
+        (- (int (/ config/WINDOW-WIDTH-PX 2)) 120)
+        400))))
