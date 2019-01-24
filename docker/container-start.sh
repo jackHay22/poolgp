@@ -1,2 +1,2 @@
 #!/bin/sh
-exec java -jar /app.jar -p $1
+exec java -jar /app.jar -e $1

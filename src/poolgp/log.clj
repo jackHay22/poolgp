@@ -9,6 +9,7 @@
 (def TEXT-YELLOW "\033[1;33m")
 (def TEXT-NC "\033[0m")
 
+;internal
 (defn- write
   "write a log message with an optional tag"
       ([msg] (println "poolgp =>" msg))

@@ -16,7 +16,6 @@ start_docker() {
     sleep 1
   done
   (( i )) && printf '\n'
-  docker build --tag poolgp_server .
 }
 
 lein_install() {
@@ -37,16 +36,16 @@ else
 fi
 
 #optional build args
-SERVER=0
+SERVER=""
 RELEASE=""
 
-while getopts ":r:s" opt; do
+while getopts ":r:s:" opt; do
   case $opt in
     r)
       RELEASE="$OPTARG"
       ;;
     s)
-      SERVER=1
+      SERVER="$OPTARG"
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -69,7 +68,8 @@ if [ "$RELEASE" != "" ]; then
   echo "TODO"
 fi
 
-if [ $SERVER -eq 1 ]; then
-  docker build --tag poolgp_server . || start_docker
+if [ "$SERVER" != "" ]; then
+  start_docker
+  docker build --build-arg TASK_DEFINITION=$SERVER --tag poolgp_server .
   docker run poolgp_server:latest
 fi
