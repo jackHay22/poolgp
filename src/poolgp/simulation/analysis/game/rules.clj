@@ -12,22 +12,6 @@
   (reduce #(if (> (:x (:vector %2)) SPEED-TOLERANCE)
                (reduced false) %1) true balls))
 
-;
-; (defn do-game-state
-;   "check game status and ball type assignments"
-;   [state]
-;   (if (not (empty? (:pocketed state)))
-;     (cond
-;       (= (:ball-type ((:current state) state)) :unassigned)
-;         ;do ball type assignments (based on first ball in pocketed list)
-;         (let [pocketed-type (:type (first (:pocketed state)))]
-;           (assoc-in
-;             (assoc-in state
-;               [(:current state) :ball-type] pocketed-type)
-;               [(:waiting state) :ball-type] (pocketed-type NOT-BALL-TYPE)))
-;       :else state)
-;     state))
-
 (defn- swap-current
   "take gamestate, swap current and waiting players"
   [gs]
@@ -53,13 +37,6 @@
   (reduce #(if (> (:r table) (physics/distance (:center b) %2))
                (reduced true) %1)
           false (:pockets table)))
-
-(defn- move-ball-check-scoring
-  "check any score updates"
-  [gamestate]
-  (let [current-balltype (:ball-type (:current gamestate))
-        current-pocketed (:pocketed (:table-state gamestate))]
-  ))
 
 (defn- move-pocketed
   "take gamestate, check for balls in
