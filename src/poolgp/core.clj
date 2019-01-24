@@ -30,9 +30,9 @@
         options (:options run-args)
         errors (:errors run-args)]
       (cond
-        (> (count errors) 0) (log/write (first errors))
+        (> (count errors) 0) (log/write-error (first errors))
         (:demo options)      (window/start-window (:demo options))
         (:builder options)   (tablebuilder/edit-tables (:builder options))
         (:new options)       (utils/write-json-file (:new options) resources/EMPTY-CONFIG-STATE)
         (:eval options)      (server/start-server (:eval options))
-        :else                (log/write "ERROR" "please specify a run configuration"))))
+        :else                (log/write-error "please specify a run configuration"))))

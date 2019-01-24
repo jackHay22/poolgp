@@ -57,3 +57,5 @@
 (def PANEL-SCORE-FONT (Font. "TimesRoman" Font/BOLD 30))
 
 (def PAUSED? (atom true))
+
+(def TEXT-COLOR? true)
