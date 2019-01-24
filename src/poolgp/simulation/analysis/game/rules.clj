@@ -3,8 +3,14 @@
             [poolgp.simulation.analysis.game.table.physics :as physics])
   (:gen-class))
 
-;TODO
-;
+;speed at which a ball is considered to be stopped
+(def SPEED-TOLERANCE 0.02)
+
+(defn- balls-stopped?
+  "check if all balls have stopped moving"
+  [balls]
+  (reduce #(if (> (:x (:vector %2)) SPEED-TOLERANCE)
+               (reduced false) %1) true balls))
 
 ;
 ; (defn do-game-state
@@ -33,21 +39,40 @@
 ;           (assoc state :current waiting :waiting current))
 ;     state))
 
-(defn pocketed?
+(defn- swap-current
+  "take gamestate, swap current and waiting players"
+  [gs]
+  (let [current (:current gs)]
+    (assoc gs :current (:waiting gs)
+              :waiting current)))
+
+(defn- do-turn-state
+  "update player turns if balls stopped"
+  [gs]
+  (if (balls-stopped? (:balls (:table-state gs)))
+      (assoc
+        (if (:current-scored? gs)
+            (if (not (:scratched? gs))
+                gs (swap-current gs))
+            (swap-current gs))
+         :ready? true)
+      gs))
+
+(defn- pocketed?
   "determine if ball is in a pocket"
   [b table]
   (reduce #(if (> (:r table) (physics/distance (:center b) %2))
                (reduced true) %1)
           false (:pockets table)))
 
-(defn move-ball-check-scoring
+(defn- move-ball-check-scoring
   "check any score updates"
   [gamestate]
   (let [current-balltype (:ball-type (:current gamestate))
         current-pocketed (:pocketed (:table-state gamestate))]
   ))
 
-(defn move-pocketed
+(defn- move-pocketed
   "take gamestate, check for balls in
   pockets"
   [gamestate]
@@ -78,5 +103,5 @@
   ;Check if any balls are in pockets
   ;Check if pocketed ball is type of current player (assign if unassigned)
   ; if balls stopped and no score during turn, set ready and change current
-    gamestate
+    (do-turn-state gamestate)
   )

@@ -20,7 +20,7 @@ Optional: -r specifies a release and -s starts a docker container
 ```
 
 ## Instruction Definitions
-Instructs are defined here: poolgp.simulation.players.push.instructions
+Instructions are defined here: poolgp.simulation.players.push.instructions
 
 ## Task Definition Structure
 ```json

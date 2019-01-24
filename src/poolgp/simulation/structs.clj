@@ -123,6 +123,7 @@
 ;   :waiting GamePlayer
 ;   :ready? true/false -> balls stopped, time for player move
 ;   :current-scored? true/false -> current player scored on turn
+;   :push-inputs (list :cue :balls :pockets) (by default)
 ;   :controller (ControllerInterface.)
 ; }
 

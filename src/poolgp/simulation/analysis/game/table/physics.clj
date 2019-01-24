@@ -4,9 +4,6 @@
   (:import poolgp.simulation.structs.Vector)
   (:gen-class))
 
-;speed at which a ball is considered to be stopped
-(def SPEED-TOLERANCE 0.1)
-
 (def NOT-BALL-TYPE {:striped :solid :solid :striped})
 
 (defn ** ([x] (* x x))
@@ -53,7 +50,6 @@
   "recalculate movement vectors on collision
   CITE: https://ericleong.me/research/circle-circle/#dynamic-circle-circle-collision"
   [b1 b2]
-  ;TODO: bug where balls are locked together
   (let [norm (structs/normalize (structs/minus (:center b2) (:center b1)))
         p (/ (* 2
                 (- (structs/dot (:vector b1) norm)
@@ -121,9 +117,17 @@
 (defn ball-collision?
   "determine if collision between balls"
   [b1 b2]
-  (> (+ (:r b1) (:r b2))
-     (distance
-       (:center b1) (:center b2))))
+  (and
+    (> (+ (:r b1) (:r b2))
+       (distance
+         (:center b1) (:center b2)))
+    ;prevent balls from sticking together by determining
+    ;directions
+    ;CITE https://gamedev.stackexchange.com/questions/20516/ball-collisions-sticking-together
+    (> (structs/dot
+          (structs/minus (:center b1) (:center b2))
+          (structs/minus (:vector b2) (:vector b1)))
+        0)))
 
 (defn do-collisions
   "determine if ball has collided with a wall
@@ -142,12 +146,6 @@
         (check-wall-collisions b (:walls (:table state)))
           balls))
         balls))))
-
-(defn balls-stopped?
-  "check if all balls have stopped moving"
-  [balls]
-  (reduce #(if (> (:x (:vector %2)) SPEED-TOLERANCE)
-               (reduced false) %1) true balls))
 
 (defn update-ball-positions
   "update the positions of balls"

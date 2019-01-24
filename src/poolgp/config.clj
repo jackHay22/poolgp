@@ -47,7 +47,7 @@
 (def DEFAULT-PUSH-INPUTS (list :cue :balls :pockets))
 
 ;max ball velocity before it skips walls
-(def MAX-VELOCITY 14)
+(def MAX-VELOCITY 10)
 
 (def PANEL-BG-COLOR (Color. 76 68 71))
 (def PANEL-INFO-COLOR (Color. 253 177 87))
