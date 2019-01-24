@@ -27,17 +27,6 @@
 ;               [(:waiting state) :ball-type] (pocketed-type NOT-BALL-TYPE)))
 ;       :else state)
 ;     state))
-;
-; (defn do-turn-state
-;   "check criteria for changing turns"
-;   [state]
-;   (if (balls-stopped? (:balls state))
-;     ;change turns
-;     (let [current (:current state)
-;           waiting (:waiting state)]
-;           ;TODO don't change if current pocketed balls on current turn
-;           (assoc state :current waiting :waiting current))
-;     state))
 
 (defn- swap-current
   "take gamestate, swap current and waiting players"
@@ -74,7 +63,7 @@
 
 (defn- move-pocketed
   "take gamestate, check for balls in
-  pockets"
+  pockets, move to pocketed list"
   [gamestate]
   (update-in gamestate [:table-state]
     (fn [ts]
@@ -97,11 +86,34 @@
                  s))
               ts (:balls ts)))))
 
+(defn- check-pocketed
+  "if any balls are in pockets, determine
+  :current-scored? or scratched
+  NOTE: does not move balls to pocketed list"
+  [gs]
+  (let [current-balltype (:ball-type (:current gs))]
+    (reduce #(if (pocketed? %2 (:table (:table-state gs)))
+                 (if (= current-balltype :unassigned)
+                     (update-in
+                       (assoc
+                         (assoc-in %1 [:current :ball-type] (:type %2))
+                         :current-scored? true)
+                       [:current :score] inc)
+                     (cond
+                       (= (:type %2) current-balltype)
+                          (update-in
+                            (assoc %1 :current-scored? true)
+                            [:current :score] inc)
+                       (= (:type %2) :cue)
+                          (assoc %1 :scratched? true)
+                       :opposing-ball
+                          (assoc %1 :scratched? true))) %1)
+            gs (:balls (:table-state gs)))))
+
 (defn rules-update
   "check rules and gamestate"
   [gamestate]
-  ;Check if any balls are in pockets
-  ;Check if pocketed ball is type of current player (assign if unassigned)
-  ; if balls stopped and no score during turn, set ready and change current
-    (do-turn-state gamestate)
-  )
+  ;TODO: score
+  (do-turn-state
+    (move-pocketed
+      (check-pocketed gamestate))))
