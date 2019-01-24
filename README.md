@@ -62,6 +62,10 @@ Instructions are defined here: poolgp.simulation.players.push.instructions
 }
 ```
 
+## Issues/TODO
+### Bugs
+- Balls sometimes still seem to be "sticky" and orbit each other briefly (especially on breaks)
+
 ## License
 
 Copyright © 2018 Jack Hay
