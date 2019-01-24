@@ -159,5 +159,4 @@
 (defrecord SimulationState [analysis-states max-iterations
                             current-iteration connection
                             watching
-                            ^Player p1 ^Player p2
-                            demo])
+                            ^Player p1 ^Player p2])

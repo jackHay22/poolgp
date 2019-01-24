@@ -3,6 +3,7 @@
             [poolgp.simulation.structs :as structs]
             [poolgp.simulation.utils :as utils]
             [poolgp.config :as config]
+            [poolgp.log :as log]
             [poolgp.simulation.players.manager :as player-manager])
   (:import poolgp.simulation.structs.SimulationState)
   (:gen-class))
@@ -10,12 +11,12 @@
 (defn simulation-init
   "load task definition from json, parse components recursively
   through structure"
-  [task-definition-path]
+  [task-definition-path demo?]
   (let [simulation-json (:simulation (utils/read-json-file task-definition-path))]
         (SimulationState.
           ;analysis states
           (analysis-manager/analysis-init
-            (:analysis simulation-json) (:demo simulation-json))
+            (:analysis simulation-json) demo?)
           ;supports a default value if not included
           (if (:max-iterations simulation-json)
               (:max-iterations simulation-json) config/DEFAULT-MAX-ITERATIONS)
@@ -25,8 +26,7 @@
           (if (:watching simulation-json)
               (:watching simulation-json) 0)
           (player-manager/init-player (:p1 simulation-json) :p1)
-          (player-manager/init-player (:p2 simulation-json) :p2)
-          (:demo simulation-json))))
+          (player-manager/init-player (:p2 simulation-json) :p2))))
 
 (defn simulation-update
   "update transform on simulation state"
@@ -49,16 +49,18 @@
 (defn simulation-render
   "take simulation state and optionally
   Graphics2D context (demo mode)"
-  [state gr]
+  [state gr demo?]
   (if (> (count (:analysis-states state)) 0)
     (analysis-manager/analysis-render
       (nth (:analysis-states state)
             (min (:watching state) (count (:analysis-states state))))
-      gr (:demo state))
+      gr demo?)
     ;display default notification
-    (doto gr
-      (.setColor config/PANEL-INFO-COLOR)
-      (.setFont config/PANEL-SCORE-FONT)
-      (.drawString "No games configured"
-        (- (int (/ config/WINDOW-WIDTH-PX 2)) 120)
-        400))))
+    (if demo?
+      (doto gr
+        (.setColor config/PANEL-INFO-COLOR)
+        (.setFont config/PANEL-SCORE-FONT)
+        (.drawString "No games configured"
+          (- (int (/ config/WINDOW-WIDTH-PX 2)) 120)
+          400))
+       (log/write-error "No games configured in task definition"))))

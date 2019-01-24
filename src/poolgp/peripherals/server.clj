@@ -1,7 +1,9 @@
 (ns poolgp.peripherals.server
   (:require [clojure.java.io :as io]
             [clojure.core.async :as async]
-            [poolgp.simulation.structs :as structs])
+            [poolgp.simulation.structs :as structs]
+            [poolgp.simulation.manager :as simulation-manager]
+            [poolgp.log :as log])
   (:import [java.net ServerSocket SocketException])
   (:gen-class))
 
@@ -37,14 +39,20 @@
 ;              (async/close! IN-CHANNEL)
 ;              (async/close! OUT-CHANNEL))))))))
 
-(defn async-persistent-server
-  [socket]
-
-  )
+(defn display-starting-config
+  "log starting configuration state"
+  [s]
+  (doall (map log/write-info
+      (list
+        (str "Port: " (:connection s))
+        (str "Max iterations: " (:max-iterations s))
+        (str "Total analysis-states: " (count (:analysis-states s)))))))
 
 (defn start-server
   "start a persistent socket server"
-  [port]
-  (let [socket (ServerSocket. port)]
-    ;(structs/init sys-state-record config)
-    (async-persistent-server socket)))
+  [task-def]
+  (let [simulation-state (simulation-manager/simulation-init task-def false)
+        socket (ServerSocket. (:connection simulation-state))]
+        (display-starting-config simulation-state)
+        (log/write-info "Starting persistent async server")
+        ))

@@ -44,7 +44,7 @@
             (mouseReleased [e])
             (paintComponent [^Graphics panel-graphics]
               (proxy-super paintComponent panel-graphics)
-              (manager/simulation-render @STATE g)
+              (manager/simulation-render @STATE g true)
               (.drawImage panel-graphics base-image 0 0 width height nil))
             (run [] (loop []
                       (if (not @config/PAUSED?)
@@ -73,7 +73,7 @@
   "start JFrame and add JPanel extension as content"
   [state-path]
   ;initialize state and store
-  (reset! STATE (manager/simulation-init state-path))
+  (reset! STATE (manager/simulation-init state-path true))
   (let [panel (graphical-panel
                   config/WINDOW-WIDTH-PX config/WINDOW-HEIGHT-PX
                   (/ SLEEP-TICKS-PER-SECOND config/WINDOW-FPS))

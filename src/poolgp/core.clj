@@ -5,21 +5,21 @@
             [poolgp.simulation.resources :as resources]
             [poolgp.simulation.utils :as utils]
             [poolgp.config :as config]
+            [poolgp.log :as log]
             [clojure.tools.cli :refer [parse-opts]])
   (:gen-class))
 
 (def opts
-  [["-p" "--port PORT" "Port number"
-    :default config/DEFAULT-PORT
-    :parse-fn #(Integer/parseInt %)
-    :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]
+  [["-e" "--eval PATH" "Evaluation task definition"
+    :default false
+    :validate [utils/path? "Must be a valid filepath"]]
    ["-d" "--demo PATH" "Demo file"
     :default false
     :validate [utils/path? "Must be a valid filepath"]]
-   ["-e" "--edit FILENAME" "Edit filename"
+   ["-b" "--builder PATH" "Edit filename"
     :default false
     :validate [utils/path? "Must be a valid filepath"]]
-   ["-b" "--blank FILENAME" "Write blank state"
+   ["-n" "--new FILENAME" "Write blank state"
     :default false]
    ["-h" "--help"]])
 
@@ -30,8 +30,9 @@
         options (:options run-args)
         errors (:errors run-args)]
       (cond
-        (> (count errors) 0) (println (first errors))
-        (:demo options)  (window/start-window (:demo options))
-        (:edit options)   (tablebuilder/edit-tables (:edit options))
-        (:blank options) (utils/write-json-file (:blank options) resources/EMPTY-CONFIG-STATE)
-        :else            (server/start-server (:port options)))))
+        (> (count errors) 0) (log/write (first errors))
+        (:demo options)      (window/start-window (:demo options))
+        (:builder options)   (tablebuilder/edit-tables (:builder options))
+        (:new options)       (utils/write-json-file (:new options) resources/EMPTY-CONFIG-STATE)
+        (:eval options)      (server/start-server (:eval options))
+        :else                (log/write "ERROR" "please specify a run configuration"))))

@@ -6,11 +6,11 @@
 ```
 Optional: -r specifies a release and -s starts a docker container
 
-## Options
-- `-d PATH` Runs in demo mode given configuration
-- `-p PORT` Runs in server mode with port specified [to be removed]
-- `-e FILENAME` Opens editing mode and writes to file provided (must exist)
-- `-b FILENAME` Creates a blank configuration file (with required fields) (this is meant to be subsequently edited)
+## Options (an option is required)
+- `-d --demo PATH` Runs in demo mode given configuration
+- `-e --eval PATH` Runs in server mode with specified task definition
+- `-b --builder PATH` Opens editing mode and writes to file provided (must exist)
+- `-n --new FILENAME` Creates a blank configuration file (with required fields) (this is meant to be subsequently edited)
 
 ## Dependencies
 ```clojure
@@ -56,8 +56,7 @@ Instructions are defined here: poolgp.simulation.players.push.instructions
     "p2" : {
       "genetic" : true,
       "strategy" : "(integer_+)"
-    },
-    "demo" : true               (optional)
+    }
   }
 }
 ```

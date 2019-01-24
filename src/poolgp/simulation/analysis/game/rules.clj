@@ -90,7 +90,6 @@
 (defn rules-update
   "check rules and gamestate"
   [gamestate]
-  ;TODO: score
   (do-turn-state
     (move-pocketed
       (check-pocketed gamestate))))

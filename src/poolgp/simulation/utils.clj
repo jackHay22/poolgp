@@ -11,8 +11,6 @@
   (:import java.awt.geom.Point2D$Double)
   (:gen-class))
 
-(def write-log (fn [msg] (println "poolgp =>" msg)))
-
 (def path? (fn [path] (.isFile (clojure.java.io/file path))))
 
 (def get-timestamp
@@ -24,7 +22,7 @@
   (try
     (.drawImage gr img (int x) (int y) nil)
     (catch Exception e
-      (write-log (str "Failed to render image:" img "\n" (.getMessage e))))))
+      (println (str "Failed to render image:" img "\n" (.getMessage e))))))
 
 (defn get-rotation-op
   "return affine transform on angle, anchor pt"

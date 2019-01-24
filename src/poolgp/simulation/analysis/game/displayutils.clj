@@ -38,6 +38,7 @@
   "render information about gamestate"
   [gr gamestate]
   ;TODO: display relevant information about gamestate
+  ;display current player
   )
 
 (defn render-pocketed
