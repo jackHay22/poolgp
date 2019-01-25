@@ -35,4 +35,4 @@
         (:builder options)   (tablebuilder/edit-tables (:builder options))
         (:new options)       (utils/write-json-file (:new options) resources/EMPTY-CONFIG-STATE)
         (:eval options)      (server/start-server (:eval options))
-        :else                (log/write-error "please specify a run configuration"))))
+        :no-opts             (log/write-error "please specify a run configuration"))))

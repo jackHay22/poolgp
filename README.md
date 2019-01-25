@@ -4,7 +4,7 @@
 ```
 ./build
 ```
-Optional: -r specifies a release and -s starts a docker container
+Optional: `-r VERSION` specifies a release and `-s TASK_DEFN` starts a docker container
 
 ## Options (an option is required)
 - `-d --demo PATH` Runs in demo mode given configuration
