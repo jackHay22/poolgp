@@ -63,8 +63,8 @@ Instructions are defined here: poolgp.simulation.players.push.instructions
 
 ## Issues/TODO
 ### Bugs
-- [] Balls sometimes still seem to be "sticky" and orbit each other briefly (especially on breaks)
-- [] Editor bug: placing balls into collisions yields a nil value in a vector operation
+- [ ] Balls sometimes still seem to be "sticky" and orbit each other briefly (especially on breaks)
+- [ ] Editor bug: placing balls into collisions yields a nil value in a vector operation
 
 ## License
 
