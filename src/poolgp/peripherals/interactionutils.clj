@@ -101,21 +101,20 @@
 
 (defn render-interaction
   "render cue if mouse on table"
-  [state g]
-  ; (if (:mouse-entered? (:controller (:gs state)))
-  ;     (let [controller (:controller (:gs state))]
-  ;     (if (not (= (:rotate-op controller) nil))
-  ;         (utils/draw-image-rotate g (:x (:cue-draw controller))
-  ;                                    (:y (:cue-draw controller))
-  ;                                    (:cue controller)
-  ;                                    (:rotate-op controller)))))
-                                     )
+  [g controller]
+  (if (:mouse-entered? controller)
+      (if (not (= (:rotate-op controller) nil))
+          (utils/draw-image-rotate g (:x (:cue-draw controller))
+                                     (:y (:cue-draw controller))
+                                     (:cue controller)
+                                     (:rotate-op controller)))))
 
 (defn do-interactive-turn
   "on ready and interactive player up,
-  do interactive turn (allow cue strike)"
-  [gamestate]
+  do interactive turn (allow cue strike)
+  this also updates the controller until
+  not ready?"
+  [gamestate controller]
   ;TODO: once cue strike complete, set ready? false to progress turn
-
-  gamestate
+  (assoc gamestate :ready? false)
   )

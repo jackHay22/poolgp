@@ -15,20 +15,23 @@
 (defn update-operations
   "update the gamestate of an analysis state
   with the current player for that gamestate
-  return: gamestate with any decisions made"
-  [gamestate current-player]
+  return: gamestate with any decisions made
+  (controller is nil when not in demo)"
+  [gamestate current-player controller]
   (if (:ready? gamestate)
-      (assoc
         (if (= (:type current-player) :genetic)
             ;do push evaluation
-            (update-in gamestate
+            (assoc
+              (update-in gamestate
                 [:table-state] push/eval-push (:strategy current-player)
                                               (:max-push-iterations gamestate)
                                               (:push-inputs gamestate))
+              :ready? false)
             ;allow controller interaction
-            (interaction/do-interactive-turn gamestate))
-        :ready? false)
+            (interaction/do-interactive-turn gamestate controller))
       gamestate))
 
 (defn display-operations
-  [gamestate gr])
+  "display controller"
+  [gr controller]
+  (interaction/render-interaction gr controller))

@@ -1,5 +1,6 @@
 (ns poolgp.simulation.manager
   (:require [poolgp.simulation.analysis.manager :as analysis-manager]
+            [poolgp.simulation.resources :as resources]
             [poolgp.simulation.structs :as structs]
             [poolgp.simulation.utils :as utils]
             [poolgp.config :as config]
@@ -26,7 +27,11 @@
           (if (:watching simulation-json)
               (:watching simulation-json) 0)
           (player-manager/init-player (:p1 simulation-json) :p1)
-          (player-manager/init-player (:p2 simulation-json) :p2))))
+          (player-manager/init-player (:p2 simulation-json) :p2)
+          (if demo?
+            (update-in resources/CONTROLLER
+                    [:cue] utils/load-image)
+            nil))))
 
 (defn simulation-update
   "update transform on simulation state"
@@ -42,7 +47,8 @@
                     (fn [gs]
                       ;update gamestate with current player
                       (player-manager/update-operations
-                        gs ((:id (:current gs)) state)))))) %))
+                        gs ((:id (:current gs)) state)
+                           (:controller state)))))) %))
       ;update current iteration
       [:current-iteration] inc))
 
@@ -52,10 +58,14 @@
   [state gr]
   (if (> (count (:analysis-states state)) 0)
       ;render to window
-      (analysis-manager/analysis-render
-        (nth (:analysis-states state)
-              (min (:watching state) (count (:analysis-states state))))
-        gr)
+      (do
+        (analysis-manager/analysis-render
+          (nth (:analysis-states state)
+                (min (:watching state) (count (:analysis-states state))))
+          gr)
+        ;render controller (demo)
+        (player-manager/display-operations
+                    gr (:controller state)))
 
     ;display default notification (no analysis states)
     (doto gr

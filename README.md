@@ -68,6 +68,8 @@ Optional: `-r VERSION` specifies a release and `-s TASK_DEFN` starts a docker co
 ### Bugs
 - [ ] Balls sometimes still seem to be "sticky" and orbit each other briefly (especially on breaks)
 - [ ] Editor bug: placing balls into collisions yields a nil value in a vector operation
+- [ ] Ball has a tendency to stick to the wall
+- [ ] Cue pockets count as points
 
 ## License
 

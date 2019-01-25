@@ -124,7 +124,6 @@
 ;   :ready? true/false -> balls stopped, time for player move
 ;   :current-scored? true/false -> current player scored on turn
 ;   :push-inputs (list :cue :balls :pockets) (by default)
-;   :controller (ControllerInterface.)
 ; }
 
 (defrecord GameState [^TableState table-state
@@ -133,8 +132,7 @@
                        ready? current-scored?
                        scratched?
                        max-push-iterations
-                       push-inputs
-                       ^ControllerInterface controller])
+                       push-inputs])
 
 ;AnalysisState
 ; {
@@ -154,9 +152,11 @@
 ;   :p1 Player.
 ;   :p2 Player.
 ;   :demo true/false
+;   :controller (ControllerInterface.)
 ; }
 
 (defrecord SimulationState [analysis-states max-iterations
                             current-iteration port
                             watching
-                            ^Player p1 ^Player p2])
+                            ^Player p1 ^Player p2
+                            ^ControllerInterface controller])

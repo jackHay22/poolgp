@@ -24,9 +24,7 @@
         config/DEFAULT-MAX-PUSH-ITERATIONS)
     (if (:push-inputs gamestate-json)
         (map keyword (:push-inputs gamestate-json))
-        config/DEFAULT-PUSH-INPUTS)
-    nil ;TODO: controller
-    ))
+        config/DEFAULT-PUSH-INPUTS)))
 
 (defn game-update
   "update gamestate"

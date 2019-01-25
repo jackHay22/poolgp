@@ -110,7 +110,9 @@
     :p1 {:genetic true :strategy "()"}
     :p2 {:genetic true :strategy "()"}}})
 
-(def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES) nil (Vector. 0 0)))
+(def CONTROLLER (ControllerInterface. false (Vector. 0 0)
+                                      0 0 false (:cue TABLE-IMAGES)
+                                      nil (Vector. 0 0)))
 
 ;_________________Analytics______________
 (def STD-ANALYTICS (list))
