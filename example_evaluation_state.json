@@ -13,7 +13,8 @@
           "push-inputs" : ["balls", "cue", "pockets"]
         },
         "p1-analytics" : [
-          "score"
+          "score",
+          "scored_turns"
         ],
         "p2-analytics" : [
 
