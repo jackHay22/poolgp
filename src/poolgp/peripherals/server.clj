@@ -44,7 +44,7 @@
   [s]
   (doall (map log/write-info
       (list
-        (str "Port: " (:connection s))
+        (str "Port: " (:port s))
         (str "Max iterations: " (:max-iterations s))
         (str "Total analysis-states: " (count (:analysis-states s)))))))
 
@@ -52,7 +52,7 @@
   "start a persistent socket server"
   [task-def]
   (let [simulation-state (simulation-manager/simulation-init task-def false)
-        socket (ServerSocket. (:connection simulation-state))]
+        socket (ServerSocket. (:port simulation-state))]
         (display-starting-config simulation-state)
         (log/write-info "Starting persistent async server")
         ))

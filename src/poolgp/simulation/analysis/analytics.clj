@@ -1,15 +1,10 @@
 (ns poolgp.simulation.analysis.analytics
-  (:require [poolgp.simulation.utils :as utils])
+  (:require [poolgp.simulation.utils :as utils]
+            [poolgp.simulation.analysis.definitions :as analytics-defs]
+            [poolgp.log :as log])
   (:gen-class))
 
-(def ANALYTICS-NS "poolgp.simulation.analysis.analytics/")
-(defprotocol Analyze (update-analytic [a s]))
-
-;operation: (fn [current-val analysis-state]) -> value
-(defrecord Analytic [operation value]
-      Analyze
-        (update-analytic [a s]
-          (update-in a [:value] (:operation a) s)))
+(def ANALYTICS-NS "poolgp.simulation.analysis.definitions/")
 
 (defn- resolve-loaded-name
   "resolve action to qualified function name"
@@ -17,22 +12,27 @@
   (ns-resolve *ns*
     (symbol (str ANALYTICS-NS function-name family-marker))))
 
-;test
-(defn score_ []
-  (Analytic. #(max %1 (:p1-score %2)) 0))
-
 (defn load-analytics
   "load analytics"
-  [analytics-list]
-  (map #((resolve-loaded-name % "_")) analytics-list))
+  [analytics-list player-id]
+  (map #((resolve-loaded-name % "_") player-id) analytics-list))
 
 (defn update-analytics
   "update analytics based on current gamestate"
   [analysis-state]
-  (let [update-fn #(update-analytic % (:game-state analysis-state))]
+  (let [update-fn #(analytics-defs/update-analytic %
+                      (:game-state analysis-state))]
     (utils/updates-in analysis-state
       [:p1-analytics] #(map update-fn %)
       [:p2-analytics] #(map update-fn %))))
 
 (defn report-analytics
-  [analysis-state gr])
+  "log any data about analytics state"
+  [s]
+  (do
+    (log/write-info "-- Player p1 analytics --")
+    (doall (map analytics-defs/display
+                (:p1-analytics s)))
+    (log/write-info "-- Player p2 analytics --")
+    (doall (map analytics-defs/display
+                (:p2-analytics s)))))

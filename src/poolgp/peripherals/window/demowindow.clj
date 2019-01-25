@@ -44,7 +44,7 @@
             (mouseReleased [e])
             (paintComponent [^Graphics panel-graphics]
               (proxy-super paintComponent panel-graphics)
-              (manager/simulation-render @STATE g true)
+              (manager/simulation-render @STATE g)
               (.drawImage panel-graphics base-image 0 0 width height nil))
             (run [] (loop []
                       (if (not @config/PAUSED?)

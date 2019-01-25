@@ -150,13 +150,13 @@
 ;   :analytics-states (list (AnalyticsState.))
 ;   :max-iterations int
 ;   :current-iteration int
-;   :connection socket/port etc...
+;   :port int
 ;   :p1 Player.
 ;   :p2 Player.
 ;   :demo true/false
 ; }
 
 (defrecord SimulationState [analysis-states max-iterations
-                            current-iteration connection
+                            current-iteration port
                             watching
                             ^Player p1 ^Player p2])

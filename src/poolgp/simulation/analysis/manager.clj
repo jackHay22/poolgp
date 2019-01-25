@@ -12,8 +12,8 @@
       #(AnalysisState.
         ;game state
         (game-manager/game-init (:game %) images?)
-        (analytics/load-analytics (:p1-analytics %))
-        (analytics/load-analytics (:p2-analytics %)))
+        (analytics/load-analytics (:p1-analytics %) :p1)
+        (analytics/load-analytics (:p2-analytics %) :p2))
     analysis-vec-json)))
 
 (defn analysis-update
@@ -26,7 +26,11 @@
 
 (defn analysis-render
   "display gamestate and display analytics"
-  [analysis-state gr demo?]
-  (do
-    (game-manager/game-render (:game-state analysis-state) gr demo?)
-    (analytics/report-analytics analysis-state gr)))
+  [analysis-state gr]
+  (game-manager/game-render
+    (:game-state analysis-state) gr))
+
+(defn analysis-log
+  "write analysis logs"
+  [analysis-state]
+  (analytics/report-analytics analysis-state))

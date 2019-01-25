@@ -1,5 +1,6 @@
 (ns poolgp.simulation.analysis.game.rules
   (:require [poolgp.simulation.resources :as resources]
+            [poolgp.log :as log]
             [poolgp.simulation.analysis.game.table.physics :as physics])
   (:gen-class))
 
@@ -19,16 +20,24 @@
     (assoc gs :current (:waiting gs)
               :waiting current)))
 
+(defn- do-move-reset
+  "clear flags if new turn
+  (player already changed if new player)"
+  [gs]
+  (assoc gs :current-scored? :false
+            :scratched :false))
+
 (defn- do-turn-state
   "update player turns if balls stopped"
   [gs]
   (if (balls-stopped? (:balls (:table-state gs)))
-      (assoc
-        (if (:current-scored? gs)
-            (if (not (:scratched? gs))
-                gs (swap-current gs))
-            (swap-current gs))
-         :ready? true)
+      (do-move-reset
+        (assoc
+          (if (:current-scored? gs)
+              (if (not (:scratched? gs))
+                  gs (swap-current gs))
+              (swap-current gs))
+           :ready? true))
       gs))
 
 (defn- pocketed?
@@ -93,3 +102,10 @@
   (do-turn-state
     (move-pocketed
       (check-pocketed gamestate))))
+
+(defn rules-log
+  "log important updates to rules
+  (if start of new move)"
+  [gs]
+  (if (:ready? gs)
+    (log/write-info (str "Player" (:id (:current gs)) "to move"))))

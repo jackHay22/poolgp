@@ -37,13 +37,18 @@
 
 (defn game-render
   "render game state"
-  [gamestate gr demo?]
+  [gamestate gr]
   (let [p1-state (if (= (:id (:current gamestate)) :p1) :current :waiting)
         p2-state (if (= p1-state :current) :waiting :current)]
-    (if demo?
-      (do
-        (table-manager/table-render (:table-state gamestate) gr)
-        (displayutils/render-score gr
-              (:score (p1-state gamestate))
-              (:score (p2-state gamestate)))
-        (displayutils/render-pocketed gr (:pocketed (:table-state gamestate)))))))
+    (do
+      (table-manager/table-render (:table-state gamestate) gr)
+      (displayutils/render-score gr
+            (:score (p1-state gamestate))
+            (:score (p2-state gamestate)))
+      (displayutils/render-pocketed gr
+        (:pocketed (:table-state gamestate))))))
+
+(defn game-log
+  "write game level logs"
+  [gamestate]
+  (rules/rules-log gamestate))

@@ -49,18 +49,26 @@
 (defn simulation-render
   "take simulation state and optionally
   Graphics2D context (demo mode)"
-  [state gr demo?]
+  [state gr]
   (if (> (count (:analysis-states state)) 0)
-    (analysis-manager/analysis-render
-      (nth (:analysis-states state)
-            (min (:watching state) (count (:analysis-states state))))
-      gr demo?)
-    ;display default notification
-    (if demo?
-      (doto gr
-        (.setColor config/PANEL-INFO-COLOR)
-        (.setFont config/PANEL-SCORE-FONT)
-        (.drawString "No games configured"
-          (- (int (/ config/WINDOW-WIDTH-PX 2)) 120)
-          400))
-       (log/write-error "No games configured in task definition"))))
+      ;render to window
+      (analysis-manager/analysis-render
+        (nth (:analysis-states state)
+              (min (:watching state) (count (:analysis-states state))))
+        gr)
+
+    ;display default notification (no analysis states)
+    (doto gr
+      (.setColor config/PANEL-INFO-COLOR)
+      (.setFont config/PANEL-SCORE-FONT)
+      (.drawString "No games configured"
+        (- (int (/ config/WINDOW-WIDTH-PX 2)) 120)
+        400))))
+
+(defn simulation-log
+  "write simulation logs"
+  [state]
+  (if (> (count (:analysis-states state)) 0)
+      (doall (map #(analysis-manager/analysis-log %)
+                   (:analysis-states state)))
+      (log/write-error "No games configured in task definition")))
