@@ -1,6 +1,6 @@
 (ns poolgp.peripherals.window.demowindow
   (:require [poolgp.config :as config]
-            [poolgp.peripherals.interaction.interactionutils :as interaction]
+            [poolgp.peripherals.interactionutils :as interaction]
             [poolgp.simulation.utils :as utils]
             [poolgp.simulation.manager :as manager])
   (:import java.awt.image.BufferedImage)

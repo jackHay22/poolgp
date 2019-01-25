@@ -1,4 +1,4 @@
-(ns poolgp.peripherals.interaction.interactionutils
+(ns poolgp.peripherals.interactionutils
   (:require [poolgp.simulation.utils :as utils]
             [poolgp.simulation.analysis.game.table.physics :as physics]
             [poolgp.simulation.structs :as structs]
@@ -21,6 +21,7 @@
 (defn clicked
   "set clicked (release)"
   [e state]
+  (println (type (:analysis-states state)))
   (assoc-in state [:gs :controller :release?] true))
 
 (defn entered
@@ -33,7 +34,7 @@
   [e state]
   (assoc-in state [:gs :controller :mouse-entered?] false))
 
-(defn cue-strike
+(defn- cue-strike
   "update cue ball velocity if hit"
   ;TODO: should this be an event handler?
   [state]
@@ -51,7 +52,7 @@
         [:gs :controller :release?] false))
       state))
 
-(defn do-cue-draw-loc
+(defn- do-cue-draw-loc
   "calculate the x,y pt to draw the cue image"
   [state]
   ;TODO
@@ -101,12 +102,20 @@
 (defn render-interaction
   "render cue if mouse on table"
   [state g]
-  (println state)
-  (System/exit 1)
-  (if (:mouse-entered? (:controller (:gs state)))
-      (let [controller (:controller (:gs state))]
-      (if (not (= (:rotate-op controller) nil))
-          (utils/draw-image-rotate g (:x (:cue-draw controller))
-                                     (:y (:cue-draw controller))
-                                     (:cue controller)
-                                     (:rotate-op controller))))))
+  ; (if (:mouse-entered? (:controller (:gs state)))
+  ;     (let [controller (:controller (:gs state))]
+  ;     (if (not (= (:rotate-op controller) nil))
+  ;         (utils/draw-image-rotate g (:x (:cue-draw controller))
+  ;                                    (:y (:cue-draw controller))
+  ;                                    (:cue controller)
+  ;                                    (:rotate-op controller)))))
+                                     )
+
+(defn do-interactive-turn
+  "on ready and interactive player up,
+  do interactive turn (allow cue strike)"
+  [gamestate]
+  ;TODO: once cue strike complete, set ready? false to progress turn
+
+  gamestate
+  )

@@ -1,5 +1,6 @@
 (ns poolgp.simulation.players.manager
-  (:require [poolgp.simulation.players.push.interp :as push])
+  (:require [poolgp.simulation.players.push.interp :as push]
+            [poolgp.peripherals.interactionutils :as interaction])
   (:import poolgp.simulation.structs.Player)
   (:gen-class))
 
@@ -18,10 +19,14 @@
   [gamestate current-player]
   (if (:ready? gamestate)
       (assoc
-        (update-in gamestate
-            [:table-state] push/eval-push (:strategy current-player)
-                                          (:max-push-iterations gamestate)
-                                          (:push-inputs gamestate))
+        (if (= (:type current-player) :genetic)
+            ;do push evaluation
+            (update-in gamestate
+                [:table-state] push/eval-push (:strategy current-player)
+                                              (:max-push-iterations gamestate)
+                                              (:push-inputs gamestate))
+            ;allow controller interaction
+            (interaction/do-interactive-turn gamestate))
         :ready? false)
       gamestate))
 
