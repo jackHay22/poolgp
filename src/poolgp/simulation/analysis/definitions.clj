@@ -14,9 +14,23 @@
   (= id (:id (:current gs))))
 
 (defn- on-current-unrecorded
-  [gs current-val id]
-  ;TODO: need to simplify analytic internal code
-  )
+  "generic attribute updater for analysis
+  when player is current and attribute is incremented
+  once per turn -> updated value
+  game attribute is a keyword that should give a boolean"
+  [gs current-val id game-attribute aggregation-attribute]
+  (if (and (player-is-current? gs id)
+           (not (:recorded-current-turn current-val)))
+      (assoc
+        (if (game-attribute gs)
+            (update current-val
+                  aggregation-attribute inc)
+            current-val)
+        :recorded-current-turn true)
+      (if (and (:ready gs)
+               (:recorded-current-turn current-val))
+          (update current-val :recorded-current-turn not)
+          current-val)))
 
 (defprotocol Analyze
   (update-analytic [a s])
@@ -42,24 +56,27 @@
 (defn scored_turns_ [id]
   (Analytic. (str "scored_turns/" id)
     (fn [current-val g-state]
-      (if (and (player-is-current? g-state id)
-               (not (:recorded-current-turn current-val)))
-          (assoc
-            (if (:current-scored? g-state)
-                (update current-val :total inc)
-                current-val)
-            :recorded-current-turn true)
-          (if (and (:ready g-state)
-                   (:recorded-current-turn current-val))
-              (update current-val :recorded-current-turn not)
-              current-val)))
+      (on-current-unrecorded
+        g-state current-val id
+        :current-scored? :total))
     {:total 0 :recorded-current-turn false}
     (fn [a] (:total (:value a)))))
 
 (defn scratches_ [id]
   (Analytic. (str "scratches/" id)
     (fn [current-val g-state]
-      current-val ;TODO
+      (on-current-unrecorded
+        g-state current-val id
+        :scratched? :scratches))
+    {:scratches 0 :recorded-current-turn false}
+    (fn [a] (:scratches (:value a)))))
+
+(defn advanced_balls_ [id]
+  (Analytic. (str "advanced_balls/" id)
+    (fn [current-val gs]
+      ;TODO: detect if, per move,
+      ; a player puts (its) balls closer to pockets
+      current-val
       )
-    {:total 0 :recorded-current-turn false}
-    (fn [a] (:total (:value a)))))
+    {:previous-avg-dist 0 :count 0}
+    (fn [a] (:count (:value a)))))

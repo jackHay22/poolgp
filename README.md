@@ -39,10 +39,10 @@ Instructions are defined here: poolgp.simulation.players.push.instructions
           "push-inputs" : [ "balls", "cue", "pockets"] (optional)
         },
         "p1-analytics" : [
-
+          "score", "scored_turns", "scratches", "advanced_balls"
         ],
         "p2-analytics" : [
-
+          "score", "scored_turns", "scratches", "advanced_balls"
         ]
       },
     ],

@@ -13,11 +13,10 @@
           "push-inputs" : ["balls", "cue", "pockets"]
         },
         "p1-analytics" : [
-          "score",
-          "scored_turns"
+          "score", "scored_turns", "scratches", "advanced_balls"
         ],
         "p2-analytics" : [
-
+          "score", "scored_turns", "scratches", "advanced_balls"
         ]
       },
       {
@@ -30,10 +29,10 @@
           }
         },
         "p1-analytics" : [
-
+          "score", "scored_turns", "scratches", "advanced_balls"
         ],
         "p2-analytics" : [
-
+          "score", "scored_turns", "scratches", "advanced_balls"
         ]
       },
       {
@@ -46,10 +45,10 @@
           }
         },
         "p1-analytics" : [
-
+          "score", "scored_turns", "scratches", "advanced_balls"
         ],
         "p2-analytics" : [
-
+          "score", "scored_turns", "scratches", "advanced_balls"
         ]
       }
     ],

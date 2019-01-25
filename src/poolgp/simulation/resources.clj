@@ -108,8 +108,7 @@
   {:simulation {
     :analysis []
     :p1 {:genetic true :strategy "()"}
-    :p2 {:genetic true :strategy "()"}
-    :demo true}})
+    :p2 {:genetic true :strategy "()"}}})
 
 (def CONTROLLER (ControllerInterface. false (Vector. 0 0) 0 0 false (:cue TABLE-IMAGES) nil (Vector. 0 0)))
 
