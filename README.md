@@ -20,7 +20,8 @@ Optional: `-r VERSION` specifies a release and `-s TASK_DEFN` starts a docker co
 ```
 
 ## Instruction Definitions
-Instructions are defined here: poolgp.simulation.players.push.instructions
+Instructions are defined here: `poolgp.simulation.players.push.instructions`
+Analytics are defined here: `poolgp.simulation.analysis.definitions`
 
 ## Task Definition Structure
 ```json
