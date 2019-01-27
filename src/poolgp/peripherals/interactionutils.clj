@@ -21,18 +21,17 @@
 (defn clicked
   "set clicked (release)"
   [e state]
-  (println (type (:analysis-states state)))
-  (assoc-in state [:gs :controller :release?] true))
+  (assoc-in state [:controller :release?] true))
 
 (defn entered
   "set entered panel"
   [e state]
-  (assoc-in state [:gs :controller :mouse-entered?] true))
+  (assoc-in state [:controller :mouse-entered?] true))
 
 (defn exited
   "set exited panel"
   [e state]
-  (assoc-in state [:gs :controller :mouse-entered?] false))
+  (assoc-in state [:controller :mouse-entered?] false))
 
 (defn- cue-strike
   "update cue ball velocity if hit"
@@ -115,6 +114,7 @@
   this also updates the controller until
   not ready?"
   [gamestate controller]
+  (println "controller update")
   ;TODO: once cue strike complete, set ready? false to progress turn
   (assoc gamestate :ready? false)
   )

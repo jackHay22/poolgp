@@ -28,7 +28,7 @@
 ; }
 
 ;square fn
-(defn ** [x] (* x x))
+(defn- ** [x] (* x x))
 
 (defrecord Vector [x y]
   VecOps

@@ -10,7 +10,8 @@
 (defn- balls-stopped?
   "check if all balls have stopped moving"
   [balls]
-  (reduce #(if (> (:x (:vector %2)) SPEED-TOLERANCE)
+  (reduce #(if (or (> (Math/abs (:x (:vector %2))) SPEED-TOLERANCE)
+                   (> (Math/abs (:y (:vector %2))) SPEED-TOLERANCE))
                (reduced false) %1) true balls))
 
 (defn- swap-current
@@ -24,18 +25,19 @@
   "clear flags if new turn
   (player already changed if new player)"
   [gs]
-  (assoc gs :current-scored? :false
-            :scratched :false))
+  (assoc gs :current-scored? false
+            :scratched false))
 
 (defn- do-turn-state
   "update player turns if balls stopped"
   [gs]
   (if (balls-stopped? (:balls (:table-state gs)))
+      ;start new turn
       (do-move-reset
         (assoc
-          (if (:current-scored? gs)
-              (if (not (:scratched? gs))
-                  gs (swap-current gs))
+          (if (and (:current-scored? gs)
+                   (not (:scratched? gs)))
+              gs
               (swap-current gs))
            :ready? true))
       gs))
@@ -79,21 +81,23 @@
   [gs]
   (let [current-balltype (:ball-type (:current gs))]
     (reduce #(if (pocketed? %2 (:table (:table-state gs)))
-                 (if (= current-balltype :unassigned)
-                     (update-in
-                       (assoc
-                         (assoc-in %1 [:current :ball-type] (:type %2))
-                         :current-scored? true)
-                       [:current :score] inc)
+                 (if (= (:type %2) :cue)
+                     (assoc %1 :scratched? true)
                      (cond
+                       (= current-balltype :unassigned)
+                           (update-in
+                                (assoc
+                                  (assoc-in %1 [:current :ball-type] (:type %2))
+                                  :current-scored? true)
+                                [:current :score] inc)
                        (= (:type %2) current-balltype)
-                          (update-in
-                            (assoc %1 :current-scored? true)
-                            [:current :score] inc)
-                       (= (:type %2) :cue)
-                          (assoc %1 :scratched? true)
+                           (update-in
+                                 (assoc %1 :current-scored? true)
+                                 [:current :score] inc)
                        :opposing-ball
-                          (assoc %1 :scratched? true))) %1)
+                           (assoc %1 :scratched? true)))
+                  ;else return state (not pocketed)
+                  %1)
             gs (:balls (:table-state gs)))))
 
 (defn rules-update

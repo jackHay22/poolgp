@@ -83,7 +83,9 @@
                         (+ (distance proj-pt (first pts))
                            (distance proj-pt (second pts))))]
         (and
-          ;confirm that projection is on line segment
+          (> 0 (structs/dot
+                (structs/minus (:center ball) proj-pt)
+                (structs/minus (:vector ball) (structs/minus (:center ball) proj-pt))))
           (> epsilon segment-diff)
           (> segment-diff (- epsilon))
           (> (:r ball) (distance proj-pt (:center ball))))))
