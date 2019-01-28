@@ -9,6 +9,7 @@
   [player-json id]
   (Player.
     id
+    nil ;eval-id
     (if (:genetic player-json) :genetic :interactive)
     (push/load-push (:strategy player-json))))
 
@@ -28,10 +29,10 @@
                                               (:push-inputs gamestate))
               :ready? false)
             ;allow controller interaction
-            (interaction/do-interactive-turn gamestate controller))
+            (interaction/update-interaction gamestate controller))
       gamestate))
 
 (defn display-operations
   "display controller"
-  [gr controller]
-  (interaction/render-interaction gr controller))
+  [gr gs controller]
+  (interaction/render-interaction gr gs controller))

@@ -31,7 +31,9 @@
 (defn- do-turn-state
   "update player turns if balls stopped"
   [gs]
-  (if (balls-stopped? (:balls (:table-state gs)))
+  (if (and
+        (balls-stopped? (:balls (:table-state gs)))
+        (not (:ready? gs)))
       ;start new turn
       (do-move-reset
         (assoc

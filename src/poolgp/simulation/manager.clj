@@ -58,15 +58,12 @@
   [state gr]
   (if (> (count (:analysis-states state)) 0)
       ;render to window
-      (do
-        (analysis-manager/analysis-render
-          (nth (:analysis-states state)
-                (min (:watching state) (count (:analysis-states state))))
-          gr)
-        ;render controller (demo)
-        (player-manager/display-operations
-                    gr (:controller state)))
-
+      (let [display-state (nth (:analysis-states state)
+            (min (:watching state) (count (:analysis-states state))))]
+            (analysis-manager/analysis-render display-state gr)
+            ;render controller (demo)
+            (player-manager/display-operations
+                        gr (:game-state display-state) (:controller state)))
     ;display default notification (no analysis states)
     (doto gr
       (.setColor config/PANEL-INFO-COLOR)

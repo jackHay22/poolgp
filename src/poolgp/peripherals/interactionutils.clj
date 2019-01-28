@@ -7,15 +7,16 @@
   (:import poolgp.simulation.structs.Vector)
   (:gen-class))
 
-;Various state transforms to GameState on player interaction
-
 ;ControllerInterface
 ; {
 ;   :mouse-entered? true/false
 ;   :mouse (Vector.)
 ;   :force int
+;   :angle int (radians)
 ;   :release? true/false
 ;   :cue path -> img
+;   :rotate-op (AffineTransformOp.)/nil
+;   :cue-draw (Vector.)
 ; }
 
 (defn clicked
@@ -33,88 +34,60 @@
   [e state]
   (assoc-in state [:controller :mouse-entered?] false))
 
-(defn- cue-strike
-  "update cue ball velocity if hit"
-  ;TODO: should this be an event handler?
-  [state]
-  (if (:release? (:controller (:gs state)))
-      (let [force (:force (:controller (:gs state)))
-            angle (:angle (:controller (:gs state)))]
-      (assoc-in
-        (update-in state [:gs :balls]
-          #(map (fn [b]
-                    (if (= (:id b) :cue)
-                        (assoc b :vector
-                            (physics/vector-from-angle angle force))
-                        b))
-                %))
-        [:gs :controller :release?] false))
-      state))
-
-(defn- do-cue-draw-loc
-  "calculate the x,y pt to draw the cue image"
-  [state]
-  ;TODO
-  (let [controller (:controller (:gs state))
-        angle (:angle controller)
-        mouse (:mouse controller)
-        end-x (- (:x mouse) (* config/CUE-HOLD-DIST (Math/cos angle)))
-        end-y (- (:y mouse) (* config/CUE-HOLD-DIST (Math/sin angle)))
-        half-img-size (/ (.getWidth (:cue controller)) 2)
-        offset-x (- half-img-size (* half-img-size (Math/cos angle)))
-        offset-y (- half-img-size (* half-img-size (Math/sin angle)))]
+(defn- get-cue-velocity
+  "calculate dx/dy vector for cue
+  based on mouse loc and cue loc"
+  [mouse-loc cue-loc]
+  (let [dist (physics/distance mouse-loc cue-loc)
+        angle (physics/pts-angle-radians cue-loc mouse-loc)]
         ;TODO
-        (assoc-in state [:gs :controller :cue-draw]
-          (Vector. (- end-x offset-x) (- end-y offset-y)))))
+        (Vector. 0 0)
+  ))
 
-(defn update-interaction
-  "update user interaction state"
-  [state]
-  (if (:mouse-entered? (:controller (:gs state)))
-      (let [controller (:controller (:gs state))
-            cue-ball-loc (:center (reduce
-                                    #(if (= (:id %2) :cue) (reduced %2) %1)
-                                    nil (:balls (:gs state))))
-            mouse-pt (.getLocation (MouseInfo/getPointerInfo))
-            mouse-loc (Vector. (int (.getX mouse-pt)) (int (.getY mouse-pt)))
-            dist (physics/distance mouse-loc cue-ball-loc)
-            angle (physics/pts-angle-radians cue-ball-loc mouse-loc)
-            rotate-op (utils/get-rotation-op angle
-                        (/ (.getWidth (:cue controller)) 2)
-                        (/ (.getHeight (:cue controller)) 2))]
-            ;(println (Math/toDegrees angle))
-          (cue-strike
-            (do-cue-draw-loc
-              (reduce #(assoc-in %1 (first %2) (second %2)) state
-                    (partition 2
-                      (list [:gs :controller :angle]
-                              angle
-                            [:gs :controller :mouse]
-                              mouse-loc
-                            [:gs :controller :force]
-                            ;TODO
-                              (int (* (- dist 230) 0.1))
-                            [:gs :controller :rotate-op]
-                              rotate-op))))))
-      state))
+(defn- get-cue-loc
+  "get cue location from gamestate"
+  [gs]
+  (:center (reduce
+              #(if (= (:id %2) :cue) (reduced %2) %1)
+              (Vector. 0 0) (:balls (:table-state gs)))))
+
+(defn- get-mouse-loc
+  "return mouse location"
+  []
+  (let [m-pt (.getLocation (MouseInfo/getPointerInfo))]
+      (Vector. (int (.getX m-pt)) (int (.getY m-pt)))))
 
 (defn render-interaction
   "render cue if mouse on table"
-  [g controller]
+  [g gs controller]
   (if (:mouse-entered? controller)
-      (if (not (= (:rotate-op controller) nil))
-          (utils/draw-image-rotate g (:x (:cue-draw controller))
-                                     (:y (:cue-draw controller))
-                                     (:cue controller)
-                                     (:rotate-op controller)))))
+      (utils/draw-image-rotate g 0 0
+                   (:cue controller)
+                   (utils/get-rotation-op
+                              (physics/pts-angle-radians
+                                (get-cue-loc gs) (get-mouse-loc))
+                               (/ (.getWidth (:cue controller)) 2)
+                               (/ (.getHeight (:cue controller)) 2)))
+                               ))
 
-(defn do-interactive-turn
+(defn update-interaction
   "on ready and interactive player up,
   do interactive turn (allow cue strike)
   this also updates the controller until
-  not ready?"
+  not ready? (returns gamestate)"
   [gamestate controller]
-  (println "controller update")
-  ;TODO: once cue strike complete, set ready? false to progress turn
-  (assoc gamestate :ready? false)
-  )
+  (if (and
+        (:mouse-entered? controller)
+        (:release? controller))
+
+        ;TODO: can't UNRELEASE
+      (assoc
+        (update-in gamestate [:table-state :balls]
+          #(map (fn [b] (if (= (:id b) :cue)
+                            (assoc b :vector
+                              (get-cue-velocity (get-mouse-loc)
+                                                (get-cue-loc gamestate)))
+                            b)) %))
+        :ready? false)
+      ;else
+      gamestate))

@@ -64,6 +64,24 @@ Optional: `-r VERSION` specifies a release and `-s TASK_DEFN` starts a docker co
 }
 ```
 
+## Individual Evaluation
+
+Here is the structure for an individual being sent from Clojush to
+evaluation instances:
+```clojure
+{
+  :strategy "()"
+  :id 2309438724
+}
+```
+Here is the structure that evaluation instances return:
+```clojure
+{
+  :id 2309438724
+  :fitness 265
+}
+```
+
 ## Issues/TODO
 ### Bugs
 - [ ] Balls sometimes still seem to be "sticky" and orbit each other briefly (especially on breaks)

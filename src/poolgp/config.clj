@@ -38,11 +38,11 @@
 (def BALL-MASS-G 160) ;160
 (def CUE-MASS-G 170) ;170
 
-(def CUE-HOLD-DIST 10)
+(def CUE-HOLD-DIST 100)
 
 ;default configuration values
 (def DEFAULT-PORT 9999)
-(def DEFAULT-MAX-ITERATIONS 100000)
+(def DEFAULT-MAX-ITERATIONS 10000)
 (def DEFAULT-MAX-PUSH-ITERATIONS 1000)
 (def DEFAULT-PUSH-INPUTS (list :cue :balls :pockets))
 

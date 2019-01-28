@@ -62,7 +62,7 @@
         stack-state (mk-stacks (concat push ball-locations))
         ;TODO: add locations
         updated-stacks (evaluate-push-state stack-state max-iterations)
-        updated-velocity (Vector. -10 1)] ;TODO
+        updated-velocity (Vector. (- (rand-int 15) 7) (- (rand-int 15) 7))] ;TODO
         ;TODO: improve efficiency here
         (update-in ts [:balls]
           #(map (fn [b] (if (= (:id b) :cue)

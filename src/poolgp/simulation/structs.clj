@@ -5,11 +5,12 @@
 ;Player
 ; {
 ;   :id :p1/:p2
+;   :eval-id (clojush assigned id)
 ;   :type :genetic/:interactive
 ;   :strategy (push code)
 ; }
 
-(defrecord Player [id type strategy])
+(defrecord Player [id eval-id type strategy])
 
 (defprotocol VecOps
   (dot [v1 v2])
@@ -94,19 +95,11 @@
 ;ControllerInterface
 ; {
 ;   :mouse-entered? true/false
-;   :mouse (Vector.)
-;   :force int
-;   :angle int (radians)
 ;   :release? true/false
 ;   :cue path -> img
-;   :rotate-op (AffineTransformOp.)/nil
-;   :cue-draw (Vector.)
 ; }
 
-(defrecord ControllerInterface [mouse-entered? ^Vector mouse
-                                force angle release? cue
-                                ^AffineTransformOp rotate-op
-                                ^Vector cue-draw])
+(defrecord ControllerInterface [mouse-entered? release? cue])
 ;GamePlayer
 ; {
 ;   :id :p1/:p2
