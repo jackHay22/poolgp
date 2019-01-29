@@ -36,16 +36,16 @@ else
 fi
 
 #optional build args
-SERVER=""
+DOCKER=""
 RELEASE=""
 
-while getopts ":r:s:" opt; do
+while getopts ":r:d:" opt; do
   case $opt in
     r)
       RELEASE="$OPTARG"
       ;;
-    s)
-      SERVER="$OPTARG"
+    d)
+      DOCKER="$OPTARG"
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -68,8 +68,17 @@ if [ "$RELEASE" != "" ]; then
   echo "TODO"
 fi
 
-if [ "$SERVER" != "" ]; then
+if [ "$DOCKER" != "" ]; then
+  #note: this file is not committed to vc and contains an aws account id and ecr name
+  source docker/aws_keyvals.txt
+
   start_docker
-  docker build --build-arg TASK_DEFINITION=$SERVER --tag poolgp_server .
-  docker run poolgp_server:latest
+  docker build --build-arg TASK_DEFINITION=$DOCKER --tag poolgp_server:latest .
+  docker tag poolgp_server:latest ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest
+  docker push ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest || exit 1
+
+  #show images currently in ecr
+  aws ecr describe-images --repository-name poolgp --region us-east-2
+
+  #to run image: docker run poolgp_server:latest
 fi
