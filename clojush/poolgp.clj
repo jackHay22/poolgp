@@ -1,6 +1,45 @@
-(ns clojush.problems.software.poolgp)
+(ns clojush.problems.software.poolgp
+  (:require [clojure.core.async :as async]
+            [clojure.java.io :as io])
+  (:import java.net.Socket)
+  )
 
 (use-clojush)
+
+(def DISTRIBUTE-CHANNEL (async/chan))
+(def COMPLETED-CHANNEL (async/chan))
+
+;sockets
+(def HOST-POOL (atom (list)))
+(def CURRENT-HOST-I (atom 0))
+
+(defn- distribution-channel-worker
+  "reads from channel, sends to host from pool"
+  []
+  (async/go-loop []
+    (let [hosts @HOST-POOL
+          current @CURRENT-HOST-I
+          writer (io/writer (nth hosts current))]
+          (.write writer (async/<! DISTRIBUTE-CHANNEL))
+          (reset! CURRENT-HOST-I
+            (mod (inc current) (count hosts))))))
+
+(defn- incoming-channel-worker
+  "waits for incoming (evaluated) individuals"
+  []
+  ;TODO: recompile
+  )
+
+(defn- completion-listener
+  "socket server listening for completed individuals"
+  []
+  )
+
+(defn- register-host
+  "add a socket to the host pool"
+  [ip port]
+  (swap! HOST-POOL conj (Socket. ip))
+  )
 
 (defn- distribute-to-eval
   "send individual to server"

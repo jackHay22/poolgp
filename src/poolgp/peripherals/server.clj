@@ -5,12 +5,19 @@
             [poolgp.simulation.utils :as utils]
             [poolgp.simulation.manager :as simulation-manager]
             [poolgp.simulation.players.manager :as player-manager]
-            [poolgp.log :as log])
-  (:import [java.net ServerSocket SocketException])
+            [poolgp.log :as log]
+            [poolgp.peripherals.monitoring :as monitoring])
+  (:import [java.net ServerSocket SocketException Socket InetSocketAddress])
   (:gen-class))
 
 (def IN-CHANNEL (async/chan))
 (def OUT-CHANNEL (async/chan))
+
+;count of total individuals in system
+(def TOTAL-INDIVS (atom 0))
+
+;Detected ip for return packets
+(def REMOTE-HOST (atom nil))
 
 (defn- async-persistent-server
   "start listening server, push individuals to channel"
@@ -20,20 +27,28 @@
     (async/go-loop []
       (let [client-socket (.accept socket)]
        (try
+         (if (nil? @REMOTE-HOST)
+              (let [return-addr (.getHostName (.getInetAddress client-socket))]
+                (log/write-info (str "Returning individuals to: " return-addr))
+                (reset! REMOTE-HOST return-addr)))
+            ;push to incoming channel
          (async/>! IN-CHANNEL (.readLine (io/reader client-socket)))
+         (swap! TOTAL-INDIVS inc)
          (.close client-socket)
          (catch SocketException e
-           (.close client-socket)
-           (async/close! IN-CHANNEL)
-           (async/close! OUT-CHANNEL)))
+           (.close client-socket)))
         (recur)))))
 
 (defn- add-players
   "updateplayer info in state"
   [starting-state p1 p2]
   (assoc starting-state
-    :p1 (player-manager/init-player (assoc p1 :genetic true) :p1) ;TODO (eval-id)
-    :p2 (player-manager/init-player (assoc p2 :genetic true) :p2)))
+    :p1 (assoc
+          (player-manager/init-player (assoc p1 :genetic true) :p1)
+          :eval-id (:id p1))
+    :p2 (assoc
+          (player-manager/init-player (assoc p2 :genetic true) :p2)
+          :eval-id (:id p2))))
 
 (defn- run-simulation
   "run the current simulation state
@@ -64,17 +79,28 @@
   [simulation-state]
   (log/write-info "Starting incoming channel worker...")
   (async/go-loop []
-    (run-simulation simulation-state
-              (async/<! IN-CHANNEL) (async/<! IN-CHANNEL))
+    (try
+      (run-simulation simulation-state
+        (async/<! IN-CHANNEL) (async/<! IN-CHANNEL))
+      (catch Exception e
+        (log/write-error "Failed to read individual from packet")))
     (recur)))
 
 (defn- out-channel-worker
   "start a distribution worker"
-  [host ip]
+  [port]
   (log/write-info "Starting outgoing channel worker...")
   (async/go-loop []
-    (let [player (async/<! OUT-CHANNEL)]
+    (let [player (async/<! OUT-CHANNEL)
+          ;client-socket (Socket. @REMOTE-HOST port)
+          ;writer (io/writer client-socket)
+          ]
+    ;TODO: do analytics aggregation
+      ;(.connect client-socket (InetSocketAddress. host port))
       (log/write-info (str "Finished simulation cycle on: " (pr-str player)))
+      (swap! TOTAL-INDIVS dec)
+      (log/write-info (str "Current individual count (in progress): " @TOTAL-INDIVS))
+      ;(.write writer (pr-str player))
       )
       (recur)
     )
@@ -85,7 +111,7 @@
   [s]
   (doall (map log/write-info
       (list
-        (str "Port: " (:port s))
+        (str "Listening on port: " (:port s))
         (str "Max iterations: " (:max-iterations s))
         (str "Total analysis-states: " (count (:analysis-states s)))))))
 
@@ -98,5 +124,6 @@
         (.setSoTimeout socket 0)
         (display-starting-config simulation-state)
         (in-channel-worker simulation-state)
-        (out-channel-worker "" 9999) ;TODO
+        (out-channel-worker 8000) ;TODO
+        (monitoring/start-monitoring-process)
         (async-persistent-server socket))))
