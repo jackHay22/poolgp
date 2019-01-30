@@ -6,7 +6,8 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/tools.cli "0.4.1"]
                  [org.clojure/core.async "0.4.490"]
-                 [org.clojure/data.json "0.2.6"]]
+                 [org.clojure/data.json "0.2.6"]
+                 [clojush "3.17.1"]]
   :main ^:skip-aot poolgp.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

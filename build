@@ -74,11 +74,11 @@ if [ "$DOCKER" != "" ]; then
 
   start_docker
   docker build --build-arg TASK_DEFINITION=$DOCKER --tag poolgp_server:latest .
-  docker tag poolgp_server:latest ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest
-  docker push ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest || exit 1
+  #docker tag poolgp_server:latest ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest
+  #docker push ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest || exit 1
 
   #show images currently in ecr
-  aws ecr describe-images --repository-name poolgp --region us-east-2
+  #aws ecr describe-images --repository-name poolgp --region us-east-2
 
   #to run image: docker run poolgp_server:latest
 fi

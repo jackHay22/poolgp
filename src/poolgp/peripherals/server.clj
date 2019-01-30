@@ -65,10 +65,9 @@
               (loop [current 0
                      state eval-state]
                      (if (> max-cycles current)
-                     (do
                        ;(simulation-manager/simulation-log state)
                        (recur (inc current)
-                              (simulation-manager/simulation-update state)))
+                              (do (simulation-manager/simulation-update state)))
                      state))]
             (do
               (async/>! OUT-CHANNEL (:p1 resultant-state))

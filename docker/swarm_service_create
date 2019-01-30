@@ -6,10 +6,10 @@ if [ "$#" -ne 1 ]; then
 fi
 
 #using aws key vals (note: this file is not committed to vc):
-source aws_keyvals.txt
+#source aws_keyvals.txt
 
 #pulling image from aws ecr
-docker pull ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest
+#docker pull ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest
 
 #run from manager
-#docker service create --replicas $1 --name poolgp ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest
+docker service create --replicas $1 --name poolgp poolgp_server:latest
