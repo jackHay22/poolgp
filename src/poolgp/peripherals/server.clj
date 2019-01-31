@@ -67,7 +67,7 @@
                      (if (> max-cycles current)
                        ;(simulation-manager/simulation-log state)
                        (recur (inc current)
-                              (do (simulation-manager/simulation-update state)))
+                              (doall (simulation-manager/simulation-update state)))
                      state))]
             (do
               (async/>! OUT-CHANNEL (:p1 resultant-state))
@@ -96,7 +96,7 @@
           ]
     ;TODO: do analytics aggregation
       ;(.connect client-socket (InetSocketAddress. host port))
-      (log/write-info (str "Finished simulation cycle on: " (pr-str player)))
+      (log/write-info (str "Finished simulation cycle on: " (:eval-id player)))
       (swap! TOTAL-INDIVS dec)
       (log/write-info (str "Current individual count (in progress): " @TOTAL-INDIVS))
       ;(.write writer (pr-str player))

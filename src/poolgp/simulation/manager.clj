@@ -36,11 +36,10 @@
 (defn simulation-update
   "update transform on simulation state"
   [state]
-  ;TODO: enforce max iterations
   (update-in
     (update-in state
       [:analysis-states]
-        #(map (fn [a-state]
+        #(doall (map (fn [a-state]
           ;perform analysis updates
                 (analysis-manager/analysis-update
                   (update-in a-state [:game-state]
@@ -48,7 +47,7 @@
                       ;update gamestate with current player
                       (player-manager/update-operations
                         gs ((:id (:current gs)) state)
-                           (:controller state)))))) %))
+                           (:controller state)))))) %)))
       ;update current iteration
       [:current-iteration] inc))
 

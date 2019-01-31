@@ -82,6 +82,25 @@ Here is the structure that evaluation instances return:
 }
 ```
 
+## Server Mode
+Load testing:
+I use the following code to test poolgp under load.
+```bash
+
+send_traffic() {
+  echo "Testing server $1 on port $2"
+  for i in `seq 1 1000`;
+    do
+      echo "{:strategy '(integer_mult) :id $i}" | nc $1 $2
+    done
+}
+
+while [[ -n "$2" ]]; do
+  send_traffic $1 $2 &
+  shift 2
+done
+```
+
 ## Issues/TODO
 ### Bugs
 - [ ] Balls sometimes still seem to be "sticky" and orbit each other briefly (especially on breaks)

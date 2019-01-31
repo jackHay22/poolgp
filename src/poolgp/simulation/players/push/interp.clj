@@ -1,73 +1,38 @@
 (ns poolgp.simulation.players.push.interp
-  (:require [poolgp.simulation.players.push.instructions :as instrs])
+  (:require [poolgp.simulation.players.push.instructions :as instrs]
+            [clojush.interpreter :as clojush-interp]
+            [clojush.pushstate :as clojush-push])
   (:import poolgp.simulation.structs.Vector)
   (:gen-class))
 
-; PushStacks
-; {
-;   :integer (list int)
-;   :exec (list fn)
-; }
-(defrecord PushStacks [integer vector boolean exec])
-
-(def INSTRS-NS "poolgp.simulation.players.push.instructions/")
-
-(defn- resolve-loaded-name
-  "resolve action to qualified function name"
-  [function-name family-marker]
-  (ns-resolve *ns*
-    (symbol (str INSTRS-NS function-name family-marker))))
-
 (defn load-push
-  "load push code from a string"
-  ;TODO: check if exists
-  [push-str]
-  (map #(if (or (boolean? %) (number? %)) %
-            (resolve-loaded-name % "_"))
-        (read-string push-str)))
+  "prepare push code"
+  [push-cons]
+  (second push-cons))
 
-(defn- mk-stacks
-  "make stacks from initial push listing"
-  [push]
-  (reduce (fn [state instr]
-            (update state
-              (cond
-                ;TODO: integer vs. number
-                (map? instr) :vector
-                (boolean? instr) :boolean
-                (number? instr) :integer
-                :else :exec)
-              conj instr))
-          (PushStacks. (list) (list) (list) (list)) push))
-
-(defn- evaluate-push-state
-  "evaluate push state steps (up to max), return stacks"
-  [push-stacks max-iterations]
-  (loop [stacks push-stacks current-step 0]
-         (if (and (> max-iterations current-step)
-                  (> (count (:exec stacks)) 0))
-              (let [exec-fn (first (:exec stacks))
-                    stack-update (update-in stacks [:exec] #(drop 1 %))]
-                (recur (exec-fn stack-update) (inc current-step)))
-             stacks)))
+(defn- make-clojush-vec
+  [^Vector v]
+  )
 
 (defn eval-push
   "evaluate push code based on tablestate"
   [ts push max-iterations inputs]
-  ;TODO: use inputs
   (let [cue (filter #(= (:id %) :cue) (:balls ts))
         cue-location (:center cue)
         ball-locations (map :center (:balls ts))
         pocket-locations (:pockets (:table ts))
-        stack-state (mk-stacks (concat push ball-locations))
-        ;TODO: add locations
-        updated-stacks (evaluate-push-state stack-state max-iterations)
+        state-w-inputs (reduce #(clojush-push/push-item %2 :input %1)
+                                (clojush-push/make-push-state)
+                                ;TODO inputs
+                                (list 2 5))
+        ;evaluation-termination-state (clojush-interp/run-push push state-w-inputs)
         updated-velocity (Vector. (- (rand-int 15) 7) (- (rand-int 15) 7))] ;TODO
+        ;(println "Push evaluated to: " evaluation-termination-state)
         ;TODO: improve efficiency here
+        (println state-w-inputs)
         (update-in ts [:balls]
           #(map (fn [b] (if (= (:id b) :cue)
                             (assoc b :vector updated-velocity)
                             b
             )) %)
-          )
-        ))
+          )))
