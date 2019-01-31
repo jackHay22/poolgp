@@ -32,7 +32,7 @@
   [ts push max-iterations inputs]
   ;TODO: use input list
   (let [cue (filter #(= (:id %) :cue) (:balls ts))
-        cue-input (map make-clojush-vec (:center cue))
+        cue-input (make-clojush-vec (:center cue))
         ball-inputs (map make-clojush-vec (map :center (:balls ts)))
         pocket-inputs (map make-clojush-vec (:pockets (:table ts)))
         state-w-inputs (reduce #(clojush-push/push-item %2 :input
@@ -41,7 +41,7 @@
                                 (concat
                                   (conj ball-inputs cue-input)
                                   pocket-inputs))
-        evaluation-termination-state (clojush-interp/run-push push state-w-inputs true)
+        evaluation-termination-state (clojush-interp/run-push push state-w-inputs)
         updated-velocity (make-poolgp-vec (first (:vector_integer evaluation-termination-state)))]
         (update-in ts [:balls]
           #(map (fn [b] (if (= (:id b) :cue)
