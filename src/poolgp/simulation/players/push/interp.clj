@@ -29,7 +29,6 @@
         updated-velocity (Vector. (- (rand-int 15) 7) (- (rand-int 15) 7))] ;TODO
         ;(println "Push evaluated to: " evaluation-termination-state)
         ;TODO: improve efficiency here
-        (println state-w-inputs)
         (update-in ts [:balls]
           #(map (fn [b] (if (= (:id b) :cue)
                             (assoc b :vector updated-velocity)

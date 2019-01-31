@@ -70,17 +70,18 @@ Here is the structure for an individual being sent from Clojush to
 evaluation instances:
 ```clojure
 {
-  :strategy "()"
-  :id 2309438724
+  :cycle 1       ;This is the current cycle of the system
+  :strategy "()" ;This is the push code for the individual
+  :eval-id 2309438724 ;This is the individual's evaluation id
+  :type :opponent/:individual  ;Individuals marked as :opponent will be used in games to test
+  ;individuals marked as :individual.  Only :individuals are given a fitness and returned to the gp engine
+  ;Note: opponents should be sent first and then individuals afterwards so that the system has time to load them
 }
 ```
+
+
 Here is the structure that evaluation instances return:
-```clojure
-{
-  :id 2309438724
-  :fitness 265
-}
-```
+(TODO)
 
 ## Server Mode
 Load testing:
@@ -89,9 +90,15 @@ I use the following code to test poolgp under load.
 
 send_traffic() {
   echo "Testing server $1 on port $2"
+  echo "Sending opponents..."
   for i in `seq 1 1000`;
     do
-      echo "{:strategy '(integer_mult) :id $i}" | nc $1 $2
+      echo "{:strategy '(integer_mult) :eval-id $i :cycle 0 :type :opponent}" | nc $1 $2
+    done
+  echo "Sending individuals..."
+  for i in `seq 1 1000`;
+    do
+      echo "{:strategy '(integer_mult) :eval-id $i :cycle 0 :type :individual}" | nc $1 $2
     done
 }
 
