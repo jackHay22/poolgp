@@ -32,20 +32,19 @@
   "runnable (thread) log process"
   []
   (let [delay (* config/LOG-SPACING-SECONDS 1000)]
-  (future
-    (loop []
-      (do
-        (log/write-info (str "Active threads: " (Thread/activeCount)))
-        (log/write-info (str "Opponent pool size: " (count @OPPONENT-POOL)))
-        (log/write-info (str "Current cycle: " @CURRENT-CYCLE))
-        (log/write-info (str "Simulation started on individuals: " @INDIV-COUNT))
-        (Thread/sleep delay))
-        (recur)))))
+    (future
+      (loop []
+        (do
+          (log/write-info (str "Active threads: " (Thread/activeCount)))
+          (log/write-info (str "Opponent pool size: " (count @OPPONENT-POOL)))
+          (log/write-info (str "Current cycle: " @CURRENT-CYCLE))
+          (log/write-info (str "Simulation started on individuals: " @INDIV-COUNT))
+          (Thread/sleep delay))
+          (recur)))))
 
 (defn- get-total-cores
   "returns number of processing cores"
-  []
-  (.availableProcessors (Runtime/getRuntime)))
+  [] (.availableProcessors (Runtime/getRuntime)))
 
 (defn- async-persistent-server
   "start listening server, push individuals to channel"
@@ -62,8 +61,9 @@
         (async/>! IN-CHANNEL (.readLine (io/reader client-socket)))
        (.close client-socket)
        (catch SocketException e
-         (.close client-socket))))
-      (recur)))
+         (.close client-socket)
+         (log/write-error "SocketServer exception, closing current conn"))))
+    (recur)))
 
 (defn- add-players
   "updateplayer info in state"
@@ -80,20 +80,18 @@
   "run the current simulation state
   and output to outgoing channel"
   [starting-state test-indiv opponent]
-  ;(async/go
-    (let [max-cycles (:max-iterations starting-state)
-          eval-state (add-players starting-state test-indiv opponent)
-          resultant-state
-              (loop [current 0
-                     state eval-state]
-                     (if (> max-cycles current)
-                       ;(simulation-manager/simulation-log state)
-                       (recur (inc current)
-                              (doall (simulation-manager/simulation-update state)))
-                     state))]
-              ;return individual from state
-              (:p1 resultant-state)))
-              ;)
+  (let [max-cycles (:max-iterations starting-state)
+        eval-state (add-players starting-state test-indiv opponent)
+        resultant-state
+            (loop [current 0
+                   state eval-state]
+                   (if (> max-cycles current)
+                     ;(simulation-manager/simulation-log state)
+                     (recur (inc current)
+                            (doall (simulation-manager/simulation-update state)))
+                   state))]
+            ;return individual from state
+            (:p1 resultant-state)))
 
 (defn- create-outgoing-map
   "take resulting gamestates and turn into report to return to engine"
@@ -134,7 +132,8 @@
                           (run-simulation simulation-state indiv op))
                         @OPPONENT-POOL))))))))
       (catch Exception e
-        (log/write-error "In channel worked failed to evaluate individual on opponent pool")))
+        (log/write-error "In channel worked failed to evaluate individual on opponent pool")
+        (.printStackTrace e)))
     (recur)))
 
 (defn- out-channel-worker
@@ -147,7 +146,8 @@
           writer (io/writer client-socket)]
         (log/write-info (str "Finished simulation cycle on individual: " (:eval-id player)))
         (.write writer (str (pr-str player) "\n"))
-        (.flush writer))
+        (.flush writer)
+        (.close client-socket))
     (recur)))
 
 (defn- display-starting-config
@@ -172,6 +172,6 @@
         (.setSoTimeout socket 0)
         (display-starting-config simulation-state)
         (in-channel-worker simulation-state)
-        (out-channel-worker 8001)
+        (out-channel-worker 8001) ;TODO (add to config)
         (status-task)
         (async-persistent-server socket))))
