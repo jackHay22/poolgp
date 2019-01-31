@@ -59,3 +59,12 @@
 (def PAUSED? (atom true))
 
 (def TEXT-COLOR? true)
+
+;_____________ EVAL MODE _____________
+
+(def CHANNEL-BUFFER 500)
+;use pmap when simulating individual across opponent population
+(def PARALLEL-SIMULATIONS? true)
+
+;delay between server logs
+(def LOG-SPACING-SECONDS 20)
