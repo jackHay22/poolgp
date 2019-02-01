@@ -39,10 +39,11 @@
                                 (clojush-push/make-push-state)
                                 (concat
                                   (conj ball-inputs cue-input)
-                                  pocket-inputs))
-        evaluation-termination-state (clojush-interp/run-push push state-w-inputs)
-        updated-velocity (make-poolgp-vec (first (:vector_integer evaluation-termination-state)))]
+                                  pocket-inputs))]
         (update-in ts [:balls]
           #(map (fn [b] (if (= (:id b) :cue)
-                            (assoc b :vector updated-velocity)
+                            (assoc b :vector
+                              (make-poolgp-vec (first
+                                (:vector_integer (clojush-interp/run-push
+                                                    push state-w-inputs)))))
                             b)) %))))
