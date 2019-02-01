@@ -1,6 +1,5 @@
 (ns poolgp.simulation.players.push
-  (:require [poolgp.simulation.players.push.instructions :as instrs]
-            [clojush.interpreter :as clojush-interp]
+  (:require [clojush.interpreter :as clojush-interp]
             [clojush.pushstate :as clojush-push])
   (:import poolgp.simulation.structs.Vector)
   (:gen-class))
@@ -31,8 +30,8 @@
   "evaluate push code based on tablestate"
   [ts push max-iterations inputs]
   ;TODO: use input list
-  (let [cue (filter #(= (:id %) :cue) (:balls ts))
-        cue-input (make-clojush-vec (:center cue))
+  (let [cue-input (make-clojush-vec
+                      (:center (first (filter #(= (:id %) :cue) (:balls ts)))))
         ball-inputs (map make-clojush-vec (map :center (:balls ts)))
         pocket-inputs (map make-clojush-vec (:pockets (:table ts)))
         state-w-inputs (reduce #(clojush-push/push-item %2 :input
