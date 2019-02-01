@@ -1,5 +1,5 @@
 (ns poolgp.simulation.players.manager
-  (:require [poolgp.simulation.players.push.interp :as push]
+  (:require [poolgp.simulation.players.push :as push]
             [poolgp.peripherals.interactionutils :as interaction])
   (:import poolgp.simulation.structs.Player)
   (:gen-class))

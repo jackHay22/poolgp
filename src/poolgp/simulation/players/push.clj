@@ -1,4 +1,4 @@
-(ns poolgp.simulation.players.push.interp
+(ns poolgp.simulation.players.push
   (:require [poolgp.simulation.players.push.instructions :as instrs]
             [clojush.interpreter :as clojush-interp]
             [clojush.pushstate :as clojush-push])
