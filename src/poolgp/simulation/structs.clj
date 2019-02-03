@@ -10,7 +10,7 @@
 ;   :strategy (push code)
 ; }
 
-(defrecord Player [id eval-id type strategy])
+(defrecord Player [id clojush-indiv type strategy])
 
 (defprotocol VecOps
   (dot [v1 v2])

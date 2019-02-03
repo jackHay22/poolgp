@@ -7,7 +7,7 @@
             [poolgp.simulation.players.manager :as player-manager]
             [poolgp.config :as config]
             [poolgp.log :as log])
-  (:import [java.net ServerSocket SocketException Socket InetSocketAddress])
+  (:import [java.net ServerSocket SocketException Socket InetAddress])
   (:gen-class))
 
 ;holds individuals from engine, pulled off individually
@@ -38,7 +38,7 @@
           (log/write-info (str "Active threads: " (Thread/activeCount)))
           (log/write-info (str "Opponent pool size: " (count @OPPONENT-POOL)))
           (log/write-info (str "Current cycle: " @CURRENT-CYCLE))
-          (log/write-info (str "Simulation started on individuals: " @INDIV-COUNT))
+          (log/write-info (str "Simulation started on " @INDIV-COUNT " individuals"))
           (Thread/sleep delay))
           (recur)))))
 
@@ -69,12 +69,8 @@
   "updateplayer info in state"
   [starting-state p1 p2]
   (assoc starting-state
-    :p1 (assoc
-          (player-manager/init-player (assoc p1 :genetic true) :p1)
-          :eval-id (:eval-id p1))
-    :p2 (assoc
-          (player-manager/init-player (assoc p2 :genetic true) :p2)
-          :eval-id (:eval-id p2))))
+    :p1 (player-manager/init-clojush-player p1 :p1)
+    :p2 (player-manager/init-clojush-player p2 :p2)))
 
 (defn- run-simulation
   "run the current simulation state
@@ -99,6 +95,7 @@
   ;TODO: incorporate results list
   ;TODO: check if results list is empty (this can happen on a opp pool clear)
   indiv
+  ;using :clojush-indiv
   )
 
 (defn- in-channel-worker
@@ -155,6 +152,7 @@
   [s]
   (doall (map log/write-info
       (list
+        (str "Host: " (.getHostName (InetAddress/getLocalHost)))
         (str "Listening on port: " (:port s))
         (str "Total system cores: " (get-total-cores))
         (str "Channel buffer size: " config/CHANNEL-BUFFER)

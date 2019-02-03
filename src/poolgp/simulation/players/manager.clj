@@ -9,9 +9,19 @@
   [player-json id]
   (Player.
     id
-    nil ;eval-id
+    nil ;clojush-indiv
     (if (:genetic player-json) :genetic :interactive)
     (push/load-push (:strategy player-json))))
+
+(defn init-clojush-player
+  "initialize a player from a
+   network received clojush packet"
+   [clojush-p id]
+   (Player.
+     id
+     clojush-p
+     :genetic
+     (push/load-push (:program (:indiv clojush-p)))))
 
 (defn update-operations
   "update the gamestate of an analysis state

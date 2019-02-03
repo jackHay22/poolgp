@@ -69,19 +69,11 @@ Optional: `-r VERSION` specifies a release and `-d TASK_DEFN` builds a docker im
 Here is the structure for an individual being sent from Clojush to
 evaluation instances:
 ```clojure
-{
-  :cycle 1       ;This is the current cycle of the system
-  :strategy "()" ;This is the push code for the individual
-  :eval-id 2309438724 ;This is the individual's evaluation id
-  :type :opponent/:individual  ;Individuals marked as :opponent will be used in games to test
-  ;individuals marked as :individual.  Only :individuals are given a fitness and returned to the gp engine
-  ;Note: opponents should be sent first and then individuals afterwards so that the system has time to load them
-}
+{:indiv indiv ;clojush.individual containing :program
+ :cycle (int)
+ :type :individual
+ :eval-id (int)}
 ```
-
-
-Here is the structure that evaluation instances return:
-(TODO)
 
 ## Server Mode
 Load testing:
@@ -108,12 +100,6 @@ while [[ -n "$2" ]]; do
 done
 ```
 
-## Issues/TODO
-### Bugs
-- [ ] Balls sometimes still seem to be "sticky" and orbit each other briefly (especially on breaks)
-- [ ] Editor bug: placing balls into collisions yields a nil value in a vector operation
-- [ ] Ball has a tendency to stick to the wall
-- [ ] Cue pockets count as points
 
 ## License
 

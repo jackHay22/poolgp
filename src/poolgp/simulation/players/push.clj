@@ -24,6 +24,7 @@
   [v]
   (if (> (count v) 1)
       (Vector. (first v) (second v))
+      ;default: if nothing on stack at execution termination
       (Vector. 0 0)))
 
 (defn eval-push
@@ -32,6 +33,7 @@
   ;TODO: use input list
   (let [cue-input (make-clojush-vec
                       (:center (first (filter #(= (:id %) :cue) (:balls ts)))))
+                  ;Note: requires cue to be configured
         ball-inputs (map make-clojush-vec (map :center (:balls ts)))
         pocket-inputs (map make-clojush-vec (:pockets (:table ts)))
         state-w-inputs (reduce #(clojush-push/push-item %2 :input

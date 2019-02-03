@@ -3,6 +3,67 @@
 #reset getopts
 OPTIND=1
 
+#optional build args
+DOCKER=""
+RELEASE=""
+SERVER_CONFIG=""
+
+while getopts ":r:s:d:" opt; do
+  case $opt in
+    r)
+      RELEASE="$OPTARG"
+      ;;
+    s)
+      SERVER_CONFIG="$OPTARG"
+      ;;
+    d)
+      DOCKER="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+[ "${1:-}" = "--" ] && shift
+
+if [ "$SERVER_CONFIG" != "" ]; then
+  #NOTE: $SERVER_CONFIG is a file to use as source for starting service
+  #note: this file is not committed to vc and contains a sumologic endpt and docker username
+  source $SERVER_CONFIG
+  docker service create --replicas $REPLICAS \
+                        --publish published=$INGRESS_PORT,target=$INGRESS_PORT \
+                        -e LOG_ENDPT=$SUMOLOGIC_ENDPT \
+                        --name poolgp \
+                        $DOCKER_USERNAME/poolgp_server:latest
+  exit
+fi
+
+#optionally release package
+if [ "$RELEASE" != "" ]; then
+  #TODO
+  echo "TODO"
+  exit
+fi
+
+if [ "$DOCKER" != "" ]; then
+  #note: this file is not committed to vc and contains a sumologic endpt and docker username
+  source docker/secrets.txt
+
+  start_docker
+  docker build --build-arg TASK_DEFINITION=$DOCKER --tag poolgp_server:latest .
+  docker tag poolgp_server:latest $DOCKER_USERNAME/poolgp_server
+  docker push $DOCKER_USERNAME/poolgp_server
+  exit
+fi
+
 lein_build () {
   lein deps
   lein uberjar || exit 1
@@ -33,52 +94,4 @@ else
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     lein_install
   fi
-fi
-
-#optional build args
-DOCKER=""
-RELEASE=""
-
-while getopts ":r:d:" opt; do
-  case $opt in
-    r)
-      RELEASE="$OPTARG"
-      ;;
-    d)
-      DOCKER="$OPTARG"
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-done
-
-shift $((OPTIND-1))
-
-[ "${1:-}" = "--" ] && shift
-
-#optionally release package
-if [ "$RELEASE" != "" ]; then
-  #TODO
-  echo "TODO"
-fi
-
-if [ "$DOCKER" != "" ]; then
-  #note: this file is not committed to vc and contains an aws account id and ecr name
-  source docker/aws_keyvals.txt
-
-  start_docker
-  docker build --build-arg TASK_DEFINITION=$DOCKER --tag poolgp_server:latest .
-  #docker tag poolgp_server:latest ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest
-  #docker push ${AWS_ACCOUNT}.${ECR_RESOURCE_URI}:latest || exit 1
-
-  #show images currently in ecr
-  #aws ecr describe-images --repository-name poolgp --region us-east-2
-
-  #to run image: docker run poolgp_server:latest
 fi
