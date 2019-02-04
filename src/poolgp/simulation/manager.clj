@@ -12,8 +12,8 @@
 (defn simulation-init
   "load task definition from json, parse components recursively
   through structure"
-  [task-definition-path demo?]
-  (let [simulation-json (:simulation (utils/read-json-file task-definition-path))]
+  [task-definition demo?]
+  (let [simulation-json (:simulation task-definition)]
         (SimulationState.
           ;analysis states
           (analysis-manager/analysis-init
@@ -22,8 +22,6 @@
           (if (:max-iterations simulation-json)
               (:max-iterations simulation-json) config/DEFAULT-MAX-ITERATIONS)
           0 ;current iteration
-          (if (:port simulation-json)
-              (:port simulation-json) config/DEFAULT-PORT)
           (if (:watching simulation-json)
               (:watching simulation-json) 0)
           (player-manager/init-player (:p1 simulation-json) :p1)

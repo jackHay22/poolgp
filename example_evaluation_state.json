@@ -60,5 +60,11 @@
       "genetic" : true,
       "strategy" : "(integer_+)"
     }
+  },
+  "eval-worker" : {
+    "indiv-ingress-p" : 9999,
+    "indiv-egress-p" : 8000,
+    "opp-pool-req-p" : 8888,
+    "engine-hostname" : "poolgp-engine"
   }
 }

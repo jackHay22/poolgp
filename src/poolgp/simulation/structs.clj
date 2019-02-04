@@ -141,7 +141,6 @@
 ;   :analytics-states (list (AnalyticsState.))
 ;   :max-iterations int
 ;   :current-iteration int
-;   :port int
 ;   :p1 Player.
 ;   :p2 Player.
 ;   :demo true/false
@@ -149,7 +148,17 @@
 ; }
 
 (defrecord SimulationState [analysis-states max-iterations
-                            current-iteration port
+                            current-iteration
                             watching
                             ^Player p1 ^Player p2
                             ^ControllerInterface controller])
+
+; ServerConfig
+; {
+;   :indiv-ingress-p int
+;   :indiv-egress-p int
+;   :opp-pool-req-p int
+;   :engine-hostname str
+; }
+(defrecord ServerConfig [indiv-ingress-p indiv-egress-p
+                         opp-pool-req-p engine-hostname])

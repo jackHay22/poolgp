@@ -8,6 +8,7 @@
             [poolgp.config :as config]
             [poolgp.log :as log])
   (:import [java.net ServerSocket SocketException Socket InetAddress])
+  (:import poolgp.simulation.structs.ServerConfig)
   (:gen-class))
 
 ;holds individuals from engine, pulled off individually
@@ -15,9 +16,6 @@
 
 ;holds individuals that have already been tested
 (def OUT-CHANNEL (async/chan config/CHANNEL-BUFFER))
-
-;Detected ip for return packets
-(def REMOTE-HOST (atom nil))
 
 ;Holds individuals being used as tests for individuals in test mode
 (def OPPONENT-POOL (atom (list)))
@@ -27,6 +25,26 @@
 
 ;This is the current evaluation cycle: if a new cycle is detected the opponent pool is purged
 (def CURRENT-CYCLE (atom 0))
+
+(defn- load-config
+  "create server config record from json->map"
+  [task-def]
+  (ServerConfig.
+    (:indiv-ingress-p task-def)
+    (:indiv-egress-p task-def)
+    (:opp-pool-req-p task-def)
+    (:engine-hostname task-def)))
+
+(defn- request-opponent-pool!
+  "request opponent pool from remote engine
+  (blocking), resets! OPPONENT-POOL"
+  [hostname req-p]
+  (let [client-socket (Socket. hostname req-p)
+        reader (io/reader client-socket)]
+      (log/write-info (str "Requesting opponent pool from: "
+                            hostname ":" req-p))
+      (reset! OPPONENT-POOL (map read-string (line-seq reader)))
+      (.close client-socket)))
 
 (defn- status-task
   "runnable (thread) log process"
@@ -42,10 +60,6 @@
           (Thread/sleep delay))
           (recur)))))
 
-(defn- get-total-cores
-  "returns number of processing cores"
-  [] (.availableProcessors (Runtime/getRuntime)))
-
 (defn- async-persistent-server
   "start listening server, push individuals to channel"
   [socket]
@@ -54,11 +68,7 @@
   (async/go-loop []
     (let [client-socket (.accept socket)]
      (try
-       (if (nil? @REMOTE-HOST)
-            (let [return-addr (.getHostName (.getInetAddress client-socket))]
-              (log/write-info (str "Returning individuals to: " return-addr))
-              (reset! REMOTE-HOST return-addr)))
-        (async/>! IN-CHANNEL (.readLine (io/reader client-socket)))
+       (async/>! IN-CHANNEL (.readLine (io/reader client-socket)))
        (.close client-socket)
        (catch SocketException e
          (.close client-socket)
@@ -100,7 +110,7 @@
 
 (defn- in-channel-worker
   "start channel worker with starting state"
-  [simulation-state]
+  [simulation-state server-config]
   (log/write-info "Starting incoming channel worker...")
   (async/go-loop []
     (try
@@ -113,21 +123,23 @@
                (reset! OPPONENT-POOL (list))
                (reset! INDIV-COUNT 0)
                (reset! CURRENT-CYCLE (:cycle indiv))))
-          (if (= (:type indiv) :opponent)
-            ;add opponent to pool
-            (swap! OPPONENT-POOL conj indiv)
-            ;simulate on individual
-            (do
-              (swap! INDIV-COUNT inc)
-              (log/write-info (str "Running simulations on individual "
-                                    (:eval-id indiv) " against " (count @OPPONENT-POOL)
-                                    " opponents"))
-              (async/>! OUT-CHANNEL
-                (create-outgoing-map indiv
-                  (doall ((if config/PARALLEL-SIMULATIONS? pmap map)
-                        (fn [op]
-                          (run-simulation simulation-state indiv op))
-                        @OPPONENT-POOL))))))))
+          (do
+            (swap! INDIV-COUNT inc)
+            ;if node hasn't requested opponents for this cycle,
+            ; request from engine host (block)
+            (if (empty? @OPPONENT-POOL)
+              (request-opponent-pool!
+                (:engine-hostname server-config)
+                (:opp-pool-req-p server-config)))
+            (log/write-info (str "Running simulations on individual "
+                                  (:eval-id indiv) " against " (count @OPPONENT-POOL)
+                                  " opponents"))
+            (async/>! OUT-CHANNEL
+              (create-outgoing-map indiv
+                (doall ((if config/PARALLEL-SIMULATIONS? pmap map)
+                      (fn [op]
+                        (run-simulation simulation-state indiv op))
+                      @OPPONENT-POOL)))))))
       (catch Exception e
         (log/write-error "In channel worked failed to evaluate individual on opponent pool")
         (.printStackTrace e)))
@@ -135,11 +147,11 @@
 
 (defn- out-channel-worker
   "start a distribution worker"
-  [port]
+  [engine-hostname port]
   (log/write-info "Starting outgoing channel worker...")
   (async/go-loop []
     (let [player (async/<! OUT-CHANNEL)
-          client-socket (Socket. @REMOTE-HOST port)
+          client-socket (Socket. engine-hostname port)
           writer (io/writer client-socket)]
         (log/write-info (str "Finished simulation cycle on individual: " (:eval-id player)))
         (.write writer (str (pr-str player) "\n"))
@@ -153,8 +165,7 @@
   (doall (map log/write-info
       (list
         (str "Host: " (.getHostName (InetAddress/getLocalHost)))
-        (str "Listening on port: " (:port s))
-        (str "Total system cores: " (get-total-cores))
+        (str "Total system cores: " (.availableProcessors (Runtime/getRuntime)))
         (str "Channel buffer size: " config/CHANNEL-BUFFER)
         (str "Using pmap for simulations? " config/PARALLEL-SIMULATIONS?)
         (str "Logging eval server status every " config/LOG-SPACING-SECONDS " seconds")
@@ -165,11 +176,14 @@
   "start a persistent socket server"
   [task-def]
   (let [simulation-state (simulation-manager/simulation-init task-def false)
-        socket (ServerSocket. (:port simulation-state))]
+        server-config (load-config (:eval-worker task-def))
+        socket (ServerSocket. (:indiv-ingress-p server-config))]
       (do
         (.setSoTimeout socket 0)
         (display-starting-config simulation-state)
-        (in-channel-worker simulation-state)
-        (out-channel-worker 8001) ;TODO (add to config)
+        (in-channel-worker simulation-state server-config)
+        (out-channel-worker
+          (:engine-hostname server-config)
+          (:indiv-egress-p server-config))
         (status-task)
         (async-persistent-server socket))))

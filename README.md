@@ -50,7 +50,6 @@ Optional: `-r VERSION` specifies a release and `-d TASK_DEFN` builds a docker im
       },
     ],
     "max-iterations" : 100000,  (optional)
-    "port": 9000,               (optional)
     "watching" : 0,             (optional)
     "p1" : {
       "genetic" : true,
@@ -60,6 +59,12 @@ Optional: `-r VERSION` specifies a release and `-d TASK_DEFN` builds a docker im
       "genetic" : true,
       "strategy" : "(integer_+)"
     }
+  },
+  "eval-worker" : {
+    "indiv-ingress" : 9999,
+    "indiv-egress" : 8000,
+    "opp-pool-req" : 8888,
+    "engine-hostname" : "poolgp-engine"
   }
 }
 ```

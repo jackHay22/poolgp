@@ -3,10 +3,20 @@
 #reset getopts
 OPTIND=1
 
+start_docker() {
+  open -a Docker || exit 1
+  i=0
+  while ! docker system info &>/dev/null; do
+    (( i++ == 0 )) && printf "Waiting for Docker daemon" %s || printf "."
+    sleep 1
+  done
+  (( i )) && printf '\n'
+}
+
 #optional build args
 DOCKER=""
 RELEASE=""
-SERVER_CONFIG=""
+TASK_DEFN=""
 
 while getopts ":r:s:d:" opt; do
   case $opt in
@@ -14,7 +24,7 @@ while getopts ":r:s:d:" opt; do
       RELEASE="$OPTARG"
       ;;
     s)
-      SERVER_CONFIG="$OPTARG"
+      TASK_DEFN="$OPTARG"
       ;;
     d)
       DOCKER="$OPTARG"
@@ -34,15 +44,10 @@ shift $((OPTIND-1))
 
 [ "${1:-}" = "--" ] && shift
 
-if [ "$SERVER_CONFIG" != "" ]; then
-  #NOTE: $SERVER_CONFIG is a file to use as source for starting service
-  #note: this file is not committed to vc and contains a sumologic endpt and docker username
-  source $SERVER_CONFIG
-  docker service create --replicas $REPLICAS \
-                        --publish published=$INGRESS_PORT,target=$INGRESS_PORT \
-                        -e LOG_ENDPT=$SUMOLOGIC_ENDPT \
-                        --name poolgp \
-                        $DOCKER_USERNAME/poolgp_server:latest
+if [ "$TASK_DEFN" != "" ]; then
+  TASK_DEFINITION=$TASK_DEFN
+  docker stack deploy --compose-file docker-compose.yml \
+                      --resolve-image never \
   exit
 fi
 
@@ -67,16 +72,6 @@ fi
 lein_build () {
   lein deps
   lein uberjar || exit 1
-}
-
-start_docker() {
-  open -a Docker || exit 1
-  i=0
-  while ! docker system info &>/dev/null; do
-    (( i++ == 0 )) && printf "Waiting for Docker daemon" %s || printf "."
-    sleep 1
-  done
-  (( i )) && printf '\n'
 }
 
 lein_install() {
