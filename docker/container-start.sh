@@ -14,4 +14,4 @@
 #   done
 # }
 
-exec java -jar app.jar -e $1 #| redirect_logs $2
+exec java -server -jar app.jar -e $1 #| redirect_logs $2

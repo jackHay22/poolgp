@@ -67,4 +67,4 @@
 (def PARALLEL-SIMULATIONS? true)
 
 ;delay between server logs
-(def LOG-SPACING-SECONDS 20)
+(def LOG-SPACING-SECONDS 30)

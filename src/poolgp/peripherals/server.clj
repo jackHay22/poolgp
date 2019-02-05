@@ -43,8 +43,8 @@
         reader (io/reader client-socket)]
       (log/write-info (str "Requesting opponent pool from: "
                             hostname ":" req-p))
-      (reset! OPPONENT-POOL (map read-string (line-seq reader)))
-      (.close client-socket)))
+      (reset! OPPONENT-POOL
+        (map read-string (line-seq reader)))))
 
 (defn- status-task
   "runnable (thread) log process"
@@ -70,9 +70,10 @@
      (try
        (async/>! IN-CHANNEL (.readLine (io/reader client-socket)))
        (.close client-socket)
-       (catch SocketException e
+       (catch Exception e
          (.close client-socket)
-         (log/write-error "SocketServer exception, closing current conn"))))
+         (log/write-error "Exception moving packet to channel, closing current conn")
+         (.printStackTrace e))))
     (recur)))
 
 (defn- add-players
@@ -141,7 +142,7 @@
                         (run-simulation simulation-state indiv op))
                       @OPPONENT-POOL)))))))
       (catch Exception e
-        (log/write-error "In channel worked failed to evaluate individual on opponent pool")
+        (log/write-error "In channel worked failed to evaluate individual on opponent pool (Exception)")
         (.printStackTrace e)))
     (recur)))
 

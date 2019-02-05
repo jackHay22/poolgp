@@ -1,21 +1,18 @@
 version: '3'
 
 services:
-  poolgp-eval:
+  eval:
     deploy:
       replicas: 6
-    environment:
-      - TASK_DEFINITION=${TASK_DEFINITION}
-    build: .
+    image: jackhay22/poolgp_server:latest
     ports:
       - "9999:9999"
-      - "8000:8000"
-      - "9000:9000"
-  poolgp-engine:
+  engine:
     image: jackhay22/poolgp_clojush:latest
     deploy:
       replicas: 1
+    depends_on:
+      - eval
     ports:
-      - "9999:9999"
       - "8000:8000"
       - "9000:9000"

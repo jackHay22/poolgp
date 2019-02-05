@@ -13,62 +13,6 @@ start_docker() {
   (( i )) && printf '\n'
 }
 
-#optional build args
-DOCKER=""
-RELEASE=""
-TASK_DEFN=""
-
-while getopts ":r:s:d:" opt; do
-  case $opt in
-    r)
-      RELEASE="$OPTARG"
-      ;;
-    s)
-      TASK_DEFN="$OPTARG"
-      ;;
-    d)
-      DOCKER="$OPTARG"
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-done
-
-shift $((OPTIND-1))
-
-[ "${1:-}" = "--" ] && shift
-
-if [ "$TASK_DEFN" != "" ]; then
-  TASK_DEFINITION=$TASK_DEFN
-  docker stack deploy --compose-file docker-compose.yml \
-                      --resolve-image never \
-  exit
-fi
-
-#optionally release package
-if [ "$RELEASE" != "" ]; then
-  #TODO
-  echo "TODO"
-  exit
-fi
-
-if [ "$DOCKER" != "" ]; then
-  #note: this file is not committed to vc and contains a sumologic endpt and docker username
-  source docker/secrets.txt
-
-  start_docker
-  docker build --build-arg TASK_DEFINITION=$DOCKER --tag poolgp_server:latest .
-  docker tag poolgp_server:latest $DOCKER_USERNAME/poolgp_server
-  docker push $DOCKER_USERNAME/poolgp_server
-  exit
-fi
-
 lein_build () {
   lein deps
   lein uberjar || exit 1
@@ -89,4 +33,35 @@ else
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     lein_install
   fi
+fi
+
+#optional build args
+TASK_DEFN=""
+
+while getopts ":d:" opt; do
+  case $opt in
+    d)
+      TASK_DEFN="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+[ "${1:-}" = "--" ] && shift
+
+if [ "$TASK_DEFN" != "" ]; then
+  start_docker
+  docker build --build-arg TASK_DEFINITION=$TASK_DEFN --tag poolgp_server:latest .
+  docker tag poolgp_server:latest jackhay22/poolgp_server
+  docker push jackhay22/poolgp_server
+  exit
 fi

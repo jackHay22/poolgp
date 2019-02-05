@@ -1,9 +1,9 @@
-FROM hypriot/rpi-java
+FROM hypriot/rpi-java:jre-1.8.111
 #FROM java:8-jre-alpine
 
 MAINTAINER Jack Hay "https://github.com/jackHay22"
 
-ARG LOG_ENDPT
+ARG TASK_DEFINITION
 
 ADD target/uberjar/poolgp-*.*.*-SNAPSHOT-standalone.jar app.jar
 

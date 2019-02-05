@@ -1,29 +1,33 @@
 # PoolGP
 
-## Build
+## Contents
+TODO
+
+## Using PoolGP
+
+### Building the project
 ```
 ./build
 ```
-Optional: `-r VERSION` specifies a release and `-d TASK_DEFN` builds a docker image
+Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
 
-## Options (an option is required)
+### Project run Options (NOTE: an option is required)
+(Example: `java -jar poolgp-0.1.0-SNAPSHOT-standalone.jar -e example_evaluation_state.json`)
 - `-d --demo PATH` Runs in demo mode given configuration
 - `-e --eval PATH` Runs in server mode with specified task definition
 - `-b --builder PATH` Opens editing mode and writes to file provided (must exist)
 - `-n --new FILENAME` Creates a blank configuration file (with required fields) (this is meant to be subsequently edited)
 
-## Dependencies
+### Project Dependencies
+(Run `lein deps`)
 ```clojure
 [org.clojure/tools.cli "0.4.1"]
 [org.clojure/core.async "0.4.490"]
 [org.clojure/data.json "0.2.6"]
+[clojush "3.17.1"]
 ```
 
-## Instruction Definitions
-- Instructions are defined here: `poolgp.simulation.players.push.instructions`
-- Analytics are defined here: `poolgp.simulation.analysis.definitions`
-
-## Task Definition Structure
+### Task Definition Structure
 - Warning: if using `:interactive` as a player type, there should only be one analysis state
   (only one state is visible to demo)
 ```json
@@ -69,8 +73,9 @@ Optional: `-r VERSION` specifies a release and `-d TASK_DEFN` builds a docker im
 }
 ```
 
-## Individual Evaluation
+## Server Mode
 
+### "Packet" structure
 Here is the structure for an individual being sent from Clojush to
 evaluation instances:
 ```clojure
@@ -80,31 +85,35 @@ evaluation instances:
  :eval-id (int)}
 ```
 
-## Server Mode
-Load testing:
-I use the following code to test poolgp under load.
+### Creating a Docker Swarm
+- Follow the [tutorial](https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/) on creating a Docker swarm.
+- Copy `docker/docker-compose.yml` to the master node of your swarm
+- From the master node, run the following:
 ```bash
-
-send_traffic() {
-  echo "Testing server $1 on port $2"
-  echo "Sending opponents..."
-  for i in `seq 1 1000`;
-    do
-      echo "{:strategy '(integer_mult) :eval-id $i :cycle 0 :type :opponent}" | nc $1 $2
-    done
-  echo "Sending individuals..."
-  for i in `seq 1 1000`;
-    do
-      echo "{:strategy '(integer_mult) :eval-id $i :cycle 0 :type :individual}" | nc $1 $2
-    done
-}
-
-while [[ -n "$2" ]]; do
-  send_traffic $1 $2 &
-  shift 2
-done
+  docker stack deploy --compose-file docker-compose.yml
 ```
 
+## Configuring Clojush to communicate with PoolGP workers
+Here are the steps required for setting up Clojush for communication with PoolGP evaluation workers.
+
+Add this dependency to your `project.clj` file: ``
+
+When your engine is ready to evaluate the entire population, include the following code:
+In your ns declaration: `(:require poolgp.distribute :as poolgp)`
+
+(Note: this should be in `clojush.src.pushgp.pushgp/compute-errors`)
+
+```clojure
+(poolgp/eval-indivs individuals-list
+  {
+    :incoming-port 8000
+    :outgoing-port 9999
+    :opp-pool-req-p 8888
+    :host "eval"          ;If running nodes in a swarm (recommended) this will be the service name
+    :accepted-return 1    ;percent total individuals required to be returned before stopping
+  })
+```
+This function returns the set of individuals with computed fitness (given the task definition used to run the workers)
 
 ## License
 
