@@ -9,6 +9,7 @@
             [poolgp.log :as log])
   (:import [java.net ServerSocket SocketException Socket InetAddress])
   (:import poolgp.simulation.structs.ServerConfig)
+  (:import clojush.individual.individual)
   (:gen-class))
 
 ;holds individuals from engine, pulled off individually
@@ -25,6 +26,14 @@
 
 ;This is the current evaluation cycle: if a new cycle is detected the opponent pool is purged
 (def CURRENT-CYCLE (atom 0))
+
+(defn- valid-indiv?
+  "takes individual, checks if valid
+  -> bool"
+  [i]
+  (and
+    (map? i)
+    (instance? individual (:indiv i))))
 
 (defn- load-config
   "create server config record from json->map"
@@ -44,7 +53,8 @@
       (log/write-info (str "Requesting opponent pool from: "
                             hostname ":" req-p))
       (reset! OPPONENT-POOL
-        (map read-string (line-seq reader)))))
+        (filter valid-indiv?
+          (map read-string (line-seq reader))))))
 
 (defn- status-task
   "runnable (thread) log process"
@@ -68,7 +78,11 @@
   (async/go-loop []
     (let [client-socket (.accept socket)]
      (try
-       (async/>! IN-CHANNEL (.readLine (io/reader client-socket)))
+       (let [line-from-sock (.readLine (io/reader client-socket))]
+          ;verify that line can be placed in channel
+          (if (not (nil? line-from-sock))
+              (async/>! IN-CHANNEL line-from-sock)
+              (log/write-info "Warning: ingress server read nil line")))
        (.close client-socket)
        (catch Exception e
          (.close client-socket)
@@ -76,19 +90,14 @@
          (.printStackTrace e))))
     (recur)))
 
-(defn- add-players
-  "updateplayer info in state"
-  [starting-state p1 p2]
-  (assoc starting-state
-    :p1 (player-manager/init-clojush-player p1 :p1)
-    :p2 (player-manager/init-clojush-player p2 :p2)))
-
 (defn- run-simulation
   "run the current simulation state
   and output to outgoing channel"
   [starting-state test-indiv opponent]
   (let [max-cycles (:max-iterations starting-state)
-        eval-state (add-players starting-state test-indiv opponent)
+        eval-state (assoc starting-state
+                      :p1 (player-manager/init-clojush-player test-indiv :p1)
+                      :p2 (player-manager/init-clojush-player opponent   :p2))
         resultant-state
             (loop [current 0
                    state eval-state]
@@ -101,8 +110,8 @@
             (:p1 resultant-state)))
 
 (defn- create-outgoing-map
-  "take resulting gamestates and turn into report to return to engine"
-  [indiv results-list]
+  "take resulting state and turn into report to return to engine"
+  [indiv results-state]
   ;TODO: incorporate results list
   ;TODO: check if results list is empty (this can happen on a opp pool clear)
   indiv
@@ -135,12 +144,16 @@
             (log/write-info (str "Running simulations on individual "
                                   (:eval-id indiv) " against " (count @OPPONENT-POOL)
                                   " opponents"))
-            (async/>! OUT-CHANNEL
-              (create-outgoing-map indiv
-                (doall ((if config/PARALLEL-SIMULATIONS? pmap map)
-                      (fn [op]
-                        (run-simulation simulation-state indiv op))
-                      @OPPONENT-POOL)))))))
+            ;validate individual before starting simulation
+            (if (valid-indiv? indiv)
+              (async/>! OUT-CHANNEL
+                ;create return map
+                (create-outgoing-map indiv
+                  (doall ((if config/PARALLEL-SIMULATIONS? pmap map)
+                        (fn [op]
+                          (run-simulation simulation-state indiv op))
+                        @OPPONENT-POOL))))
+              (log/write-error (str "Failed to validate individual: " indiv))))))
       (catch Exception e
         (log/write-error "In channel worked failed to evaluate individual on opponent pool (Exception)")
         (.printStackTrace e)))
