@@ -11,7 +11,7 @@ TODO
 ```
 Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
 
-### Project run Options (NOTE: an option is required)
+### Project run options (NOTE: an option is required)
 (Example: `java -jar poolgp-0.1.0-SNAPSHOT-standalone.jar -e example_evaluation_state.json`)
 - `-d --demo PATH` Runs in demo mode given configuration
 - `-e --eval PATH` Runs in server mode with specified task definition
