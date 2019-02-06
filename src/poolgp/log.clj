@@ -6,6 +6,7 @@
 
 (def INFO "INFO")
 (def ERROR "ERROR")
+(def WARNING "WARNING")
 
 (def TEXT-RED "\033[0;31m")
 (def TEXT-YELLOW "\033[1;33m")
@@ -26,3 +27,6 @@
 (def write-error #(if config/TEXT-COLOR?
                       (write ERROR % TEXT-RED)
                       (write ERROR %)))
+(def write-warning #(if config/TEXT-COLOR?
+                      (write WARNING % TEXT-YELLOW)
+                      (write WARNING %)))

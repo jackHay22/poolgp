@@ -82,7 +82,7 @@
           ;verify that line can be placed in channel
           (if (not (nil? line-from-sock))
               (async/>! IN-CHANNEL line-from-sock)
-              (log/write-info "Warning: ingress server read nil line")))
+              (log/write-warning "Ingress server read nil line")))
        (.close client-socket)
        (catch Exception e
          (.close client-socket)

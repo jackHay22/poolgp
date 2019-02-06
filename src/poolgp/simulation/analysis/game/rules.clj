@@ -2,6 +2,7 @@
   (:require [poolgp.simulation.resources :as resources]
             [poolgp.log :as log]
             [poolgp.simulation.analysis.game.table.physics :as physics])
+  (:import poolgp.simulation.structs.Vector)
   (:gen-class))
 
 ;speed at which a ball is considered to be stopped
@@ -71,7 +72,8 @@
                     ;move cue to break point
                     (update-in s [:balls]
                       (fn [balls] (map #(if (= (:id %) :cue)
-                                          (assoc % :center resources/BREAK-PT) %)
+                                          (assoc % :center resources/BREAK-PT
+                                                   :vector (Vector. 0 0)) %)
                                         balls))))
                  s))
               ts (:balls ts)))))

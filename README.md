@@ -96,7 +96,9 @@ evaluation instances:
 ## Configuring Clojush to communicate with PoolGP workers
 Here are the steps required for setting up Clojush for communication with PoolGP evaluation workers.
 
-Add this dependency to your `project.clj` file: ``
+Add this dependency to your `project.clj` file: `[poolgp.distribute "0.1.0-SNAPSHOT"]`
+
+See [![poolgp.distribute](https://img.shields.io/clojars/v/poolgp.distribute.svg)](https://clojars.org/poolgp.distribute).
 
 When your engine is ready to evaluate the entire population, include the following code:
 In your ns declaration: `(:require poolgp.distribute :as poolgp)`
