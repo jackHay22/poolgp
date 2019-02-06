@@ -98,7 +98,7 @@ Here are the steps required for setting up Clojush for communication with PoolGP
 
 Add this dependency to your `project.clj` file: `[poolgp.distribute "0.1.0-SNAPSHOT"]`
 
-See [![poolgp.distribute](https://img.shields.io/clojars/v/poolgp.distribute.svg)](https://clojars.org/poolgp.distribute).
+[![poolgp.distribute](https://img.shields.io/clojars/v/poolgp.distribute.svg)](https://clojars.org/poolgp.distribute).
 
 When your engine is ready to evaluate the entire population, include the following code:
 In your ns declaration: `(:require poolgp.distribute :as poolgp)`
