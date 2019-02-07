@@ -50,6 +50,7 @@
   [hostname req-p]
   (log/write-info (str "Requesting opponent pool from: "
                         hostname ":" req-p))
+  ;TODO: on failure to connect wait an retry
   (let [client-socket (Socket. hostname req-p)
         reader (io/reader client-socket)]
       (reset! OPPONENT-POOL

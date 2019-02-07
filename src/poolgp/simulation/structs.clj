@@ -124,7 +124,6 @@
                        ^GamePlayer waiting
                        ready? current-scored?
                        scratched?
-                       max-push-iterations
                        push-inputs])
 
 ;AnalysisState

@@ -29,7 +29,7 @@
 
 (defn eval-push
   "evaluate push code based on tablestate"
-  [ts push max-iterations inputs]
+  [ts push inputs]
   ;TODO: use input list
   (let [cue-input (make-clojush-vec
                       (:center (first (filter #(= (:id %) :cue) (:balls ts)))))

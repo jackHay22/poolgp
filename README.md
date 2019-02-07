@@ -42,7 +42,6 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
               {"x" : 500, "y" : 285, "id" : "cue", "type" : "cue"}
             ]
           },
-          "max-push-iterations" : 1000, (optional)
           "push-inputs" : [ "balls", "cue", "pockets"] (optional)
         },
         "p1-analytics" : [

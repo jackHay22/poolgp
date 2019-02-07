@@ -19,9 +19,6 @@
     (GamePlayer. :p2 :unassigned 0)
     ;ready? current-scored? scratched?
     true    false           false
-    (if (:max-push-iterations gamestate-json)
-        (:max-push-iterations gamestate-json)
-        config/DEFAULT-MAX-PUSH-ITERATIONS)
     (if (:push-inputs gamestate-json)
         (map keyword (:push-inputs gamestate-json))
         config/DEFAULT-PUSH-INPUTS)))

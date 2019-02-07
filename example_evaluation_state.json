@@ -9,7 +9,6 @@
               {"x" : 500, "y" : 285, "id" : "cue", "type" : "cue"}
             ]
           },
-          "max-push-iterations" : 1000,
           "push-inputs" : ["balls", "cue", "pockets"]
         },
         "p1-analytics" : [
