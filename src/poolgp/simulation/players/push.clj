@@ -32,27 +32,32 @@
                            (second int-stack))
           :no-output (Vector. 0 0))))
 
+(defn- get-push-state
+  "add table state inputs to a new push state"
+  [ts inputs]
+  ;TODO: use input list
+  (reduce (fn [s in] (clojush-push/push-item in :input s))
+      (clojush-push/make-push-state)
+      (concat
+        (conj
+          ;get ball positions
+          (map make-clojush-vec (map :center (:balls ts)))
+          ;get cue position
+          (make-clojush-vec
+              (:center (first
+                  (filter (fn [b] (= (:id b) :cue))
+                          (:balls ts))))))
+        ;get pocket positions
+        (map make-clojush-vec (:pockets (:table ts))))))
+
 (defn eval-push
   "evaluate push code based on tablestate"
   [ts push inputs]
-  ;TODO: use input list
   (update-in ts [:balls]
     ;add new velocity to cue
     #(map (fn [b] (if (= (:id b) :cue)
                       (assoc b :vector
                         (extract-cue-vel
                           (clojush-interp/run-push push
-                            (reduce (fn [s in] (clojush-push/push-item in :input s))
-                                (clojush-push/make-push-state)
-                                (concat
-                                  (conj
-                                    ;get ball positions
-                                    (map make-clojush-vec (map :center (:balls ts)))
-                                    ;get cue position
-                                    (make-clojush-vec
-                                        (:center (first
-                                            (filter (fn [b] (= (:id b) :cue))
-                                                    (:balls ts))))))
-                                  ;get pocket positions
-                                  (map make-clojush-vec (:pockets (:table ts))))))))
+                            (get-push-state ts inputs))))
                       b)) %)))
