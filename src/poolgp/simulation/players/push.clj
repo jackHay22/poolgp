@@ -41,8 +41,8 @@
     #(map (fn [b] (if (= (:id b) :cue)
                       (assoc b :vector
                         (extract-cue-vel
-                          (clojush-interp/run-push
-                            (reduce #(clojush-push/push-item %2 :input %1)
+                          (clojush-interp/run-push push
+                            (reduce (fn [s in] (clojush-push/push-item in :input s))
                                 (clojush-push/make-push-state)
                                 (concat
                                   (conj
@@ -51,7 +51,8 @@
                                     ;get cue position
                                     (make-clojush-vec
                                         (:center (first
-                                            (filter #(= (:id %) :cue) (:balls ts))))))
+                                            (filter (fn [b] (= (:id b) :cue))
+                                                    (:balls ts))))))
                                   ;get pocket positions
                                   (map make-clojush-vec (:pockets (:table ts))))))))
                       b)) %)))
