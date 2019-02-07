@@ -36,19 +36,22 @@
   "evaluate push code based on tablestate"
   [ts push inputs]
   ;TODO: use input list
-  (let [state-w-inputs (reduce #(clojush-push/push-item %2 :input %1)
+  (update-in ts [:balls]
+    ;add new velocity to cue
+    #(map (fn [b] (if (= (:id b) :cue)
+                      (assoc b :vector
+                        (extract-cue-vel
+                          (clojush-interp/run-push
+                            (reduce #(clojush-push/push-item %2 :input %1)
                                 (clojush-push/make-push-state)
                                 (concat
                                   (conj
+                                    ;get ball positions
                                     (map make-clojush-vec (map :center (:balls ts)))
+                                    ;get cue position
                                     (make-clojush-vec
                                         (:center (first
                                             (filter #(= (:id %) :cue) (:balls ts))))))
-                                  (map make-clojush-vec (:pockets (:table ts)))))]
-        (update-in ts [:balls]
-          #(map (fn [b] (if (= (:id b) :cue)
-                            (assoc b :vector
-                              (extract-cue-vel
-                                (clojush-interp/run-push
-                                      push state-w-inputs)))
-                            b)) %))))
+                                  ;get pocket positions
+                                  (map make-clojush-vec (:pockets (:table ts))))))))
+                      b)) %)))
