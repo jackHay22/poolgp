@@ -90,7 +90,7 @@ evaluation instances:
 - Copy `docker/docker-compose.yml` to the master node of your swarm
 - From the master node, run the following:
 ```bash
-  docker stack deploy --compose-file docker-compose.yml
+  docker stack deploy --compose-file docker-compose.yml poolgp
 ```
 
 ## Configuring Clojush to communicate with PoolGP workers
@@ -99,7 +99,7 @@ Here are the steps required for setting up Clojush for communication with PoolGP
 Add this dependency to your `project.clj` file: [![poolgp.distribute](https://img.shields.io/clojars/v/poolgp.distribute.svg)](https://clojars.org/poolgp.distribute).
 
 When your engine is ready to evaluate the entire population, include the following code:
-In your ns declaration: `(:require poolgp.distribute :as poolgp)`
+In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 
 (Note: this should be in `clojush.src.pushgp.pushgp/compute-errors`)
 

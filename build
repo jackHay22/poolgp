@@ -61,7 +61,7 @@ shift $((OPTIND-1))
 if [ "$TASK_DEFN" != "" ]; then
   start_docker
   docker build --build-arg TASK_DEFINITION=$TASK_DEFN --tag poolgp_server:latest .
-  docker tag poolgp_server:latest jackhay22/poolgp_server
-  docker push jackhay22/poolgp_server
+  docker tag poolgp_server:latest jackhay22/poolgp_server:latest
+  docker push jackhay22/poolgp_server:latest
   exit
 fi

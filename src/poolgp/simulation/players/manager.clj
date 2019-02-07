@@ -21,7 +21,7 @@
      id
      clojush-p
      :genetic
-     (push/load-push (:program (:indiv clojush-p)))))
+     (:program (:indiv clojush-p))))
 
 (defn update-operations
   "update the gamestate of an analysis state

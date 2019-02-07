@@ -3,10 +3,15 @@ version: '3'
 services:
   eval:
     deploy:
-      replicas: 6
+      replicas: 1
     image: jackhay22/poolgp_server:latest
     ports:
       - "9999:9999"
+    healthcheck:
+      test: ["CMD", "nc", "-zv", "127.0.0.1", "9999"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
   engine:
     image: jackhay22/poolgp_clojush:latest
     deploy:

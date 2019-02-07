@@ -48,10 +48,10 @@
   "request opponent pool from remote engine
   (blocking), resets! OPPONENT-POOL"
   [hostname req-p]
+  (log/write-info (str "Requesting opponent pool from: "
+                        hostname ":" req-p))
   (let [client-socket (Socket. hostname req-p)
         reader (io/reader client-socket)]
-      (log/write-info (str "Requesting opponent pool from: "
-                            hostname ":" req-p))
       (reset! OPPONENT-POOL
         (filter valid-indiv?
           (map read-string (line-seq reader))))))
