@@ -6,10 +6,10 @@
 
 (def NOT-BALL-TYPE {:striped :solid :solid :striped})
 
-(defn ** ([x] (* x x))
+(defn- ** ([x] (* x x))
          ([x p] (reduce * (repeat p x))))
 
-(defn throttle-speed
+(defn- throttle-speed
   "trottle speed based on max speed"
   [vector max]
   (let [speed (Math/sqrt (+ (** (:x vector))
@@ -25,7 +25,7 @@
   ([x1 y1 x2 y2]
     (Math/sqrt (+ (** (- x2 x1)) (** (- y2 y1))))))
 
-(defn vector-from-angle
+(defn- vector-from-angle
   "create dx/dy vector from force/angle"
   [a f]
   (Vector. (- (int (* f (Math/cos a))))
@@ -38,7 +38,7 @@
       (- (:y v2) (:y v1))
       (- (:x v2) (:x v1))))
 
-(defn do-normal-reflection
+(defn- do-normal-reflection
   "perform a normal reflection of vector d on normal n
   (n is normalized)"
   [d n]
@@ -46,7 +46,7 @@
     (structs/scale
       (structs/scale n (structs/dot d n)) 2)))
 
-(defn do-ball-collision
+(defn- do-ball-collision
   "recalculate movement vectors on collision
   CITE: https://ericleong.me/research/circle-circle/#dynamic-circle-circle-collision"
   [b1 b2]
@@ -60,7 +60,7 @@
               (structs/scale
                   (structs/scale norm (:mass b1)) p)))))
 
-(defn segment-surface-normals
+(defn- segment-surface-normals
   "Vector (pt), Vector (pt), facing  -> Vector
   calculate surface normal of line segment"
   [v1 v2 facing]
@@ -70,7 +70,7 @@
           (structs/normalize (Vector. (- dy) dx))
           (structs/normalize (Vector. dy (- dx))))))
 
-(defn ball-intersects-segment?
+(defn- ball-intersects-segment?
   "check if the ball intersects with the line segment
   CITE: https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
   (using vector projection)"
@@ -85,12 +85,12 @@
         (and
           (> 0 (structs/dot
                 (structs/minus (:center ball) proj-pt)
-                (structs/minus (:vector ball) (structs/minus (:center ball) proj-pt))))
+                (:vector ball)))
           (> epsilon segment-diff)
           (> segment-diff (- epsilon))
           (> (:r ball) (distance proj-pt (:center ball))))))
 
-(defn do-segment-collision
+(defn- do-segment-collision
   "take ball and intersecting segment pts
   and recompute ball movement vector"
   [ball pts]
@@ -102,8 +102,7 @@
         ;two standard surface normals
         (update-in ball [:vector] do-normal-reflection norm)))
 
-
-(defn check-wall-collisions
+(defn- check-wall-collisions
   "check if ball has collided with any walls
   and update velocity accordingly"
   [ball walls]
@@ -131,7 +130,7 @@
           (structs/minus (:vector b2) (:vector b1)))
         0)))
 
-(defn do-collisions
+(defn- do-collisions
   "determine if ball has collided with a wall
   update ball accordingly"
   [state]
@@ -149,7 +148,7 @@
           balls))
         balls))))
 
-(defn update-ball-positions
+(defn- update-ball-positions
   "update the positions of balls"
   [balls]
   (map (fn [b]
