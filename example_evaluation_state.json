@@ -53,11 +53,11 @@
     ],
     "p1" : {
       "genetic" : true,
-      "strategy" : "(integer_** 2 4 integer_- vector_plus)"
+      "strategy" : "(integer_mult in1 integer_add integer_div integer_sub integer_div integer_add in1 in2 integer_mult integer_add integer_mult integer_add in1 integer_add integer_sub 8 integer_sub 3 3 5 integer_mult 4 7 9 integer_sub integer_div integer_div in1 integer_sub 3 in1 integer_mult integer_sub 9 integer_mult integer_add integer_mult integer_sub integer_div 8 integer_mult 9 integer_add integer_mult 0 integer_div integer_mult integer_mult 2 integer_div integer_sub in1)"
     },
     "p2" : {
       "genetic" : true,
-      "strategy" : "(integer_+)"
+      "strategy" : "(in1 integer_add 2 3)"
     }
   },
   "eval-worker" : {

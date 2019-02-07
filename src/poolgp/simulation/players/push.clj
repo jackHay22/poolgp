@@ -9,43 +9,42 @@
              environment string char vectors
              tag zip input-output genome gtm))
 
-(defn load-push
-  "prepare push code"
-  [push-cons]
-  (second push-cons))
-
 (defn- make-clojush-vec
   "turn a vector into a clojush vec"
   [^Vector v]
-  [(int (:x v)) (int (:y v))])
+  [(:x v) (:y v)])
 
-(defn- make-poolgp-vec
-  "turn a vec into a Vector."
-  [v]
-  (if (> (count v) 1)
-      (Vector. (first v) (second v))
-      ;default: if nothing on stack at execution termination
-      (Vector. 0 0)))
+(defn- extract-cue-vel
+  "take final push state and return a Vector for cue dx dy"
+  [push-final-state]
+  (let [vec-int-stack (:vector_integer push-final-state)
+        vec-float-stack (:vector_float push-final-state)
+        int-stack (:integer push-final-state)]
+        (cond
+          (not (empty? vec-float-stack)) (Vector. (first (first vec-float-stack))
+                                                  (second (first vec-float-stack)))
+          (not (empty? vec-int-stack)) (Vector. (first (first vec-int-stack))
+                                                (second (first vec-int-stack)))
+          (not (empty? int-stack))
+          :no-output (Vector. 0 0))))
 
 (defn eval-push
   "evaluate push code based on tablestate"
   [ts push inputs]
   ;TODO: use input list
-  (let [cue-input (make-clojush-vec
-                      (:center (first (filter #(= (:id %) :cue) (:balls ts)))))
-                  ;Note: requires cue to be configured
-        ball-inputs (map make-clojush-vec (map :center (:balls ts)))
-        pocket-inputs (map make-clojush-vec (:pockets (:table ts)))
-        state-w-inputs (reduce #(clojush-push/push-item %2 :input
-                                    (clojush-push/push-item %2 :vector_integer %1))
+  (let [state-w-inputs (reduce #(clojush-push/push-item %2 :input %1)
                                 (clojush-push/make-push-state)
                                 (concat
-                                  (conj ball-inputs cue-input)
-                                  pocket-inputs))]
+                                  (conj
+                                    (map make-clojush-vec (map :center (:balls ts)))
+                                    (make-clojush-vec
+                                        (:center (first
+                                            (filter #(= (:id %) :cue) (:balls ts))))))
+                                  (map make-clojush-vec (:pockets (:table ts)))))]
         (update-in ts [:balls]
           #(map (fn [b] (if (= (:id b) :cue)
                             (assoc b :vector
-                              (make-poolgp-vec (first
-                                (:vector_integer (clojush-interp/run-push
-                                                    push state-w-inputs)))))
+                              (extract-cue-vel
+                                (clojush-interp/run-push
+                                      push state-w-inputs)))
                             b)) %))))

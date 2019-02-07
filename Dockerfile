@@ -5,7 +5,7 @@ MAINTAINER Jack Hay "https://github.com/jackHay22"
 
 ARG TASK_DEFINITION
 
-ADD target/uberjar/poolgp-*.*.*-SNAPSHOT-standalone.jar app.jar
+ADD target/uberjar/poolgp-*-standalone.jar app.jar
 
 ADD docker/container-start.sh /run.sh
 

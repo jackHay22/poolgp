@@ -11,7 +11,8 @@
     id
     nil ;clojush-indiv
     (if (:genetic player-json) :genetic :interactive)
-    (push/load-push (:strategy player-json))))
+    (read-string
+      (:strategy player-json))))
 
 (defn init-clojush-player
   "initialize a player from a
