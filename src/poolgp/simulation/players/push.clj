@@ -36,6 +36,7 @@
   "add table state inputs to a new push state"
   [ts inputs]
   ;TODO: use input list
+  ; Creates input: [pocket locations, ball locations, cue location]
   (reduce (fn [s in] (clojush-push/push-item in :input s))
       (clojush-push/make-push-state)
       (concat

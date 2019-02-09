@@ -126,11 +126,21 @@
                        scratched?
                        push-inputs])
 
+;PlayerAnalytics
+; {
+;   :score (int)
+;   :forward-movement (int) average positive ball movement (towards pockets)
+;   :scratches (int) total scratches
+;   :scored-turns (int) max points before losing turn
+; }
+
+(defrecord PlayerAnalytics [score forward-movement scratches scored-turns])
+
 ;AnalysisState
 ; {
 ;   :game-state GameState.
-;   :p1-analytics (list (TurnAnalytic.))
-;   :p2-analytics (list (TurnAnalytic.))
+;   :p1-analytics PlayerAnalytics.
+;   :p2-analytics PlayerAnalytics.
 ; }
 
 (defrecord AnalysisState [^GameState game-state p1-analytics p2-analytics])
