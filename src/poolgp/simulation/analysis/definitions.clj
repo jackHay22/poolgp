@@ -1,5 +1,6 @@
 (ns poolgp.simulation.analysis.definitions
-  (:require [poolgp.log :as log])
+  (:require [poolgp.log :as log]
+            [poolgp.simulation.analysis.game.table.physics :as physics])
   (:gen-class))
 
 (defmacro def-analytic
@@ -26,6 +27,11 @@
   (if (player-is-current? gs id)
       (:current gs) (:waiting gs)))
 
+(defn- distance-to-closest-pocket
+  "returns ball distance to closet pocket"
+  [pt pockets]
+  (reduce #(max %1 (physics/distance pt %2)) 0 pockets))
+
 ;; ------ ANALYTICS DEFINITIONS ------
 
 (def-analytic score
@@ -33,14 +39,30 @@
     (:score (get-player gs p-id))))
 
 (def-analytic forward-movement
-  ;If player has scored, update current score
   (fn [gs current p-id]
-    current
-    ;TODO
-    ))
+    ;TODO will this work correctly? NO
+    (if (player-is-current? gs p-id)
+      (let [current-avg (:avg current)
+            prev-dist (:prev current)
+            player-balltype (:ball-type (get-player gs p-id))
+            target-balls (filter
+                          (if (= :unassigned player-balltype)
+                              #(not (= (:type %) :cue))
+                              #(= (:type %) player-balltype))
+                          (:balls (:table-state gs)))
+            current-agg-dist (reduce #(+ (distance-to-closest-pocket
+                                            (:center %2)
+                                            (:pockets (:table (:table-state gs))))
+                                          %1)
+                                     0 target-balls)]
+          (assoc current
+            :avg (/ (+ current-avg (- current-agg-dist prev-dist)) 2)
+            :prev current-agg-dist))
+        current)))
 
 (def-analytic scratches
   (fn [gs current p-id]
+    ;TODO: produces incorrect value
     (if (and (player-is-current? gs p-id)
              (:scratched? gs))
       (inc current) current)))
@@ -48,5 +70,8 @@
 (def-analytic scored-turns
   (fn [gs current p-id]
     (if (and (player-is-current? gs p-id)
-             (:scratched? gs))
-      (inc current) current)))
+             (:current_scored? gs))
+        (assoc (update current :count inc)
+          :best (max (inc (:count current))
+                     (:best current)))
+        (assoc current :count 0))))

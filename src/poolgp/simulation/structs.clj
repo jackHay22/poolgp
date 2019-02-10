@@ -129,9 +129,9 @@
 ;PlayerAnalytics
 ; {
 ;   :score (int)
-;   :forward-movement (int) average positive ball movement (towards pockets)
+;   :forward-movement {:avg :prev} (int) total positive ball movement (towards pockets)
 ;   :scratches (int) total scratches
-;   :scored-turns (int) max points before losing turn
+;   :scored-turns {:count :best} highest number of points before losing turn
 ; }
 
 (defrecord PlayerAnalytics [score forward-movement scratches scored-turns])

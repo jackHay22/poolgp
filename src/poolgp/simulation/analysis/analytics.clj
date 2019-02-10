@@ -10,7 +10,9 @@
                      analytics-defs/scratches
                      analytics-defs/scored-turns))
 
-(defn state [] (PlayerAnalytics. 0 0 0 0))
+(defn state [] (PlayerAnalytics.
+                  0 {:avg 0 :prev 0}
+                  0 {:count 0 :best 0}))
 
 (defn update-analytics
   "update analytics based on current gamestate"
@@ -20,6 +22,8 @@
                                 (transform
                                     (:game-state analysis-state) state %2))
                             %1 ANALYTICS)]
+                            (println "P1" (:p1-analytics analysis-state))
+                            (println "P2" (:p2-analytics analysis-state))
         (update-in
           (update-in analysis-state
             [:p1-analytics] update-fn :p1)
@@ -29,4 +33,5 @@
 (defn report-analytics
   "log any data about analytics state"
   [s]
+
 )

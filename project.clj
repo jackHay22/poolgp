@@ -9,5 +9,8 @@
                  [org.clojure/data.json "0.2.6"]
                  [clojush.poolgp "3.17.1-1-SNAPSHOT"]]
   :main ^:skip-aot poolgp.core
+  :jvm-opts ["-Xdock:name=PoolGP"
+             "-server"
+             "-Xdock:icon=resources/images/icon.png"]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
