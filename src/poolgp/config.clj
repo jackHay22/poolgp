@@ -41,7 +41,6 @@
 (def CUE-HOLD-DIST 100)
 
 ;default configuration values
-(def DEFAULT-PORT 9999)
 (def DEFAULT-MAX-ITERATIONS 100000)
 (def DEFAULT-PUSH-INPUTS (list :cue :balls :pockets))
 
@@ -61,7 +60,7 @@
 
 ;_____________ EVAL MODE _____________
 
-(def CHANNEL-BUFFER 1000)
+(def CHANNEL-BUFFER 500)
 ;use pmap when simulating individual across opponent population
 (def PARALLEL-SIMULATIONS? true)
 

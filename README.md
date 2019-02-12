@@ -1,4 +1,5 @@
 # PoolGP
+[![Clojars Project](https://img.shields.io/clojars/v/poolgp.svg)](https://clojars.org/poolgp)
 
 ## Contents
 TODO
@@ -97,7 +98,7 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 (Note: this should be in `clojush.src.pushgp.pushgp/compute-errors`)
 
 ```clojure
-(poolgp/eval-indivs individuals-list
+(poolgp/eval-indiv individual opponents-list
   {
     :incoming-port 8000
     :outgoing-port 9999
@@ -107,6 +108,17 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
   })
 ```
 This function returns the set of individuals with computed fitness (given the task definition used to run the workers)
+
+## Using Poolgp as a Clojush Library
+Include the following dependency in clojush: [![Clojars Project](https://img.shields.io/clojars/v/poolgp.svg)](https://clojars.org/poolgp)
+
+This method evaluates an individual against the population:
+```clojure
+(:require [poolgp.direct :as poolgpdirect])
+
+(poolgpdirect/evaluate-individual indiv opponents poolgpdirect/POOLGP-CONFIG-STD)
+
+```
 
 ## License
 

@@ -38,11 +38,15 @@
 (defn- load-config
   "create server config record from json->map"
   [task-def]
-  (ServerConfig.
-    (:indiv-ingress-p task-def)
-    (:indiv-egress-p task-def)
-    (:opp-pool-req-p task-def)
-    (:engine-hostname task-def)))
+  (if (= nil task-def)
+      (do
+        (log/write-error "Server evaluation parameters not specified in configuration")
+        (System/exit 0))
+      (ServerConfig.
+        (:indiv-ingress-p task-def)
+        (:indiv-egress-p task-def)
+        (:opp-pool-req-p task-def)
+        (:engine-hostname task-def))))
 
 (defn- request-opponent-pool!
   "request opponent pool from remote engine
@@ -77,19 +81,14 @@
   (log/write-info "Starting persistent async server...")
   ;continues on main thread
   (async/go-loop []
-    (let [client-socket (.accept socket)]
-     (try
-       (let [line-from-sock (.readLine (io/reader client-socket))]
-          ;verify that line can be placed in channel
-          (if (not (nil? line-from-sock))
-              (async/>! IN-CHANNEL line-from-sock)
-              (log/write-warning "Ingress server read nil line")))
-       (.close client-socket)
-       (catch Exception e
-         (.close client-socket)
-         (log/write-error "Exception moving packet to channel, closing current conn")
-         (.printStackTrace e))))
+    (with-open [client-socket (.accept socket)]
+      (let [line-from-sock (.readLine (io/reader client-socket))]
+         ;verify that line can be placed in channel
+         (if (not (nil? line-from-sock))
+             (async/>! IN-CHANNEL line-from-sock)
+             (log/write-warning "Ingress server read nil line"))))
     (recur)))
+
 
 (defn- run-simulation
   "run the current simulation state
