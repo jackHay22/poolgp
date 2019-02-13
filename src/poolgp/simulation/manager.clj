@@ -7,6 +7,7 @@
             [poolgp.log :as log]
             [poolgp.simulation.players.manager :as player-manager])
   (:import poolgp.simulation.structs.SimulationState)
+  (:import clojush.individual.individual)
   (:gen-class))
 
 (defn simulation-init
@@ -76,3 +77,24 @@
       (doall (map #(analysis-manager/analysis-log %)
                    (:analysis-states state)))
       (log/write-error "No games configured in task definition")))
+
+(defn calculate-individual-fitness
+  "takes individual and completed states, generates fitness and
+  returns individual"
+  [pgp-indiv final-simulation-states]
+  (assoc-in
+    pgp-indiv [:indiv :errors]
+    (into []
+      (reduce (fn [errors sim-state]
+                (let [analysis-states (:analysis-states sim-state)]
+                  (concat errors
+                    (mapcat (fn [a-state]
+                              (let [p1-analytics (:p1-analytics a-state)]
+                                  (list
+                                    ;TODO
+                                    ;TODO: count balls instead?
+                                    (- 8 (:score p1-analytics))
+                                    (:scratches p1-analytics)
+                                    )))
+                         analysis-states))))
+              (list) final-simulation-states))))

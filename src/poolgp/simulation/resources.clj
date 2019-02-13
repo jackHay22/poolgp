@@ -108,11 +108,11 @@
   {:simulation {
     :analysis []
     :p1 {:genetic true :strategy "()"}
-    :p2 {:genetic true :strategy "()"}
+    :p2 {:genetic true :strategy "()"}}
     :eval-worker {
       :indiv-ingress-p 9999
       :indiv-egress-p 8000
       :opp-pool-req-p 8888
-      :engine-hostname "eval"}}})
+      :engine-hostname "eval"}})
 
 (def CONTROLLER (ControllerInterface. false false (:cue TABLE-IMAGES)))

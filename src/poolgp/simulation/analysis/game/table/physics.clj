@@ -75,6 +75,7 @@
   CITE: https://stackoverflow.com/questions/1073336/circle-line-segment-collision-detection-algorithm
   (using vector projection)"
   [ball pts]
+  (try
   (let [epsilon 2
         segment-vec (structs/minus (second pts) (first pts))
         circle-vec (structs/minus (:center ball) (first pts))
@@ -88,7 +89,17 @@
                 (:vector ball)))
           (> epsilon segment-diff)
           (> segment-diff (- epsilon))
-          (> (:r ball) (distance proj-pt (:center ball))))))
+          (> (:r ball) (distance proj-pt (:center ball)))))
+          (catch Exception e
+            (println "FAILED")
+            (println ball)
+            (println pts)
+            (System/exit 1)
+            )
+
+                )
+
+          )
 
 (defn- do-segment-collision
   "take ball and intersecting segment pts
@@ -164,4 +175,4 @@
 (defn update-state
   "update balls on table"
   [state]
-  (update-in (do-collisions state) [:balls] update-ball-positions))
+    (update-in (do-collisions state) [:balls] update-ball-positions))

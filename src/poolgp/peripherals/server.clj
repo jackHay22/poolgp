@@ -97,26 +97,14 @@
   (let [max-cycles (:max-iterations starting-state)
         eval-state (assoc starting-state
                       :p1 (player-manager/init-clojush-player test-indiv :p1)
-                      :p2 (player-manager/init-clojush-player opponent   :p2))
-        resultant-state
-            (loop [current 0
-                   state eval-state]
-                   (if (> max-cycles current)
-                     ;(simulation-manager/simulation-log state)
-                     (recur (inc current)
-                            (doall (simulation-manager/simulation-update state)))
-                   state))]
-            ;return individual from state
-            (:p1 resultant-state)))
-
-(defn- create-outgoing-map
-  "take resulting state and turn into report to return to engine"
-  [indiv results-state]
-  ;TODO: incorporate results list
-  ;TODO: check if results list is empty (this can happen on a opp pool clear)
-  indiv
-  ;using :clojush-indiv
-  )
+                      :p2 (player-manager/init-clojush-player opponent   :p2))]
+        (loop [current 0
+               state eval-state]
+               (if (> max-cycles current)
+                 ;(simulation-manager/simulation-log state)
+                 (recur (inc current)
+                        (doall (simulation-manager/simulation-update state)))
+               state))))
 
 (defn- in-channel-worker
   "start channel worker with starting state"
@@ -144,11 +132,12 @@
             (log/write-info (str "Running simulations on individual "
                                   (:eval-id indiv) " against " (count @OPPONENT-POOL)
                                   " opponents"))
+
             ;validate individual before starting simulation
             (if (valid-indiv? indiv)
               (async/>! OUT-CHANNEL
                 ;create return map
-                (create-outgoing-map indiv
+                (simulation-manager/calculate-individual-fitness indiv
                   (doall ((if config/PARALLEL-SIMULATIONS? pmap map)
                         (fn [op]
                           (run-simulation simulation-state indiv op))
@@ -168,7 +157,7 @@
           client-socket (Socket. engine-hostname port)
           writer (io/writer client-socket)]
         (log/write-info (str "Finished simulation cycle on individual: " (:eval-id player)))
-        (.write writer (str (pr-str player) "\n"))
+        (.write writer (str (pr-str (:indiv player)) "\n"))
         (.flush writer)
         (.close client-socket))
     (recur)))

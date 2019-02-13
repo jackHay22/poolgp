@@ -24,8 +24,7 @@
 (def EDIT-STATE (atom nil))
 (def GRAPHICS-PANEL (atom nil))
 
-(def EMPTY-TABLE {:game {:table {:balls []}}
-                   :p1-analytics [] :p2-analytics []})
+(def EMPTY-TABLE {:game {:table {:balls []}}})
 
 (defrecord EditState [filename selected-ball
                       selected-holder surface
