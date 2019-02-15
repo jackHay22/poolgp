@@ -84,11 +84,10 @@
     (with-open [client-socket (.accept socket)]
       (let [line-from-sock (.readLine (io/reader client-socket))]
          ;verify that line can be placed in channel
-         (if (not (nil? line-from-sock))
+         (if (or (not (nil? line-from-sock)) (not (empty? line-from-sock)))
              (async/>! IN-CHANNEL line-from-sock)
              (log/write-warning "Ingress server read nil line"))))
     (recur)))
-
 
 (defn- run-simulation
   "run the current simulation state
@@ -113,36 +112,36 @@
   (async/go-loop []
     (try
       (let [indiv (read-string (async/<! IN-CHANNEL))]
-        (do
+          ;validate individual before starting simulation
+          (if (valid-indiv? indiv)
           ;check if current cycle has changed
-          (if (not (= (:cycle indiv) @CURRENT-CYCLE))
-             (do
-               (log/write-info "Detected new cycle, clearing opponent pool")
-               (reset! OPPONENT-POOL (list))
-               (reset! INDIV-COUNT 0)
-               (reset! CURRENT-CYCLE (:cycle indiv))))
-          (do
-            (swap! INDIV-COUNT inc)
-            ;if node hasn't requested opponents for this cycle,
-            ; request from engine host (block)
-            (if (empty? @OPPONENT-POOL)
-              (request-opponent-pool!
-                (:engine-hostname server-config)
-                (:opp-pool-req-p server-config)))
-            (log/write-info (str "Running simulations on individual "
-                                  (:eval-id indiv) " against " (count @OPPONENT-POOL)
-                                  " opponents"))
+            (do
+              (if (not (= (:cycle indiv) @CURRENT-CYCLE))
+                 (do
+                   (log/write-info "Detected new cycle, clearing opponent pool")
+                   (reset! OPPONENT-POOL (list))
+                   (reset! INDIV-COUNT 0)
+                   (reset! CURRENT-CYCLE (:cycle indiv))))
 
-            ;validate individual before starting simulation
-            (if (valid-indiv? indiv)
+              (swap! INDIV-COUNT inc)
+              ;if node hasn't requested opponents for this cycle,
+              ; request from engine host (block)
+              (if (empty? @OPPONENT-POOL)
+                (request-opponent-pool!
+                  (:engine-hostname server-config)
+                  (:opp-pool-req-p server-config)))
+
+              (log/write-info (str "Running simulations on individual "
+                                    (:eval-id indiv) " against " (count @OPPONENT-POOL)
+                                    " opponents"))
               (async/>! OUT-CHANNEL
                 ;create return map
                 (simulation-manager/calculate-individual-fitness indiv
                   (doall ((if config/PARALLEL-SIMULATIONS? pmap map)
                         (fn [op]
                           (run-simulation simulation-state indiv op))
-                        @OPPONENT-POOL))))
-              (log/write-error (str "Failed to validate individual: " indiv))))))
+                        @OPPONENT-POOL)))))
+             (log/write-error (str "Received invalid individual: " indiv))))
       (catch Exception e
         (log/write-error "In channel worked failed to evaluate individual on opponent pool (Exception)")
         (.printStackTrace e)))

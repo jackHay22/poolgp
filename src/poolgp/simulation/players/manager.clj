@@ -39,10 +39,12 @@
                                               (:push-inputs gamestate))
               :ready? false)
             ;allow controller interaction
-            (interaction/update-interaction gamestate controller))
+            ;(interaction/update-interaction gamestate controller)
+            )
       gamestate))
 
 (defn display-operations
   "display controller"
   [gr gs controller]
-  (interaction/render-interaction gr gs controller))
+  ;(interaction/render-interaction gr gs controller)
+  )

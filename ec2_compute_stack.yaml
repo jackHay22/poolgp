@@ -1,0 +1,66 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Stack for deploying a EC2 instances for poolgp docker swarm'
+Parameters:
+  KeyName:
+    Description: Existing EC2 KeyPair
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: Must be an EC2 keypair.
+  InstanceType:
+    Description: EC2 compute instance type
+    Type: String
+    Default: c4.2xlarge
+    AllowedValues: [c4.large, c4.xlarge, c4.2xlarge]
+    ConstraintDescription: must be a valid c4 large EC2 instance type.
+  InstanceAmiId:
+    Type:  'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: 'ami-0f65671a86f061fcd'
+Resources:
+  PoolGPCompute1:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'InstanceAmiId'
+  PoolGPCompute2:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'InstanceAmiId'
+  PoolGPCompute3:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'InstanceAmiId'
+  PoolGPCompute4:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'InstanceAmiId'
+Outputs:
+  C1InstanceId:
+    Description: InstanceId of compute node 1
+    Value: !Ref 'PoolGPCompute1'
+  C2InstanceId:
+    Description: InstanceId of compute node 3
+    Value: !Ref 'PoolGPCompute2'
+  C3InstanceId:
+    Description: InstanceId of compute node 3
+    Value: !Ref 'PoolGPCompute3'
+  C4InstanceId:
+    Description: InstanceId of compute node 4
+    Value: !Ref 'PoolGPCompute4'
+  C1PublicIP:
+    Description: Public IP address of compute node 1
+    Value: !GetAtt [PoolGPCompute1, PublicIp]
+  C2PublicIP:
+    Description: Public IP address of compute node 2
+    Value: !GetAtt [PoolGPCompute2, PublicIp]
+  C3PublicIP:
+    Description: Public IP address of compute node 3
+    Value: !GetAtt [PoolGPCompute3, PublicIp]
+  C4PublicIP:
+    Description: Public IP address of compute node 4
+    Value: !GetAtt [PoolGPCompute4, PublicIp]

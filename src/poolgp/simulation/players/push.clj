@@ -14,23 +14,32 @@
   [^Vector v]
   [(:x v) (:y v)])
 
+(defn- vec-nil-guard
+  "prevent velocity vector from containing a nil value"
+  [vector s]
+  (if (or (nil? (:x vector)) (nil? (:y vector)))
+    (Vector. 0 0)
+     vector))
+
 (defn- extract-cue-vel
   "take final push state and return a Vector for cue dx dy"
   [push-final-state]
   (let [vec-int-stack (:vector_integer push-final-state)
         vec-float-stack (:vector_float push-final-state)
         int-stack (:integer push-final-state)]
-        (cond
-          (not (empty? vec-float-stack))
-                  (Vector. (first (first vec-float-stack))
-                           (second (first vec-float-stack)))
-          (not (empty? vec-int-stack))
-                  (Vector. (first (first vec-int-stack))
-                           (second (first vec-int-stack)))
-          (>= (count int-stack) 2)
-                  (Vector. (first int-stack)
-                           (second int-stack))
-          :no-output (Vector. 0 0))))
+        (vec-nil-guard
+          (cond
+            (not (empty? vec-float-stack))
+                    (Vector. (first (first vec-float-stack))
+                             (second (first vec-float-stack)))
+            (not (empty? vec-int-stack))
+                    (Vector. (first (first vec-int-stack))
+                             (second (first vec-int-stack)))
+            (>= (count int-stack) 2)
+                    (Vector. (first int-stack)
+                             (second int-stack))
+            :no-output (Vector. 0 0))
+          push-final-state)))
 
 (defn- get-push-state
   "add table state inputs to a new push state"
