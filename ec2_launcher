@@ -1,0 +1,15 @@
+#!/bin/bash
+
+aws cloudformation deploy \
+    --region us-east-2 \
+    --profile poolgp \
+    --template-file ec2_stack.yaml \
+    --stack-name poolgpec2cluster \
+    --parameter-overrides KeyName=poolgp_cluster \
+                          InstanceType=c4.2xlarge \
+                          InstanceAmiId=ami-0f65671a86f061fcd \
+
+aws cloudformation describe-stacks \
+    --region us-east-2 \
+    --profile poolgp \
+    --stack-name poolgpec2cluster

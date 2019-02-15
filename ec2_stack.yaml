@@ -12,7 +12,7 @@ Parameters:
     AllowedValues: [c4.large, c4.xlarge, c4.2xlarge]
     ConstraintDescription: must be a valid c4 large EC2 instance type.
   InstanceAmiId:
-    Type:  'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Type:  String
     Default: 'ami-0f65671a86f061fcd'
 Resources:
   PoolGPCompute1:
