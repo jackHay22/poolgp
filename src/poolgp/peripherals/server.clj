@@ -84,9 +84,9 @@
     (with-open [client-socket (.accept socket)]
       (let [line-from-sock (.readLine (io/reader client-socket))]
          ;verify that line can be placed in channel
-         (if (or (not (nil? line-from-sock)) (not (empty? line-from-sock)))
+         (if (and (not (nil? line-from-sock)) (not (empty? line-from-sock)))
              (async/>! IN-CHANNEL line-from-sock)
-             (log/write-warning "Ingress server read nil line"))))
+             (log/write-warning "Ingress server read empty line"))))
     (recur)))
 
 (defn- run-simulation
