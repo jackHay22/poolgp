@@ -9,7 +9,7 @@ services:
       - "9000:9000"
   eval:
     deploy:
-      replicas: 2
+      replicas: 4
     image: jackhay22/poolgp_server:latest
     ports:
       - "9999:9999"

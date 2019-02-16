@@ -98,26 +98,18 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 (Note: this should be in `clojush.src.pushgp.pushgp/compute-errors`)
 
 ```clojure
-(poolgp/eval-indiv individual opponents-list
-  {
-    :incoming-port 8000
-    :outgoing-port 9999
-    :opp-pool-req-p 8888
-    :host "eval"          ;If running nodes in a swarm (recommended) this will be the service name
-    :accepted-return 1    ;percent total individuals required to be returned before stopping
-  })
-```
-This function returns the set of individuals with computed fitness (given the task definition used to run the workers)
+(poolgp/start-dist-services {
+  :incoming-port 8000
+  :outgoing-port 9999
+  :opp-pool-req-p 8888
+  :host "eval"}) ;swarm service name or load-balancer/host
 
-## Using Poolgp as a Clojush Library
-Include the following dependency in clojush: [![Clojars Project](https://img.shields.io/clojars/v/poolgp.svg)](https://clojars.org/poolgp)
+(poolgp/register-opponents (map deref pop-agents))
 
-This method evaluates an individual against the population:
-```clojure
-(:require [poolgp.direct :as poolgpdirect])
-
-(poolgpdirect/evaluate-individual indiv opponents poolgpdirect/POOLGP-CONFIG-STD)
-
+(dorun (map #((if use-single-thread swap! send)
+             %1 evaluate-individual poolgp/eval-indiv %2 argmap)
+           pop-agents
+           rand-gens))
 ```
 
 ## License
