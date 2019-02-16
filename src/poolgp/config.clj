@@ -41,7 +41,7 @@
 (def CUE-HOLD-DIST 100)
 
 ;default configuration values
-(def DEFAULT-MAX-ITERATIONS 100000)
+(def DEFAULT-MAX-ITERATIONS 36000) ;10 minutes realtime
 (def DEFAULT-PUSH-INPUTS (list :cue :balls :pockets))
 
 ;max ball velocity before it skips walls

@@ -24,8 +24,8 @@
 
 ;Vector
 ; {
-;   :x int
-;   :y int
+;   :x int/float
+;   :y int/float
 ; }
 
 ;square fn

@@ -25,12 +25,6 @@
   ([x1 y1 x2 y2]
     (Math/sqrt (+ (** (- x2 x1)) (** (- y2 y1))))))
 
-(defn- vector-from-angle
-  "create dx/dy vector from force/angle"
-  [a f]
-  (Vector. (- (int (* f (Math/cos a))))
-           (- (int (* f (Math/sin a))))))
-
 (defn pts-angle-radians
   "get angle of line from pt1 to pt2"
   [v1 v2]

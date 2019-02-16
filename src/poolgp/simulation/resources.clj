@@ -96,8 +96,8 @@
       (Vector. 53 572))))
 
 (def TABLE (Table. 20,
-            (list (Vector. 32 32) (Vector. 600 32) (Vector. 1167 32)
-                  (Vector. 1167 571) (Vector. 600 571) (Vector. 32 571))
+            (list (Vector. 32.0 32.0) (Vector. 600.0 32.0) (Vector. 1167.0 32.0)
+                  (Vector. 1167.0 571.0) (Vector. 600.0 571.0) (Vector. 32.0 571.0))
             (list LEFT-WALL RIGHT-WALL
                   BOTTOM-LEFT-WALL BOTTOM-RIGHT-WALL
                   TOP-LEFT-WALL TOP-RIGHT-WALL)

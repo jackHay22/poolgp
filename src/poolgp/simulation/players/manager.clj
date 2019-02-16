@@ -36,7 +36,9 @@
             (assoc
               (update-in gamestate
                 [:table-state] push/eval-push (:strategy current-player)
-                                              (:push-inputs gamestate))
+                                              (:push-inputs gamestate)
+                                              (:ball-type
+                                                  (:current gamestate)))
               :ready? false)
             ;allow controller interaction
             ;(interaction/update-interaction gamestate controller)

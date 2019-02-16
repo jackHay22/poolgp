@@ -14,9 +14,9 @@
   [table-json images?]
   (TableState.
     (map #(Ball.
-            (Vector. (:x %) (:y %))
+            (Vector. (float (:x %)) (float (:y %)))
             config/BALL-RADIUS-PX
-            (Vector. 0 0)
+            (Vector. 0.0 0.0)
             config/BALL-MASS-G
             (keyword (str (:id %)))
             (keyword (:type %))

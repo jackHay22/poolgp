@@ -9,10 +9,58 @@
              environment string char vectors
              tag zip input-output genome gtm))
 
+;holds the gamestate for a push run so that input
+;instructions work
+(def TABLESTATE-CACHE (atom nil))
+(def CURRENT-BALLTYPE (atom nil))
+
 (defn- make-clojush-vec
   "turn a vector into a clojush vec"
   [^Vector v]
   [(:x v) (:y v)])
+
+(defn- push-vec-floats
+  "push list of items to vector float stack"
+  [state items]
+  (reduce #(clojush-push/push-item (make-clojush-vec %2) :vector_float %1)
+          state items))
+
+(defn- push-ball-group
+  "push a set of balls based on filter to push state"
+  [state filter-fn]
+  (push-vec-floats
+    state
+    (map :center (filter filter-fn
+            (:balls @TABLESTATE-CACHE)))))
+
+(clojush-push/define-registered cue
+  (fn [state]
+    (clojush-push/push-item
+      (make-clojush-vec
+        (:center (first (filter #(= (:id %) :cue)
+                              (:balls @TABLESTATE-CACHE)))))
+      :vector_float state)))
+
+(clojush-push/define-registered self-balls
+  (fn [state]
+    (let [current-balltype @CURRENT-BALLTYPE]
+      (push-ball-group state
+        (if (= current-balltype :unassigned)
+                        #(not (= (:type %) :cue))
+                        #(= (:type %) current-balltype))))))
+
+(clojush-push/define-registered opp-balls
+  (fn [state]
+    (let [current-balltype @CURRENT-BALLTYPE]
+      (push-ball-group state
+        (if (= current-balltype :unassigned)
+                        #(not (= (:type %) :cue))
+                        #(not (= (:type %) current-balltype)))))))
+
+(clojush-push/define-registered pockets
+  (fn [state]
+    (push-vec-floats state
+      (:pockets (:table @TABLESTATE-CACHE)))))
 
 (defn- vec-nil-guard
   "prevent velocity vector from containing a nil value"
@@ -32,42 +80,26 @@
             (not (empty? vec-float-stack))
                     (Vector. (first (first vec-float-stack))
                              (second (first vec-float-stack)))
-            (not (empty? vec-int-stack))
-                    (Vector. (first (first vec-int-stack))
-                             (second (first vec-int-stack)))
             (>= (count int-stack) 2)
                     (Vector. (first int-stack)
                              (second int-stack))
+            (> (count int-stack) 0)
+                    (Vector. 0 (first int-stack))
             :no-output (Vector. 0 0))
           push-final-state)))
 
-(defn- get-push-state
-  "add table state inputs to a new push state"
-  [ts inputs]
-  ;TODO: use input list
-  ; Creates input: [pocket locations, ball locations, cue location]
-  (reduce (fn [s in] (clojush-push/push-item in :input s))
-      (clojush-push/make-push-state)
-      (concat
-        (conj
-          ;get ball positions
-          (map make-clojush-vec (map :center (:balls ts)))
-          ;get cue position
-          (make-clojush-vec
-              (:center (first
-                  (filter (fn [b] (= (:id b) :cue))
-                          (:balls ts))))))
-        ;get pocket positions
-        (map make-clojush-vec (:pockets (:table ts))))))
-
 (defn eval-push
   "evaluate push code based on tablestate"
-  [ts push inputs]
-  (update-in ts [:balls]
-    ;add new velocity to cue
-    #(map (fn [b] (if (= (:id b) :cue)
-                      (assoc b :vector
-                        (extract-cue-vel
-                          (clojush-interp/run-push push
-                            (get-push-state ts inputs))))
-                      b)) %)))
+  [ts push inputs p-balltype]
+  ;update gs cache
+  (do
+    (reset! TABLESTATE-CACHE ts)
+    (reset! CURRENT-BALLTYPE p-balltype)
+    (update-in ts [:balls]
+      ;add new velocity to cue
+      #(map (fn [b] (if (= (:id b) :cue)
+                        (assoc b :vector
+                          (extract-cue-vel
+                            (clojush-interp/run-push push
+                              (clojush-push/make-push-state))))
+                        b)) %))))
