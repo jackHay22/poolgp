@@ -52,6 +52,11 @@
                (reduced true) %1)
           false (:pockets table)))
 
+(defn- check-game-complete
+  "check if the game is completed"
+  [gs]
+  (assoc gs :game-complete? (= (count (:balls (:table-state gs))) 0)))
+
 (defn- move-pocketed
   "take gamestate, check for balls in
   pockets, move to pocketed list"
@@ -91,10 +96,13 @@
                        (= current-balltype :unassigned)
                            (update-in
                                 (assoc
-                                  (assoc-in %1 [:current :ball-type] (:type %2))
+                                  (assoc-in
+                                    (assoc-in %1 [:current :ball-type] (:type %2))
+                                                 [:waiting :ball-type] (if (= (:type %2) :solid)
+                                                                            :striped :solid))
                                   :current-scored? true)
                                 [:current :score] inc)
-                       (= (:type %2) current-balltype)
+                       (= current-balltype (:type %2))
                            (update-in
                                  (assoc %1 :current-scored? true)
                                  [:current :score] inc)
@@ -107,9 +115,10 @@
 (defn rules-update
   "check rules and gamestate"
   [gamestate]
-  (do-turn-state
-    (move-pocketed
-      (check-pocketed gamestate))))
+  (check-game-complete
+    (do-turn-state
+      (move-pocketed
+        (check-pocketed gamestate)))))
 
 (defn rules-log
   "log important updates to rules

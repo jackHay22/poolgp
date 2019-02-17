@@ -40,13 +40,15 @@
       [:analysis-states]
         #(doall (map (fn [a-state]
           ;perform analysis updates
+              (if (not (:game-complete? (:gamestate a-state)))
                 (analysis-manager/analysis-update
                   (update-in a-state [:game-state]
                     (fn [gs]
                       ;update gamestate with current player
                       (player-manager/update-operations
                         gs ((:id (:current gs)) state)
-                           (:controller state)))))) %)))
+                           (:controller state)))))
+                a-state)) %)))
       ;update current iteration
       [:current-iteration] inc))
 

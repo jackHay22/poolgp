@@ -17,8 +17,8 @@
     (GamePlayer. :p1 :unassigned 0)
     ;waiting
     (GamePlayer. :p2 :unassigned 0)
-    ;ready? current-scored? scratched?
-    true    false           false
+    ;ready? current-scored? scratched? completed?
+    true    false           false      false
     (if (:push-inputs gamestate-json)
         (map keyword (:push-inputs gamestate-json))
         config/DEFAULT-PUSH-INPUTS)))
@@ -39,7 +39,8 @@
       (table-manager/table-render (:table-state gamestate) gr)
       (displayutils/render-score gr
             (:score (p1-state gamestate))
-            (:score (p2-state gamestate)))
+            (:score (p2-state gamestate))
+            (:id (:current gamestate)))
       (displayutils/render-pocketed gr
         (:pocketed (:table-state gamestate))))))
 

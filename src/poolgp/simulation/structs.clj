@@ -124,6 +124,7 @@
                        ^GamePlayer waiting
                        ready? current-scored?
                        scratched?
+                       game-complete?
                        push-inputs])
 
 ;PlayerAnalytics

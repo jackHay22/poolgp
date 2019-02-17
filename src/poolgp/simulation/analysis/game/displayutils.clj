@@ -16,7 +16,7 @@
 
 (defn render-score
   "take graphics, render score"
-  [gr p1-score p2-score]
+  [gr p1-score p2-score current]
   (let [rect-x config/INSET-MARGIN
         rect-y (+ config/POOL-HEIGHT-PX config/INSET-MARGIN)
         rect-width (int (/ config/POOL-WIDTH-PX 4))
@@ -32,7 +32,11 @@
       (.drawString (str p1-score) (- (+ rect-x (int (/ rect-width 4))) 15)
                                   (+ rect-y (int (/ rect-height 2)) 15))
       (.drawString (str p2-score) (+ rect-x (* (int (/ rect-width 4)) 3))
-                                  (+ rect-y (int (/ rect-height 2)) 15)))))
+                                  (+ rect-y (int (/ rect-height 2)) 15))
+      (.fillRect (if (= current :p1)
+                    (- (+ rect-x (int (/ rect-width 4))) 17)
+                    (+ rect-x (* (int (/ rect-width 4)) 3) -2))
+                (+ rect-y (int (* rect-height 0.75))) 20 2))))
 
 (defn render-info
   "render information about gamestate"

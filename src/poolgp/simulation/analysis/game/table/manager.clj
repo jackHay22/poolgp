@@ -21,7 +21,7 @@
             (keyword (str (:id %)))
             (keyword (:type %))
             (if images?
-              (utils/load-image ((keyword (str (:id %))) resources/BALL-IMAGES))
+              (utils/load-image ((keyword (str (:type %))) resources/BALL-IMAGES))
               nil))
           (:balls table-json))
     (list)

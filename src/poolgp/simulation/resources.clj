@@ -12,21 +12,8 @@
 (def BREAK-PT (Vector. 883 303))
 
 (def BALL-IMAGES
-  {:1 "images/balls/red_solid_blank.png"
-   :2 "images/balls/red_solid_blank.png"
-   :3 "images/balls/red_solid_blank.png"
-   :4 "images/balls/red_solid_blank.png"
-   :5 "images/balls/red_solid_blank.png"
-   :6 "images/balls/red_solid_blank.png"
-   :7 "images/balls/red_solid_blank.png"
-   :8 "images/balls/red_solid_blank.png"
-   :9 "images/balls/blue_solid_blank.png"
-   :10 "images/balls/blue_solid_blank.png"
-   :11 "images/balls/blue_solid_blank.png"
-   :12 "images/balls/blue_solid_blank.png"
-   :13 "images/balls/blue_solid_blank.png"
-   :14 "images/balls/blue_solid_blank.png"
-   :15 "images/balls/blue_solid_blank.png"
+  {:solid "images/balls/red_solid_blank.png"
+   :striped "images/balls/blue_solid_blank.png"
    :cue "images/balls/white_cue.png"})
 
 (def TABLE-IMAGES
