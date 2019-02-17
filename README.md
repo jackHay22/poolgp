@@ -75,7 +75,6 @@ evaluation instances:
 ```clojure
 {:indiv indiv ;clojush.individual containing :program
  :cycle (int)
- :type :individual
  :eval-id (int)}
 ```
 
