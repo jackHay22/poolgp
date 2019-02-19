@@ -41,9 +41,10 @@
   (do
     (utils/draw-image gr 0 0 (:surface (:table tablestate)))
     (doall (map #(let [center (:center %)
-                       r (:r %)]
-                    (utils/draw-image gr
-                          (- (:x center) r)
-                          (- (:y center) r) (:img %)))
+                       r (:r %)
+                       cx (- (:x center) r)
+                       cy (- (:y center) r)]
+                    (renderutils/render-ball-shadow gr cx cy (* r 1.1))
+                    (utils/draw-image gr cx cy (:img %)))
                 (:balls tablestate)))
     (utils/draw-image gr 0 0 (:raised (:table tablestate)))))
