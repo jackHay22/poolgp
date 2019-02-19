@@ -36,8 +36,6 @@
                                   (transform
                                       (:game-state game-updated-state) state %2))
                               %1 ANALYTICS)]
-                              ;(println "P1" (:p1-analytics game-updated-state))
-                              ;(println "P2" (:p2-analytics game-updated-state))
           (update-in
             (update-in
               game-updated-state

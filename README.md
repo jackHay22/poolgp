@@ -1,5 +1,4 @@
 # PoolGP
-[![Clojars Project](https://img.shields.io/clojars/v/poolgp.svg)](https://clojars.org/poolgp)
 
 ## Contents
 TODO
