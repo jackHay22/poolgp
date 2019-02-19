@@ -25,62 +25,62 @@
 (def LEFT-WALL
   (Wall.
     (list
-      (Vector. 28 53)
-      (Vector. 51 88)
-      (Vector. 51 88)
-      (Vector. 51 512)
-      (Vector. 51 512)
-      (Vector. 28 549))))
+      (Vector. 28 50)
+      (Vector. 47 76)
+      (Vector. 47 76)
+      (Vector. 47 524)
+      (Vector. 47 524)
+      (Vector. 28 546))))
 
 (def TOP-LEFT-WALL
   (Wall.
     (list
       (Vector. 53 28)
-      (Vector. 78 50)
-      (Vector. 78 50)
-      (Vector. 567 50)
-      (Vector. 567 50)
+      (Vector. 71 48)
+      (Vector. 71 48)
+      (Vector. 572 48)
+      (Vector. 572 48)
       (Vector. 580 28))))
 
 (def TOP-RIGHT-WALL
   (Wall.
     (list
-      (Vector. 622 28)
-      (Vector. 633 50)
-      (Vector. 633 50)
-      (Vector. 1119 50)
-      (Vector. 1119 50)
+      (Vector. 620 28)
+      (Vector. 628 48)
+      (Vector. 628 48)
+      (Vector. 1130 48)
+      (Vector. 1130 48)
       (Vector. 1146 28))))
 
 (def RIGHT-WALL
   (Wall.
     (list
       (Vector. 1172 52)
-      (Vector. 1150 86)
-      (Vector. 1150 86)
-      (Vector. 1150 511)
-      (Vector. 1150 511)
+      (Vector. 1154 76)
+      (Vector. 1154 76)
+      (Vector. 1154 524)
+      (Vector. 1154 524)
       (Vector. 1172 548))))
 
 (def BOTTOM-RIGHT-WALL
   (Wall.
     (list
-      (Vector. 1145 572)
-      (Vector. 1122 550)
-      (Vector. 1122 550)
-      (Vector. 632 550)
-      (Vector. 632 550)
-      (Vector. 621 572))))
+      (Vector. 1146 572)
+      (Vector. 1126 552)
+      (Vector. 1126 552)
+      (Vector. 628 552)
+      (Vector. 628 552)
+      (Vector. 620 572))))
 
 (def BOTTOM-LEFT-WALL
   (Wall.
     (list
       (Vector. 580 572)
-      (Vector. 568 550)
-      (Vector. 568 550)
-      (Vector. 79 550)
-      (Vector. 79 550)
-      (Vector. 53 572))))
+      (Vector. 572 552)
+      (Vector. 572 552)
+      (Vector. 71 552)
+      (Vector. 71 552)
+      (Vector. 52 572))))
 
 (def TABLE (Table. 20,
             (list (Vector. 32.0 32.0) (Vector. 600.0 32.0) (Vector. 1167.0 32.0)

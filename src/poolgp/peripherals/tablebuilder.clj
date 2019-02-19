@@ -42,8 +42,8 @@
       (utils/load-image (:surface resources/TABLE-IMAGES))
       (utils/load-image (:raised resources/TABLE-IMAGES))
       (utils/load-image (:cue resources/BALL-IMAGES))
-      (utils/load-image (:15 resources/BALL-IMAGES))
-      (utils/load-image (:1 resources/BALL-IMAGES))
+      (utils/load-image (:striped resources/BALL-IMAGES))
+      (utils/load-image (:solid resources/BALL-IMAGES))
       EMPTY-TABLE)))
 
 (defn- on-write!

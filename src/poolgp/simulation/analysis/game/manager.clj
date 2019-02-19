@@ -26,7 +26,6 @@
 (defn game-update
   "update gamestate"
   [gamestate]
-  ;TODO update gamestate, controller?
   (rules/rules-update
     (update-in gamestate [:table-state] table-manager/table-update)))
 

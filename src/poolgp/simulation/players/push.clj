@@ -1,6 +1,7 @@
 (ns poolgp.simulation.players.push
   (:require [clojush.interpreter :as clojush-interp]
-            [clojush.pushstate :as clojush-push])
+            [clojush.pushstate :as clojush-push]
+            [poolgp.config :as config])
   (:import poolgp.simulation.structs.Vector)
   (:gen-class))
 
@@ -61,6 +62,25 @@
   (fn [state]
     (push-vec-floats state
       (:pockets (:table @TABLESTATE-CACHE)))))
+
+(clojush-push/define-registered ball-diam
+  (fn [state]
+    (clojush-push/push-item
+      (* 2 config/BALL-RADIUS-M)
+      :float state)))
+
+;TODO
+; (clojush-push/define-registered self-count
+;   (fn [state]
+;     (clojush/push-item
+;       (* 2 config/BALL-RADIUS-M)
+;       :integer state)))
+;
+; (clojush-push/define-registered opp-count
+;   (fn [state]
+;     (clojush/push-item
+;       (* 2 config/BALL-RADIUS-M)
+;       :integer state)))
 
 (defn- vec-nil-guard
   "prevent velocity vector from containing a nil value"
