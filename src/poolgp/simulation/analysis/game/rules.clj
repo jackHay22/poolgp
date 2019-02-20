@@ -55,7 +55,9 @@
 (defn- check-game-complete
   "check if the game is completed"
   [gs]
-  (assoc gs :game-complete? (= (count (:balls (:table-state gs))) 0)))
+  (assoc gs :game-complete?
+    (empty? (filter #(not (= (:id %) :cue))
+                  (:balls (:table-state gs))))))
 
 (defn- move-pocketed
   "take gamestate, check for balls in

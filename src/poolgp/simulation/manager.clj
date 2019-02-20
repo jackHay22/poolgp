@@ -40,7 +40,7 @@
       [:analysis-states]
         #(doall (map (fn [a-state]
           ;perform analysis updates
-              (if (not (:game-complete? (:gamestate a-state)))
+              (if (not (:game-complete? (:game-state a-state)))
                 (analysis-manager/analysis-update
                   (update-in a-state [:game-state]
                     (fn [gs]
