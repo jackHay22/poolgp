@@ -6,9 +6,8 @@
   (:gen-class))
 
 (def ANALYTICS (list analytics-defs/score
-                     analytics-defs/forward-movement
                      analytics-defs/scratches
-                     analytics-defs/scored-turns))
+                     analytics-defs/turns))
 
 (defn analysis-init
   "initialize gamestate and analytics"
@@ -18,16 +17,8 @@
       #(AnalysisState.
         ;game state
         (game-manager/game-init (:game %) images?)
-        (PlayerAnalytics.
-          {:score 0 :total nil}
-          {:avg 0 :prev 0}
-          0
-          {:count 0 :best 0})
-        (PlayerAnalytics.
-          {:score 0 :total nil}
-          {:avg 0 :prev 0}
-          0
-          {:count 0 :best 0}))
+        (PlayerAnalytics. {:score 0 :total nil} 0 0)
+        (PlayerAnalytics. {:score 0 :total nil} 0 0))
     analysis-vec-json)))
 
 (defn analysis-update

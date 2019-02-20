@@ -27,11 +27,6 @@
   (if (player-is-current? gs id)
       (:current gs) (:waiting gs)))
 
-(defn- distance-to-closest-pocket
-  "returns ball distance to closet pocket"
-  [pt pockets]
-  (reduce #(max %1 (physics/distance pt %2)) 0 pockets))
-
 ;; ------ ANALYTICS DEFINITIONS ------
 
 (def-analytic score
@@ -45,42 +40,16 @@
                    (+ (:score p) ;include points already scored
                       (count (filter #(= (:type %) p-balltype)
                               (:balls (:table-state gs)))))
-                   nil)))))
-
-(def-analytic forward-movement
-  (fn [gs current p-id]
-    ;TODO will this work correctly? NO
-    (if (player-is-current? gs p-id)
-      (let [current-avg (:avg current)
-            prev-dist (:prev current)
-            player-balltype (:ball-type (get-player gs p-id))
-            target-balls (filter
-                          (if (= :unassigned player-balltype)
-                              #(not (= (:type %) :cue))
-                              #(= (:type %) player-balltype))
-                          (:balls (:table-state gs)))
-            current-agg-dist (reduce #(+ (distance-to-closest-pocket
-                                            (:center %2)
-                                            (:pockets (:table (:table-state gs))))
-                                          %1)
-                                     0 target-balls)]
-          (assoc current
-            :avg (/ (+ current-avg (- current-agg-dist prev-dist)) 2)
-            :prev current-agg-dist))
-        current)))
+                   (:total current))))))
 
 (def-analytic scratches
   (fn [gs current p-id]
-    ;TODO: produces incorrect value
+    ;TODO: produces incorrect value (switches player before scratched?)
     (if (and (player-is-current? gs p-id)
              (:scratched? gs))
       (inc current) current)))
 
-(def-analytic scored-turns
+(def-analytic turns
   (fn [gs current p-id]
-    (if (and (player-is-current? gs p-id)
-             (:current_scored? gs))
-        (assoc (update current :count inc)
-          :best (max (inc (:count current))
-                     (:best current)))
-        (assoc current :count 0))))
+    (if (player-is-current? gs p-id)
+        (inc current) current)))

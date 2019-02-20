@@ -56,6 +56,10 @@
 
 (def PAUSED? (atom true))
 
+;penalty (total balls - score) when player has zero score in a game
+(def ZERO-SCORE-PENALTY 1000)
+(def TURNS-NO-PENALTY 4)
+
 (def TEXT-COLOR? true)
 
 ;_____________ EVAL MODE _____________

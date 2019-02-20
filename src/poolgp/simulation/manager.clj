@@ -93,10 +93,22 @@
                               (let [p1-analytics (:p1-analytics a-state)
                                     p1-score-a (:score p1-analytics)]
                                   (list
-                                    ;TODO: count balls instead?
-                                    (- (or (:total p1-score-a) 100000) (:score p1-score-a))
+
+                                    ;player's remaining balls (win if zero)
+                                    (- (or (:total p1-score-a)
+                                           config/ZERO-SCORE-PENALTY)
+                                       (:score p1-score-a))
+
+                                    ;opponent's score
                                     (:score (:score (:p2-analytics a-state)))
-                                    ;(:scratches p1-analytics)
+
+                                    ;player scratches
+                                    (:scratches p1-analytics)
+
+                                    ;player turns
+                                    ;TODO: this should somehow ramp up as players get better
+                                    (max 0 (- (:turns p1-analytics)
+                                              config/TURNS-NO-PENALTY))
                                     )))
                          analysis-states))))
               (list) final-simulation-states))))
