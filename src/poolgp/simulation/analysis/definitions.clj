@@ -36,7 +36,16 @@
 
 (def-analytic score
   (fn [gs current p-id]
-    (:score (get-player gs p-id))))
+    (let [p (get-player gs p-id)
+          p-balltype (:ball-type p)]
+      (assoc current
+        :score (:score p)
+        :total (if (and (nil? (:total current))
+                        (not (= :unassigned p-balltype)))
+                   (+ (:score p) ;include points already scored
+                      (count (filter #(= (:type %) p-balltype)
+                              (:balls (:table-state gs)))))
+                   nil)))))
 
 (def-analytic forward-movement
   (fn [gs current p-id]

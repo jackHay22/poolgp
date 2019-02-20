@@ -129,7 +129,7 @@
 
 ;PlayerAnalytics
 ; {
-;   :score (int)
+;   :score {:score (int) :total (int)}
 ;   :forward-movement {:avg :prev} (int) total positive ball movement (towards pockets)
 ;   :scratches (int) total scratches
 ;   :scored-turns {:count :best} highest number of points before losing turn

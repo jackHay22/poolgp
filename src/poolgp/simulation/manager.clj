@@ -20,11 +20,10 @@
           (analysis-manager/analysis-init
             (:analysis simulation-json) demo?)
           ;supports a default value if not included
-          (if (:max-iterations simulation-json)
-              (:max-iterations simulation-json) config/DEFAULT-MAX-ITERATIONS)
+          (or (:max-iterations simulation-json)
+              config/DEFAULT-MAX-ITERATIONS)
           0 ;current iteration
-          (if (:watching simulation-json)
-              (:watching simulation-json) 0)
+          (or (:watching simulation-json) 0)
           (player-manager/init-player (:p1 simulation-json) :p1)
           (player-manager/init-player (:p2 simulation-json) :p2)
           (if demo?
@@ -91,11 +90,13 @@
                 (let [analysis-states (:analysis-states sim-state)]
                   (concat errors
                     (mapcat (fn [a-state]
-                              (let [p1-analytics (:p1-analytics a-state)]
+                              (let [p1-analytics (:p1-analytics a-state)
+                                    p1-score-a (:score p1-analytics)]
                                   (list
                                     ;TODO: count balls instead?
-                                    (- 8 (:score p1-analytics))
-                                    (:scratches p1-analytics)
+                                    (- (or (:total p1-score-a) 100000) (:score p1-score-a))
+                                    (:score (:score (:p2-analytics a-state)))
+                                    ;(:scratches p1-analytics)
                                     )))
                          analysis-states))))
               (list) final-simulation-states))))

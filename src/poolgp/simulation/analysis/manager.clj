@@ -19,11 +19,15 @@
         ;game state
         (game-manager/game-init (:game %) images?)
         (PlayerAnalytics.
-          0 {:avg 0 :prev 0}
-          0 {:count 0 :best 0})
+          {:score 0 :total nil}
+          {:avg 0 :prev 0}
+          0
+          {:count 0 :best 0})
         (PlayerAnalytics.
-          0 {:avg 0 :prev 0}
-          0 {:count 0 :best 0}))
+          {:score 0 :total nil}
+          {:avg 0 :prev 0}
+          0
+          {:count 0 :best 0}))
     analysis-vec-json)))
 
 (defn analysis-update
