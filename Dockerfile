@@ -1,5 +1,4 @@
 FROM java:8-jre-alpine
-#FROM hypriot/rpi-java:jre-1.8.111
 
 MAINTAINER Jack Hay "https://github.com/jackHay22"
 

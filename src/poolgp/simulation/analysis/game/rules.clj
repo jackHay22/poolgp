@@ -60,7 +60,8 @@
               (if (empty?
                     (filter #(= (:type %) b-type)
                               (:balls (:table-state gs))))
-                  (reduced true) c)) false (list :solid :striped))))
+                  (reduced true) c))
+            false (list :solid :striped))))
 
 (defn- move-pocketed
   "take gamestate, check for balls in

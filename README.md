@@ -24,7 +24,7 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
 [org.clojure/tools.cli "0.4.1"]
 [org.clojure/core.async "0.4.490"]
 [org.clojure/data.json "0.2.6"]
-[clojush.poolgp "3.17.1-1-SNAPSHOT"] ;Note: this is the poolgp fork of clojush and contains a different function set
+[clojush.poolgp "3.17.1-1-SNAPSHOT"] ;Note: this is the poolgp fork of clojush and contains new functions
 ```
 
 ### Task Definition Structure
