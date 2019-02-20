@@ -93,7 +93,6 @@
                     (mapcat (fn [a-state]
                               (let [p1-analytics (:p1-analytics a-state)]
                                   (list
-                                    ;TODO
                                     ;TODO: count balls instead?
                                     (- 8 (:score p1-analytics))
                                     (:scratches p1-analytics)
