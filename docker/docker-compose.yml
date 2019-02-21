@@ -7,9 +7,15 @@ services:
     ports:
       - "8000:8000"
       - "9000:9000"
+    volumes:
+      - "${PWD}/logs:/server_logs"
   eval:
     deploy:
-      replicas: 4
+      replicas: 1
     image: jackhay22/poolgp_server:latest
     ports:
       - "9999:9999"
+    volumes:
+      - "${PWD}/logs:/server_logs"
+volumes:
+  logs:
