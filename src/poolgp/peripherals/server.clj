@@ -181,6 +181,9 @@
         server-config (load-config (:eval-worker task-def))
         socket (ServerSocket. (:indiv-ingress-p server-config))]
       (do
+        ;configure clojush globals
+        (player-manager/configure-clojush!)
+        ;start socket server and other services
         (.setSoTimeout socket 0)
         (display-starting-config simulation-state)
         (in-channel-worker simulation-state server-config)

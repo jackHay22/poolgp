@@ -11,7 +11,7 @@ services:
       - "${PWD}/logs:/server_logs"
   eval:
     deploy:
-      replicas: 1
+      replicas: 2
     image: jackhay22/poolgp_server:latest
     ports:
       - "9999:9999"

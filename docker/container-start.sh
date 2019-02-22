@@ -1,3 +1,3 @@
 #!/bin/sh
-
-exec java -server -jar app.jar -e $1 | tee -a server_logs/workers.log
+DATE=`date +%Y-%m-%d`
+exec java -server -jar app.jar -e $1 |& tee -a server_logs/workers_${DATE}.log

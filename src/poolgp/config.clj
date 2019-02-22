@@ -69,4 +69,7 @@
 (def PARALLEL-SIMULATIONS? true)
 
 ;delay between server logs
-(def LOG-SPACING-SECONDS 30)
+(def LOG-SPACING-SECONDS 120)
+
+(def CLOJUSH-EVALPUSH-LIMIT 800)
+(def CLOJUSH-MAX-PTS 800)

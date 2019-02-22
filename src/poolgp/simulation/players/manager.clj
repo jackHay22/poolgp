@@ -1,6 +1,8 @@
 (ns poolgp.simulation.players.manager
   (:require [poolgp.simulation.players.push :as push]
-            [poolgp.peripherals.interactionutils :as interaction])
+            [poolgp.peripherals.interactionutils :as interaction]
+            [clojush.globals :as clojush-globals]
+            [poolgp.config :as config])
   (:import poolgp.simulation.structs.Player)
   (:gen-class))
 
@@ -23,6 +25,15 @@
      clojush-p
      :genetic
      (:program (:indiv clojush-p))))
+
+(defn configure-clojush!
+  "configure clojush global values"
+  []
+  (do
+    (reset! clojush-globals/global-evalpush-limit
+            config/CLOJUSH-EVALPUSH-LIMIT)
+    (reset! clojush-globals/global-max-points
+            config/CLOJUSH-MAX-PTS)))
 
 (defn update-operations
   "update the gamestate of an analysis state
