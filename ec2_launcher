@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ "$#" -ne 2 ]; then
+    echo "Usage: <keypair.pem> <ssh_cidr_block>"
+    exit 1
+fi
+
+#deploy stack
 aws cloudformation deploy \
     --region us-east-2 \
     --profile poolgp \
@@ -8,8 +14,17 @@ aws cloudformation deploy \
     --parameter-overrides KeyName=poolgp_cluster \
                           InstanceType=c4.2xlarge \
                           InstanceAmiId=ami-0f65671a86f061fcd \
+                          SSHLocation=$2
 
-aws cloudformation describe-stacks \
-    --region us-east-2 \
-    --profile poolgp \
-    --stack-name poolgpec2cluster
+#describe deployed stack
+MASTERIP=$(aws cloudformation describe-stacks \
+              --region us-east-2 \
+              --profile poolgp \
+              --stack-name poolgpec2cluster | python -c "import json,sys;json_obj=json.load(sys.stdin); \
+                                                          print(filter(lambda o: o['OutputKey'] == 'C1PublicIP', \
+                                                          json_obj['Stacks'][0]['Outputs'])[0]['OutputValue'])")
+
+#copy swarm config and ssh into master
+echo "Copying swarm configuration to ubuntu@${MASTERIP}..."
+scp -i $1 docker/docker-compose.yml ubuntu@${MASTERIP}:
+ssh -i $1 ubuntu@$MASTERIP
