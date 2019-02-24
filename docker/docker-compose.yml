@@ -4,18 +4,19 @@ services:
     image: jackhay22/poolgp_clojush:latest
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
     ports:
       - "8000:8000"
       - "9000:9000"
-    volumes:
-      - "${PWD}/logs:/server_logs"
   eval:
     deploy:
-      replicas: 2
+      replicas: 4
     image: jackhay22/poolgp_server:latest
     ports:
       - "9999:9999"
     volumes:
-      - "${PWD}/logs:/server_logs"
+      - "./logs:/server_logs"
 volumes:
   logs:

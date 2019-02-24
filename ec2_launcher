@@ -1,11 +1,10 @@
 #!/bin/bash
 
-if [ "$#" -ne 2 ]; then
-    echo "Usage: <keypair.pem> <ssh_cidr_block>"
+if [ "$#" -ne 3 ]; then
+    echo "Usage: <keypair.pem> <ssh_cidr_block> <vpc_cidr_block"
     exit 1
 fi
 
-#deploy stack
 aws cloudformation deploy \
     --region us-east-2 \
     --profile poolgp \
@@ -14,17 +13,31 @@ aws cloudformation deploy \
     --parameter-overrides KeyName=poolgp_cluster \
                           InstanceType=c4.2xlarge \
                           InstanceAmiId=ami-0f65671a86f061fcd \
-                          SSHLocation=$2
+                          SSHLocation=$2 \
+                          VpcCIDR=$3
 
-#describe deployed stack
-MASTERIP=$(aws cloudformation describe-stacks \
+STACKJSON=$(aws cloudformation describe-stacks \
               --region us-east-2 \
               --profile poolgp \
-              --stack-name poolgpec2cluster | python -c "import json,sys;json_obj=json.load(sys.stdin); \
-                                                          print(filter(lambda o: o['OutputKey'] == 'C1PublicIP', \
-                                                          json_obj['Stacks'][0]['Outputs'])[0]['OutputValue'])")
+              --stack-name poolgpec2cluster)
 
-#copy swarm config and ssh into master
-echo "Copying swarm configuration to ubuntu@${MASTERIP}..."
-scp -i $1 docker/docker-compose.yml ubuntu@${MASTERIP}:
-ssh -i $1 ubuntu@$MASTERIP
+for node in 'C4PublicIP' 'C3PublicIP' 'C2PublicIP' 'C1PublicIP'
+do
+  IP=$(echo $STACKJSON | python -c "import json,sys;json_obj=json.load(sys.stdin); \
+                                    print(filter(lambda o: o['OutputKey'] == '${node}', \
+                                    json_obj['Stacks'][0]['Outputs'])[0]['OutputValue'])")
+  #attempt to reach instance
+  until ping -c1 $IP &>/dev/null; do :; done
+
+  echo "Copying docker installer to ubuntu@${IP}..."
+  scp -i $1 docker/docker_installer ubuntu@$IP:
+
+  if [ $node = 'C1PublicIP' ]
+  then
+    echo "Copying swarm configuration to ubuntu@${IP}..."
+    scp -i $1 docker/docker-compose.yml ubuntu@$IP:
+    #finally, ssh into master
+    ssh -i $1 ubuntu@$IP
+  fi
+
+done
