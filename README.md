@@ -110,6 +110,9 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
            rand-gens))
 ```
 
+### Setting up the eval swarm on AWS
+
+
 ## License
 
 Copyright © 2018 Jack Hay

@@ -52,6 +52,14 @@ Resources:
         FromPort: 4789
         ToPort: 4789
         CidrIp: !Ref 'VpcCIDR'
+      - IpProtocol: udp
+        FromPort: 7946
+        ToPort: 7946
+        CidrIp: !Ref 'VpcCIDR'
+      - IpProtocol: tcp
+        FromPort: 7946
+        ToPort: 7946
+        CidrIp: !Ref 'VpcCIDR'
       - IpProtocol: 50
         FromPort: 0
         ToPort: 65535

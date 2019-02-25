@@ -17,9 +17,9 @@ aws cloudformation deploy \
                           VpcCIDR=$3
 
 STACKJSON=$(aws cloudformation describe-stacks \
-              --region us-east-2 \
-              --profile poolgp \
-              --stack-name poolgpec2cluster)
+                --region us-east-2 \
+                --profile poolgp \
+                --stack-name poolgpec2cluster)
 
 for node in 'C4PublicIP' 'C3PublicIP' 'C2PublicIP' 'C1PublicIP'
 do
@@ -29,6 +29,14 @@ do
   #attempt to reach instance
   until ping -c1 $IP &>/dev/null; do :; done
 
+  #attempt to ssh into instance
+  ssh -i $1 ubuntu@$IP exit
+  while test $? -gt 0
+  do
+     sleep 5
+     ssh -i $1 ubuntu@$IP exit
+  done
+
   echo "Copying docker installer to ubuntu@${IP}..."
   scp -i $1 docker/docker_installer ubuntu@$IP:
 
@@ -36,6 +44,10 @@ do
   then
     echo "Copying swarm configuration to ubuntu@${IP}..."
     scp -i $1 docker/docker-compose.yml ubuntu@$IP:
+
+    echo "STACK CREATION RESULT"
+    echo $STACKJSON
+
     #finally, ssh into master
     ssh -i $1 ubuntu@$IP
   fi
