@@ -112,6 +112,21 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 
 ### Setting up the eval swarm on AWS
 
+- Make sure you have an AWS account that can support charges incurred by running ec2 instances at high load.  (These costs add up)
+- Create an ec2 keypair.  In `ec2_launcher`, rename the keypair argument with this keypair name.
+- Download the keypair pem file for use during deployment.  
+- Change the profile name in in `ec2_launcher` to your own (remove arg if using default profile)
+- Determine the CIDR range of your default AWS VPC (or custom VPC)
+- Determine the CIDR range to allow SSH access from (your IP)
+- Execute: `ec2_launcher <keypair.pem> <ssh_cidr_block> <vpc_cidr_block>`
+- Accept any SSH/SCP prompts
+- This script will end by connecting you to the master node
+- SSH into all nodes (including master) using public IP addresses or public DNS
+- Run `./docker_installer` and accept any prompts
+- From the master, execute `sudo docker swarm init --advertise-addr <instance_private_ip> --data-path-addr <instance_private_ip>`
+- Then in all nodes, copy the outputted join command (run with sudo), and append `--advertise-addr <instance_private_ip> --data-path-addr <instance_private_ip>`
+- From master, execute `sudo docker stack deploy --compose-file docker-compose.yml poolgp`
+- From there, list and inspect docker volumes to determine the location of log files
 
 ## License
 
