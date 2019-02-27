@@ -125,8 +125,9 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 - Run `./docker_installer` and accept any prompts
 - From the master, execute `sudo docker swarm init --advertise-addr <instance_private_ip> --data-path-addr <instance_private_ip>`
 - Then in all nodes, copy the outputted join command (run with sudo), and append `--advertise-addr <instance_private_ip> --data-path-addr <instance_private_ip>`
+- make a directory called `logs`
 - From master, execute `sudo docker stack deploy --compose-file docker-compose.yml poolgp`
-- From there, list and inspect docker volumes to determine the location of log files
+- From there, list and inspect docker volumes to verify the location of log files
 
 ## License
 
