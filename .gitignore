@@ -10,8 +10,6 @@ pom.xml.asc
 .hgignore
 .hg/
 *.txt
-*.json
 *.csv
-!example_evaluation_state.json
 /logs
 *.pem

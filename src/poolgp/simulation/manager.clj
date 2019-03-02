@@ -83,32 +83,23 @@
   "takes individual and completed states, generates fitness and
   returns individual"
   [pgp-indiv final-simulation-states]
-  (assoc-in
-    pgp-indiv [:indiv :errors]
-    (into []
-      (reduce (fn [errors sim-state]
-                (let [analysis-states (:analysis-states sim-state)]
-                  (concat errors
-                    (mapcat (fn [a-state]
-                              (let [p1-analytics (:p1-analytics a-state)
-                                    p1-score-a (:score p1-analytics)]
-                                  (list
-
-                                    ;player's remaining balls (win if zero)
-                                    (- (or (:total p1-score-a)
-                                           config/ZERO-SCORE-PENALTY)
-                                       (:score p1-score-a))
-
-                                    ;opponent's score
-                                    (:score (:score (:p2-analytics a-state)))
-
-                                    ;player scratches
-                                    (:scratches p1-analytics)
-
-                                    ;player turns
-                                    ;TODO: this should somehow ramp up as players get better
-                                    (max 0 (- (:turns p1-analytics)
-                                              config/TURNS-NO-PENALTY))
-                                    )))
-                         analysis-states))))
-              (list) final-simulation-states))))
+  (let [score-or-penalty #(- (or (:total %)
+                                 config/ZERO-SCORE-PENALTY)
+                              (:score %))]
+      (assoc
+        pgp-indiv :errors
+        {:self (reduce (fn [errors sim-state]
+                          (reduce #(conj %1
+                                    (score-or-penalty
+                                        (:score (:p1-analytics %2))))
+                            errors (:analysis-states sim-state)))
+                        [] final-simulation-states)
+         ;extract opponent scores and create lookup
+         :opp (reduce (fn [opp-map sim-state]
+                        (assoc opp-map
+                          (keyword (:uuid (:clojush-indiv (:p2 sim-state))))
+                          (reduce #(conj %1
+                                      (score-or-penalty
+                                        (:score (:p2-analytics %2))))
+                              [] (:analysis-states sim-state))))
+              (hash-map) final-simulation-states)})))

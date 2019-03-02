@@ -24,7 +24,7 @@
      id
      clojush-p
      :genetic
-     (:program (:indiv clojush-p))))
+     (:program clojush-p)))
 
 (defn configure-clojush!
   "configure clojush global values"

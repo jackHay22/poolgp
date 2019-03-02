@@ -33,7 +33,7 @@
   [i]
   (and
     (map? i)
-    (instance? individual (:indiv i))))
+    (instance? individual i)))
 
 (defn- load-config
   "create server config record from json->map"
@@ -59,7 +59,7 @@
         reader (io/reader client-socket)]
       (reset! OPPONENT-POOL
         (filter valid-indiv?
-          (map read-string (line-seq reader))))))
+          (map #(:indiv (read-string %)) (line-seq reader))))))
 
 (defn- status-task
   "runnable (thread) log process"
@@ -111,17 +111,20 @@
   (log/write-info "Starting incoming channel worker...")
   (async/go-loop []
     (try
-      (let [indiv (read-string (async/<! IN-CHANNEL))]
+      (let [indiv-packet (read-string (async/<! IN-CHANNEL))
+            ;unpack individual
+            indiv (:indiv indiv-packet)
+            current-cycle (:cycle indiv-packet)]
           ;validate individual before starting simulation
           (if (valid-indiv? indiv)
           ;check if current cycle has changed
             (do
-              (if (not (= (:cycle indiv) @CURRENT-CYCLE))
+              (if (not (= current-cycle @CURRENT-CYCLE))
                  (do
                    (log/write-info "Detected new cycle, clearing opponent pool")
                    (reset! OPPONENT-POOL (list))
                    (reset! INDIV-COUNT 0)
-                   (reset! CURRENT-CYCLE (:cycle indiv))))
+                   (reset! CURRENT-CYCLE current-cycle)))
 
               (swap! INDIV-COUNT inc)
               ;if node hasn't requested opponents for this cycle,
@@ -132,7 +135,7 @@
                   (:opp-pool-req-p server-config)))
 
               (log/write-info (str "Running simulations on individual "
-                                    (:eval-id indiv) " against " (count @OPPONENT-POOL)
+                                    (:uuid indiv) " against " (count @OPPONENT-POOL)
                                     " opponents"))
               (async/>! OUT-CHANNEL
                 ;create return map
@@ -155,8 +158,8 @@
     (let [player (async/<! OUT-CHANNEL)
           client-socket (Socket. engine-hostname port)
           writer (io/writer client-socket)]
-        (log/write-info (str "Finished simulation cycle on individual: " (:eval-id player)))
-        (.write writer (str (pr-str (:indiv player)) "\n"))
+        (log/write-info (str "Finished simulation cycle on individual: " (:uuid player)))
+        (.write writer (str (pr-str player) "\n"))
         (.flush writer)
         (.close client-socket))
     (recur)))

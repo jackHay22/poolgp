@@ -1,0 +1,48 @@
+{"simulation":
+ {"analysis":
+  [{"game":
+    {"table":
+     {"balls":
+      [{"x":883, "y":302, "id":"cue", "type":"cue"},
+       {"x":316, "y":303, "id":"1", "type":"solid"},
+       {"x":296.1, "y":291.5, "id":"2", "type":"striped"},
+       {"x":296.1, "y":314.5, "id":"3", "type":"solid"},
+       {"x":276.2, "y":326, "id":"4", "type":"striped"},
+       {"x":276.2, "y":303, "id":"5", "type":"solid"},
+       {"x":276.2, "y":280, "id":"6", "type":"striped"},
+       {"x":256.3, "y":268.5, "id":"7", "type":"solid"},
+       {"x":256.3, "y":291.5, "id":"8", "type":"striped"},
+       {"x":256.3, "y":314.5, "id":"9", "type":"solid"},
+       {"x":256.3, "y":337.5, "id":"10", "type":"striped"},
+       {"x":236.4, "y":257, "id":"11", "type":"solid"},
+       {"x":236.4, "y":280, "id":"12", "type":"striped"},
+       {"x":236.4, "y":303, "id":"13", "type":"solid"},
+       {"x":236.4, "y":326, "id":"14", "type":"striped"},
+       {"x":236.4, "y":349, "id":"15", "type":"solid"}]}}},
+   {"game":
+    {"table":
+     {"balls":
+      [{"x":315, "y":302, "id":"cue", "type":"cue"},
+       {"x":883, "y":303, "id":"1", "type":"striped"},
+       {"x":903, "y":291.5, "id":"2", "type":"solid"},
+       {"x":903, "y":314.5, "id":"3", "type":"striped"},
+       {"x":923, "y":326, "id":"4", "type":"solid"},
+       {"x":923, "y":303, "id":"5", "type":"striped"},
+       {"x":923, "y":280, "id":"6", "type":"solid"},
+       {"x":943, "y":268.5, "id":"7", "type":"striped"},
+       {"x":943, "y":291.5, "id":"8", "type":"solid"},
+       {"x":943, "y":314.5, "id":"9", "type":"striped"},
+       {"x":943, "y":337.5, "id":"10", "type":"solid"},
+       {"x":963, "y":257, "id":"11", "type":"striped"},
+       {"x":963, "y":280, "id":"12", "type":"solid"},
+       {"x":963, "y":303, "id":"13", "type":"striped"},
+       {"x":963, "y":326, "id":"14", "type":"solid"},
+       {"x":963, "y":349, "id":"15", "type":"striped"}]}}}],
+  "watching" : 1,
+  "p1":{"genetic":true, "strategy":"()"},
+  "p2":{"genetic":true, "strategy":"()"}},
+ "eval-worker":
+ {"indiv-ingress-p":9999,
+  "indiv-egress-p":8000,
+  "opp-pool-req-p":8888,
+  "engine-hostname":"eval"}}

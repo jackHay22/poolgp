@@ -96,11 +96,13 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 (Note: this should be in `clojush.src.pushgp.pushgp/compute-errors`)
 
 ```clojure
+(Thread/sleep 10000)
+
 (poolgp/start-dist-services {
   :incoming-port 8000
   :outgoing-port 9999
   :opp-pool-req-p 8888
-  :host "eval"}) ;swarm service name or load-balancer/host
+  :host "eval"})
 
 (poolgp/register-opponents (map deref pop-agents))
 
@@ -108,6 +110,14 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
              %1 evaluate-individual poolgp/eval-indiv %2 argmap)
            pop-agents
            rand-gens))
+
+(when-not use-single-thread (apply await pop-agents)) ;; SYNCHRONIZE
+
+;swap/send (send derefed pops), for individual, find self in pop opponent fitnesses
+(let [opps (map deref pop-agents)]
+ (dorun (map #((if use-single-thread swap! send)
+               %1 poolgp/merge-opp-performance opps)
+             pop-agents)))
 ```
 
 ### Setting up the eval swarm on AWS
