@@ -103,15 +103,19 @@
   [push-final-state]
   (let [vec-int-stack (:vector_integer push-final-state)
         vec-float-stack (:vector_float push-final-state)
-        int-stack (:integer push-final-state)]
+        int-stack (:integer push-final-state)
+        float-stack (:float push-final-state)]
         (vec-nil-guard
           (cond
             (not (empty? vec-float-stack))
                     (Vector. (first (first vec-float-stack))
                              (second (first vec-float-stack)))
+            (>= (count float-stack) 2)
+                    (Vector. (first float-stack)
+                             (second float-stack))
             (>= (count int-stack) 2)
-                    (Vector. (first int-stack)
-                             (second int-stack))
+                   (Vector. (first int-stack)
+                            (second int-stack))
             (> (count int-stack) 0)
                     (Vector. 0 (first int-stack))
             :no-output (Vector. 0 0))

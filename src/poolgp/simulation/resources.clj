@@ -100,6 +100,6 @@
       :indiv-ingress-p 9999
       :indiv-egress-p 8000
       :opp-pool-req-p 8888
-      :engine-hostname "eval"}})
+      :engine-hostname "engine"}})
 
 (def CONTROLLER (ControllerInterface. false false (:cue TABLE-IMAGES)))

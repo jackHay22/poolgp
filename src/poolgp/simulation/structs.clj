@@ -5,7 +5,7 @@
 ;Player
 ; {
 ;   :id :p1/:p2
-;   :eval-id (clojush assigned id)
+;   :clojush-indiv (individual.)
 ;   :type :genetic/:interactive
 ;   :strategy (push code)
 ; }
