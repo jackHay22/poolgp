@@ -13,15 +13,16 @@ services:
       - "8000:8000"
       - "9000:9000"
     volumes:
-      - "./logs:/server_logs"
+      - "${PWD}:/server_logs"
   eval:
     networks:
       - poolgp_overlay
     deploy:
-      replicas: 8
+      replicas: 2
     image: jackhay22/poolgp_server:latest
     ports:
       - "9999:9999"
+
 volumes:
   logs:
 
