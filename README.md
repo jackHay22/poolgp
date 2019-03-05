@@ -114,6 +114,8 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 
 ### Setting up the eval swarm on AWS
 
+![Swarm Diagram](https://raw.githubusercontent.com/jackHay22/poolgp/master/docs/ec2_swarm_diagram.png)
+
 - Make sure you have an AWS account that can support charges incurred by running ec2 instances at high load.  (These costs add up)
 - Create an ec2 keypair.  In `ec2_launcher`, rename the keypair argument with this keypair name.
 - Download the keypair pem file for use during deployment.  
