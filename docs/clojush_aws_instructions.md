@@ -18,7 +18,7 @@
 - From the console, copy the public IP of your instance or the public DNS
 - Move your .pem file to the directory from which you intend to connect to the instance
 - Copy the docker installation script to your instance (once running)
-- Run: `scp -i <keypair>.pem path/to/docker_installer ubuntu@<public_ip>:`
+- Run: `scp -i <keypair>.pem path/to/docker_installer ubuntu@<public_ip>:` (Note, the docker installation can be found here: `docker/docker_installer`)
 - To connect: `ssh -i <keypair>.pem ubuntu@<public_ip>`
 - From the instance, run `./docker_installer` (answer yes when prompted)
 - If your docker image is stored in a repository, run the necessary docker run command (using sudo)
