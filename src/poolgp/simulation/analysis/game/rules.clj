@@ -1,6 +1,8 @@
 (ns poolgp.simulation.analysis.game.rules
   (:require [poolgp.simulation.resources :as resources]
             [poolgp.log :as log]
+            [poolgp.config :as config]
+            [poolgp.simulation.structs :as structs]
             [poolgp.simulation.analysis.game.table.physics :as physics])
   (:import poolgp.simulation.structs.Vector)
   (:gen-class))
@@ -52,6 +54,18 @@
                (reduced true) %1)
           false (:pockets table)))
 
+(defn- on-table?
+  "determine if a ball is in bounds
+  (may be the case for clipping bug or
+  during placement)
+  (essentially checks if ball in window)"
+  [b]
+  (let [bx (:x b) by (:y b)]
+    (and
+      (> 0 bx) (> 0 by)
+      (> config/POOL-WIDTH-PX bx)
+      (> config/POOL-HEIGHT-PX by))))
+
 (defn- check-game-complete
   "check if the game is completed"
   [gs]
@@ -62,6 +76,39 @@
                               (:balls (:table-state gs))))
                   (reduced true) c))
             false (list :solid :striped))))
+
+(defn- replace-ball
+  "replace ball on table (checks for collisions
+   with other table balls)
+   --positions ball at first non colliding (moves left
+     from attempted position)
+   location"
+  [ball attempt balls]
+  (reduce
+    (fn [b pos]
+      (if (reduce #(if (or (physics/ball-collision? b %2)
+                           (not (on-table? b)))
+                       (reduced false) %1) true balls)
+          ;return ball, zero vel (position already worked)
+          (reduced (assoc b :vector (Vector. 0 0)))
+          ;try next position
+          (assoc b :center pos)))
+    (assoc ball :center attempt)
+    (iterate #(structs/minus
+                % (Vector. config/BALL-RADIUS-PX 0))
+             attempt)))
+
+(defn- fix-off-table
+  "move any balls that have left the table
+  to a location on the table"
+  [gamestate]
+  (update-in gamestate [:table-state :balls]
+    (fn [balls]
+      (map #(if (not (on-table? %))
+                (replace-ball %
+                  resources/BREAK-PT balls)
+                %))
+           balls)))
 
 (defn- move-pocketed
   "take gamestate, check for balls in
@@ -83,8 +130,8 @@
                     ;move cue to break point
                     (update-in s [:balls]
                       (fn [balls] (map #(if (= (:id %) :cue)
-                                          (assoc % :center resources/BREAK-PT
-                                                   :vector (Vector. 0 0)) %)
+                                          (replace-ball %
+                                              resources/BREAK-PT balls) %)
                                         balls))))
                  s))
               ts (:balls ts)))))
@@ -123,8 +170,9 @@
   [gamestate]
   (check-game-complete
     (do-turn-state
-      (move-pocketed
-        (check-pocketed gamestate)))))
+      (fix-off-table
+        (move-pocketed
+          (check-pocketed gamestate))))))
 
 (defn rules-log
   "log important updates to rules
