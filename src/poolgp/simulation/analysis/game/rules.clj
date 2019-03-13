@@ -29,7 +29,7 @@
   (player already changed if new player)"
   [gs]
   (assoc gs :current-scored? false
-            :scratched false))
+            :scratched? false))
 
 (defn- do-turn-state
   "update player turns if balls stopped"
@@ -60,9 +60,9 @@
   during placement)
   (essentially checks if ball in window)"
   [b]
-  (let [bx (:x b) by (:y b)]
+  (let [bx (:x (:center b)) by (:y (:center b))]
     (and
-      (> 0 bx) (> 0 by)
+      (> bx 0) (> by 0)
       (> config/POOL-WIDTH-PX bx)
       (> config/POOL-HEIGHT-PX by))))
 
@@ -105,6 +105,7 @@
   (update-in gamestate [:table-state :balls]
     (fn [balls]
       (map #(if (not (on-table? %))
+                ;move to a free spot near the break pt
                 (replace-ball %
                   resources/BREAK-PT balls)
                 %))
@@ -173,10 +174,3 @@
       (fix-off-table
         (move-pocketed
           (check-pocketed gamestate))))))
-
-(defn rules-log
-  "log important updates to rules
-  (if start of new move)"
-  [gs]
-  (if (:ready? gs)
-    (log/write-info (str "Player" (:id (:current gs)) "to move"))))

@@ -42,8 +42,3 @@
             (:id (:current gamestate)))
       (displayutils/render-pocketed gr
         (:pocketed (:table-state gamestate))))))
-
-(defn game-log
-  "write game level logs"
-  [gamestate]
-  (rules/rules-log gamestate))

@@ -71,14 +71,6 @@
         (- (int (/ config/WINDOW-WIDTH-PX 2)) 120)
         400))))
 
-(defn simulation-log
-  "write simulation logs"
-  [state]
-  (if (> (count (:analysis-states state)) 0)
-      (doall (map #(analysis-manager/analysis-log %)
-                   (:analysis-states state)))
-      (log/write-error "No games configured in task definition")))
-
 (defn calculate-individual-fitness
   "takes individual and completed states, generates fitness and
   returns individual"

@@ -43,7 +43,3 @@
   [analysis-state gr]
   (game-manager/game-render
     (:game-state analysis-state) gr))
-
-(defn analysis-log
-  "write analysis logs"
-  [analysis-state])
