@@ -1,6 +1,24 @@
 {"simulation":
  {"analysis":
-  [
+  [{"game":
+    {"table":
+     {"balls":
+      [{"x":883, "y":302, "id":"cue", "type":"cue"},
+       {"x":316, "y":303, "id":"1", "type":"solid"},
+       {"x":296.1, "y":291.5, "id":"2", "type":"striped"},
+       {"x":296.1, "y":314.5, "id":"3", "type":"solid"},
+       {"x":276.2, "y":326, "id":"4", "type":"striped"},
+       {"x":276.2, "y":303, "id":"5", "type":"solid"},
+       {"x":276.2, "y":280, "id":"6", "type":"striped"},
+       {"x":256.3, "y":268.5, "id":"7", "type":"solid"},
+       {"x":256.3, "y":291.5, "id":"8", "type":"striped"},
+       {"x":256.3, "y":314.5, "id":"9", "type":"solid"},
+       {"x":256.3, "y":337.5, "id":"10", "type":"striped"},
+       {"x":236.4, "y":257, "id":"11", "type":"solid"},
+       {"x":236.4, "y":280, "id":"12", "type":"striped"},
+       {"x":236.4, "y":303, "id":"13", "type":"solid"},
+       {"x":236.4, "y":326, "id":"14", "type":"striped"},
+       {"x":236.4, "y":349, "id":"15", "type":"solid"}]}}},
    {"game":
     {"table":
      {"balls":
