@@ -1,8 +1,5 @@
 # PoolGP
 
-## Contents
-TODO
-
 ## Using PoolGP
 
 ### Building the project
@@ -41,8 +38,7 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
               {"x" : 100, "y" : 150, "id" : 1, "type" : "striped"},
               {"x" : 500, "y" : 285, "id" : "cue", "type" : "cue"}
             ]
-          },
-          "push-inputs" : [ "balls", "cue", "pockets"] (optional)
+          }
         }
       },
     ],
