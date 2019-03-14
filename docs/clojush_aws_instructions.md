@@ -15,13 +15,12 @@
 - You can either use a preexisting key pair (.pem) to access the instance or create a new pair
 - If you create a new pair, save the .pem file for use when connecting to the instance
 - Select _Launch Instances_ and then _View Instances_ (if necessary)
-- From the console, copy the public IP of your instance or the public DNS
-- Move your .pem file to the directory from which you intend to connect to the instance
-- Copy the docker installation script to your instance (once running)
+- From the ec2 dashboard, (you may need to navigate to the instances tab in the left) select your running instance and under the description tab, copy the public IP of your instance or the public DNS
+- Move your .pem file to the directory from which you intend to connect to the instance (or specify a path for the following commands)
+- Copy the docker installation script to your instance (once running):
 - Run: `scp -i <keypair>.pem path/to/docker_installer ubuntu@<public_ip>:` (Note, the docker installation can be found here: `docker/docker_installer` in the poolgp repo)
 - To connect: `ssh -i <keypair>.pem ubuntu@<public_ip>`
 - From the instance, run `./docker_installer` (answer yes when prompted)
-- If your docker image is stored in a repository, run the necessary docker run command (using sudo)
-- Otherwise, clone Clojush
+- Clone Clojush `git clone https://github.com/lspector/Clojush.git`
 - From the local repo, run `sudo docker build -t lspector/clojush .` (as per Clojush readme)
 - To run launch the container, run `sudo docker run --rm lspector/clojush lein run clojush.problems.demos.simple-regression` (as per Clojush readme)
