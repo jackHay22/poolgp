@@ -69,8 +69,7 @@ Here is the structure for an individual being sent from Clojush to
 evaluation instances:
 ```clojure
 {:indiv indiv ;clojush.individual containing :program
- :cycle (int)
- :eval-id (int)}
+ :cycle (int)}
 ```
 
 ### Creating a Docker Swarm
