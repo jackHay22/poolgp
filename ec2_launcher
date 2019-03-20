@@ -21,7 +21,7 @@ STACKJSON=$(aws cloudformation describe-stacks \
                 --profile poolgp \
                 --stack-name poolgpec2cluster)
 
-for node in 'C4PublicIP' 'C3PublicIP' 'C2PublicIP' 'C1PublicIP'
+for node in 'C8PublicIP' 'C7PublicIP' 'C6PublicIP' 'C5PublicIP' 'C4PublicIP' 'C3PublicIP' 'C2PublicIP' 'C1PublicIP'
 do
   IP=$(echo $STACKJSON | python -c "import json,sys;json_obj=json.load(sys.stdin); \
                                     print(filter(lambda o: o['OutputKey'] == '${node}', \

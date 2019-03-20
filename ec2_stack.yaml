@@ -87,6 +87,10 @@ Resources:
       InstanceType: !Ref 'InstanceType'
       KeyName: !Ref 'KeyName'
       ImageId: !Ref 'InstanceAmiId'
+      Tags:
+        -
+          Key: "Name"
+          Value: "PoolGP_1"
   PoolGPCompute2:
     Type: AWS::EC2::Instance
     Properties:
@@ -94,6 +98,10 @@ Resources:
       InstanceType: !Ref 'InstanceType'
       KeyName: !Ref 'KeyName'
       ImageId: !Ref 'InstanceAmiId'
+      Tags:
+        -
+          Key: "Name"
+          Value: "PoolGP_2"
   PoolGPCompute3:
     Type: AWS::EC2::Instance
     Properties:
@@ -101,6 +109,10 @@ Resources:
       InstanceType: !Ref 'InstanceType'
       KeyName: !Ref 'KeyName'
       ImageId: !Ref 'InstanceAmiId'
+      Tags:
+        -
+          Key: "Name"
+          Value: "PoolGP_3"
   PoolGPCompute4:
     Type: AWS::EC2::Instance
     Properties:
@@ -108,6 +120,54 @@ Resources:
       InstanceType: !Ref 'InstanceType'
       KeyName: !Ref 'KeyName'
       ImageId: !Ref 'InstanceAmiId'
+      Tags:
+        -
+          Key: "Name"
+          Value: "PoolGP_4"
+  PoolGPCompute5:
+    Type: AWS::EC2::Instance
+    Properties:
+      SecurityGroups: [!Ref 'PoolgpSecurityGroup']
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'InstanceAmiId'
+      Tags:
+        -
+          Key: "Name"
+          Value: "PoolGP_5"
+  PoolGPCompute6:
+    Type: AWS::EC2::Instance
+    Properties:
+      SecurityGroups: [!Ref 'PoolgpSecurityGroup']
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'InstanceAmiId'
+      Tags:
+        -
+          Key: "Name"
+          Value: "PoolGP_6"
+  PoolGPCompute7:
+    Type: AWS::EC2::Instance
+    Properties:
+      SecurityGroups: [!Ref 'PoolgpSecurityGroup']
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'InstanceAmiId'
+      Tags:
+        -
+          Key: "Name"
+          Value: "PoolGP_7"
+  PoolGPCompute8:
+    Type: AWS::EC2::Instance
+    Properties:
+      SecurityGroups: [!Ref 'PoolgpSecurityGroup']
+      InstanceType: !Ref 'InstanceType'
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'InstanceAmiId'
+      Tags:
+        -
+          Key: "Name"
+          Value: "PoolGP_8"
 Outputs:
   C1PublicIP:
     Description: Public IP address of compute node 1
@@ -121,3 +181,15 @@ Outputs:
   C4PublicIP:
     Description: Public IP address of compute node 4
     Value: !GetAtt [PoolGPCompute4, PublicIp]
+  C5PublicIP:
+    Description: Public IP address of compute node 5
+    Value: !GetAtt [PoolGPCompute5, PublicIp]
+  C6PublicIP:
+    Description: Public IP address of compute node 6
+    Value: !GetAtt [PoolGPCompute6, PublicIp]
+  C7PublicIP:
+    Description: Public IP address of compute node 7
+    Value: !GetAtt [PoolGPCompute7, PublicIp]
+  C8PublicIP:
+    Description: Public IP address of compute node 8
+    Value: !GetAtt [PoolGPCompute8, PublicIp]
