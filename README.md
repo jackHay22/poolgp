@@ -57,7 +57,7 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
     "indiv-ingress" : 9999,
     "indiv-egress" : 8000,
     "opp-pool-req" : 8888,
-    "engine-hostname" : "poolgp-engine"
+    "engine-hostname" : "engine"
   }
 }
 ```

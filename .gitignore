@@ -11,5 +11,7 @@ pom.xml.asc
 .hg/
 *.txt
 *.csv
+*.log
 /logs
 *.pem
+docker/docker-compose_test.yml
