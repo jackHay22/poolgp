@@ -24,13 +24,6 @@
     (assoc gs :current (:waiting gs)
               :waiting current)))
 
-(defn- do-move-reset
-  "clear flags if new turn
-  (player already changed if new player)"
-  [gs]
-  (assoc gs :current-scored? false
-            :scratched? false))
-
 (defn- do-turn-state
   "update player turns if balls stopped"
   [gs]
@@ -38,13 +31,14 @@
         (balls-stopped? (:balls (:table-state gs)))
         (not (:ready? gs)))
       ;start new turn
-      (do-move-reset
-        (assoc
-          (if (and (:current-scored? gs)
-                   (not (:scratched? gs)))
-              gs
-              (swap-current gs))
-           :ready? true))
+      (assoc
+        (if (and (:current-scored? gs)
+                 (not (:scratched? gs)))
+            gs
+            (swap-current gs))
+         :ready? true
+         :current-scored? false
+         :scratched? false)
       gs))
 
 (defn- pocketed?

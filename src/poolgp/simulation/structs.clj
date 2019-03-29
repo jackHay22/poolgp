@@ -134,7 +134,7 @@
 ;   :scored-turns (int)
 ; }
 
-(defrecord PlayerAnalytics [score scratches turns])
+(defrecord PlayerAnalytics [score balls-remaining])
 
 ;AnalysisState
 ; {

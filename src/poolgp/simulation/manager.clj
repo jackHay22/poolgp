@@ -82,11 +82,11 @@
         pgp-indiv :errors
         {:self (reduce (fn [errors sim-state]
                           (reduce #(conj %1
-                                      ;own score (based on total balls)
-                                      (score-or-penalty
-                                          (:score (:p1-analytics %2)))
-                                      ;opponent score
-                                      (:score (:score (:p1-analytics %2))))
+                                      ;own balls remaining
+                                      (:balls-remaining (:p1-analytics %2))
+                                      ;opponent balls remaining
+                                      (- 8
+                                        (:balls-remaining (:p2-analytics %2))))
                             errors (:analysis-states sim-state)))
                         [] final-simulation-states)
          ;extract opponent scores and create lookup
@@ -94,10 +94,10 @@
                         (assoc opp-map
                           (keyword (str (:uuid (:clojush-indiv (:p2 sim-state)))))
                           (reduce #(conj %1
-                                      ;opponent score
-                                      (score-or-penalty
-                                        (:score (:p2-analytics %2)))
-                                      ;individual score
-                                      (:score (:score (:p1-analytics %2))))
+                                      ;opponent balls remaining
+                                      (:balls-remaining (:p2-analytics %2))
+                                      ;own balls remaining
+                                      (- 8
+                                        (:balls-remaining (:p1-analytics %2))))
                               [] (:analysis-states sim-state))))
               (hash-map) final-simulation-states)})))

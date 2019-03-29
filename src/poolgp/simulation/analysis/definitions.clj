@@ -42,14 +42,11 @@
                               (:balls (:table-state gs)))))
                    (:total current))))))
 
-(def-analytic scratches
+(def-analytic balls-remaining
   (fn [gs current p-id]
-    ;TODO: produces incorrect value (switches player before scratched?)
-    (if (and (player-is-current? gs p-id)
-             (:scratched? gs))
-      (inc current) current)))
-
-(def-analytic turns
-  (fn [gs current p-id]
-    (if (player-is-current? gs p-id)
-        (inc current) current)))
+    (let [p-balltype (:ball-type (get-player gs p-id))]
+      (if (= p-balltype :unassigned)
+          current
+          (count
+            (filter #(= (:type %) p-balltype)
+                    (:balls (:table-state gs))))))))

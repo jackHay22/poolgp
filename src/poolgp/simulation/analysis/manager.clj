@@ -1,13 +1,13 @@
 (ns poolgp.simulation.analysis.manager
   (:require [poolgp.simulation.analysis.game.manager :as game-manager]
+            [poolgp.config :as config]
             [poolgp.simulation.analysis.definitions :as analytics-defs])
   (:import poolgp.simulation.structs.AnalysisState)
   (:import poolgp.simulation.structs.PlayerAnalytics)
   (:gen-class))
 
 (def ANALYTICS (list analytics-defs/score
-                     analytics-defs/scratches
-                     analytics-defs/turns))
+                     analytics-defs/balls-remaining))
 
 (defn analysis-init
   "initialize gamestate and analytics"
@@ -17,8 +17,8 @@
       #(AnalysisState.
         ;game state
         (game-manager/game-init (:game %) images?)
-        (PlayerAnalytics. {:score 0 :total nil} 0 0)
-        (PlayerAnalytics. {:score 0 :total nil} 0 0))
+        (PlayerAnalytics. {:score 0 :total nil} config/ZERO-SCORE-PENALTY)
+        (PlayerAnalytics. {:score 0 :total nil} config/ZERO-SCORE-PENALTY))
     analysis-vec-json)))
 
 (defn analysis-update
