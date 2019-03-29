@@ -83,10 +83,16 @@
         {:self (reduce (fn [errors sim-state]
                           (reduce #(conj %1
                                       ;own balls remaining
-                                      (:balls-remaining (:p1-analytics %2))
+                                      (or
+                                        (:balls-remaining (:p1-analytics %2))
+                                        ;penalty for no ball assignment
+                                        config/ZERO-SCORE-PENALTY)
                                       ;opponent balls remaining
                                       (- 8
-                                        (:balls-remaining (:p2-analytics %2))))
+                                        (or
+                                          (:balls-remaining (:p2-analytics %2))
+                                          ;If player not even assigned a ball, zero error
+                                          8)))
                             errors (:analysis-states sim-state)))
                         [] final-simulation-states)
          ;extract opponent scores and create lookup
@@ -95,9 +101,13 @@
                           (keyword (str (:uuid (:clojush-indiv (:p2 sim-state)))))
                           (reduce #(conj %1
                                       ;opponent balls remaining
-                                      (:balls-remaining (:p2-analytics %2))
+                                      (or
+                                        (:balls-remaining (:p2-analytics %2))
+                                        config/ZERO-SCORE-PENALTY)
                                       ;own balls remaining
                                       (- 8
-                                        (:balls-remaining (:p1-analytics %2))))
+                                        (or
+                                          (:balls-remaining (:p1-analytics %2))
+                                          8)))
                               [] (:analysis-states sim-state))))
               (hash-map) final-simulation-states)})))

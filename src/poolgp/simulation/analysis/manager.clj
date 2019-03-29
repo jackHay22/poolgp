@@ -17,8 +17,8 @@
       #(AnalysisState.
         ;game state
         (game-manager/game-init (:game %) images?)
-        (PlayerAnalytics. {:score 0 :total nil} config/ZERO-SCORE-PENALTY)
-        (PlayerAnalytics. {:score 0 :total nil} config/ZERO-SCORE-PENALTY))
+        (PlayerAnalytics. {:score 0 :total nil} nil)
+        (PlayerAnalytics. {:score 0 :total nil} nil))
     analysis-vec-json)))
 
 (defn analysis-update
