@@ -102,8 +102,8 @@
                 ;move to a free spot near the break pt
                 (replace-ball %
                   resources/BREAK-PT balls)
-                %))
-           balls)))
+                %)
+           balls))))
 
 (defn- move-pocketed
   "take gamestate, check for balls in
