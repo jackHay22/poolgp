@@ -87,8 +87,11 @@
           ;NOTE: cue not included
           ;return ball, zero vel (position already worked)
           (reduced (assoc b :vector (Vector. 0 0)))
-          ;try next position
-          (assoc b :center pos)))
+          (if (> 0 (:x (:center b)))
+              ;past point of placement, leave off table
+              (reduced b)
+              ;try next position
+              (assoc b :center pos))))
     ;initial attempt
     (assoc ball :center attempt)
     ;lazy position creation
