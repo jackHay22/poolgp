@@ -116,6 +116,7 @@
     (> (+ (:r b1) (:r b2))
        (distance
          (:center b1) (:center b2)))
+    (not (= (:id b1) (:id b2)))
     ;prevent balls from sticking together by determining
     ;directions
     ;CITE https://gamedev.stackexchange.com/questions/20516/ball-collisions-sticking-together
@@ -123,6 +124,16 @@
           (structs/minus (:center b1) (:center b2))
           (structs/minus (:vector b2) (:vector b1)))
         0)))
+
+(defn ball-collision-static?
+  "determine if there is a distance collision (only)
+  between balls (does not check for vector)"
+  [b1 b2]
+  (and
+    (> (+ (:r b1) (:r b2))
+       (distance
+         (:center b1) (:center b2)))
+    (not (= (:id b1) (:id b2)))))
 
 (defn- do-collisions
   "determine if ball has collided with a wall

@@ -80,14 +80,18 @@
   [ball attempt balls]
   (reduce
     (fn [b pos]
-      (if (reduce #(if (or (physics/ball-collision? b %2)
-                           (not (on-table? b)))
-                       (reduced false) %1) true balls)
+      (if (and (on-table? b)
+               (reduce #(if (physics/ball-collision-static? b %2)
+                            (reduced false)
+                             %1) true balls))
+          ;NOTE: cue not included
           ;return ball, zero vel (position already worked)
           (reduced (assoc b :vector (Vector. 0 0)))
           ;try next position
           (assoc b :center pos)))
+    ;initial attempt
     (assoc ball :center attempt)
+    ;lazy position creation
     (iterate #(structs/minus
                 % (Vector. config/BALL-RADIUS-PX 0))
              attempt)))
