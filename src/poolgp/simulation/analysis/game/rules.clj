@@ -80,7 +80,7 @@
   [ball attempt balls]
   (reduce
     (fn [b pos]
-      (if (and (on-table? b)
+      (if (and (on-table? b) ;TODO: for scoring
                (reduce #(if (physics/ball-collision-static? b %2)
                             (reduced false)
                              %1) true balls))

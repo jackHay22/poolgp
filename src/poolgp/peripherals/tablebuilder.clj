@@ -91,7 +91,7 @@
         (let [current-balls (:balls (:table (:game (:table-json-struct state))))
               temp-position {:r config/BALL-RADIUS-PX
                              :center (Vector. (.getX e) (.getY e))}
-              can-place? (reduce #(if (physics/ball-collision?
+              can-place? (reduce #(if (physics/ball-collision-static?
                                         temp-position {:r config/BALL-RADIUS-PX
                                                        :center (Vector. (:x %2) (:y %2))})
                                       (reduced false) %1)
