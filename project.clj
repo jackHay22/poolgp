@@ -1,4 +1,4 @@
-(defproject poolgp "0.1.0-SNAPSHOT"
+(defproject poolgp "1.2.0-SNAPSHOT"
   :description "Pool genetic programming simulation"
   :url "https://github.com/jackHay22/poolgp"
   :license {:name "Eclipse Public License"
