@@ -1,6 +1,6 @@
 # PoolGP
 
-[![Version](https://img.shields.io/badge/dynamic/json.svg?color=blue&label=PoolGP&query=tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2FjackHay22%2Fpoolgp%2Freleases%2Flatest)]
+[Version](https://img.shields.io/badge/dynamic/json.svg?color=blue&label=PoolGP&query=tag_name&url=https%3A%2F%2Fapi.github.com%2Frepos%2FjackHay22%2Fpoolgp%2Freleases%2Flatest)
 
 ## Using PoolGP
 
