@@ -13,7 +13,7 @@
 (def WINDOW-HEIGHT-PX (+ POOL-HEIGHT-PX INFO-HEIGHT-PX))
 (def INSET-MARGIN 10)
 (def WINDOW-FPS 60)
-(def WINDOW-TITLE "Pool GP")
+(def WINDOW-TITLE "PoolGP")
 (def EDIT-WINDOW-TITLE "PoolGP Test Builder")
 
 ;Table dimensions in meters
