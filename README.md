@@ -11,7 +11,7 @@
 Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
 
 ### Project run options (NOTE: an option is required)
-(Example: `java -jar poolgp-0.1.0-SNAPSHOT-standalone.jar -e example_evaluation_state.json`)
+(Example: `java -jar poolgp-0.1.0-SNAPSHOT-standalone.jar -d full_games.json`)
 - `-d --demo PATH` Runs in demo mode given configuration
 - `-e --eval PATH` Runs in server mode with specified task definition
 - `-b --builder PATH` Opens editing mode and writes to file provided (must exist)
