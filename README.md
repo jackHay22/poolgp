@@ -93,6 +93,7 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 (Note: this should be in `clojush.src.pushgp.pushgp/compute-errors`)
 
 ```clojure
+;temporary: wait 10 seconds for workers to start
 (Thread/sleep 10000)
 
 (poolgp/start-dist-services {
@@ -101,7 +102,14 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
   :opp-pool-req-p 8888
   :host "eval"})
 
-(poolgp/register-opponents (map deref pop-agents))
+;take first 10 individuals from starting gen if no
+;previous gen computed
+(let [prev-gen @POOLGP-PREV-GEN]
+ (poolgp/register-opponents
+   (take 10
+     (if (not (empty? prev-gen))
+         (sort-by :total-error prev-gen)
+         (map deref pop-agents)))))
 
 (dorun (map #((if use-single-thread swap! send)
              %1 poolgp/eval-indiv)
@@ -115,6 +123,11 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
                                                (assoc argmap :reuse-errors false))
              pop-agents
              rand-gens)))
+
+(when-not use-single-thread (apply await pop-agents)) ;; SYNCHRONIZE
+
+;(store generation)
+(reset! POOLGP-PREV-GEN (doall (map deref pop-agents)))
 ```
 
 ### Setting up the eval swarm on AWS
