@@ -6,8 +6,9 @@
 
 (def NOT-BALL-TYPE {:striped :solid :solid :striped})
 
-(defn- ** ([x] (* x x))
-         ([x p] (reduce * (repeat p x))))
+(defn- ** ([x] (try (** x 2)
+                    (catch java.lang.ArithmeticException e x)))
+          ([x p] (reduce * (repeat p x))))
 
 (defn- throttle-speed
   "trottle speed based on max speed"
