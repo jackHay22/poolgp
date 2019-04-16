@@ -83,8 +83,8 @@
       (Vector. 52 572))))
 
 (def TABLE (Table. 20,
-            (list (Vector. 32.0 32.0) (Vector. 600.0 32.0) (Vector. 1167.0 32.0)
-                  (Vector. 1167.0 571.0) (Vector. 600.0 571.0) (Vector. 32.0 571.0))
+            (list (Vector. 52.0 52.0) (Vector. 600.0 52.0) (Vector. 1147.0 52.0)
+                  (Vector. 1147.0 546.0) (Vector. 600.0 546.0) (Vector. 52.0 546.0))
             (list LEFT-WALL RIGHT-WALL
                   BOTTOM-LEFT-WALL BOTTOM-RIGHT-WALL
                   TOP-LEFT-WALL TOP-RIGHT-WALL)
