@@ -10,18 +10,21 @@
 (defn game-init
   "init gamestate"
   [gamestate-json images?]
-  (GameState.
-    ;table state
-    (table-manager/table-init (:table gamestate-json) images?)
-    ;current
-    (GamePlayer. :p1 :unassigned 0)
-    ;waiting
-    (GamePlayer. :p2 :unassigned 0)
-    ;ready? current-scored? scratched? completed?
-    true    false           false      false
-    (if (:push-inputs gamestate-json)
-        (map keyword (:push-inputs gamestate-json))
-        config/DEFAULT-PUSH-INPUTS)))
+  (do
+    (if images?
+      (displayutils/load-static!))
+    (GameState.
+      ;table state
+      (table-manager/table-init (:table gamestate-json) images?)
+      ;current
+      (GamePlayer. :p1 :unassigned 0)
+      ;waiting
+      (GamePlayer. :p2 :unassigned 0)
+      ;ready? current-scored? scratched? completed?
+      true    false           false      false
+      (if (:push-inputs gamestate-json)
+          (map keyword (:push-inputs gamestate-json))
+          config/DEFAULT-PUSH-INPUTS))))
 
 (defn game-update
   "update gamestate"
@@ -39,6 +42,8 @@
       (displayutils/render-score gr
             (:score (p1-state gamestate))
             (:score (p2-state gamestate))
-            (:id (:current gamestate)))
+            (:id (:current gamestate))
+            (:ball-type (p1-state gamestate))
+            (:ball-type (p2-state gamestate)))
       (displayutils/render-pocketed gr
         (:pocketed (:table-state gamestate))))))

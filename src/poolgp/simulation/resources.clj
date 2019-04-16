@@ -14,7 +14,8 @@
 (def BALL-IMAGES
   {:solid "images/balls/red_solid_blank.png"
    :striped "images/balls/blue_solid_blank.png"
-   :cue "images/balls/white_cue.png"})
+   :cue "images/balls/white_cue.png"
+   :unassigned "images/balls/unassigned.png"})
 
 (def TABLE-IMAGES
   {:surface "images/table_surface.png"

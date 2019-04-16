@@ -1,7 +1,25 @@
 (ns poolgp.simulation.analysis.game.displayutils
   (:require [poolgp.config :as config]
-            [poolgp.simulation.utils :as utils])
+            [poolgp.simulation.utils :as utils]
+            [poolgp.simulation.resources :as resources])
   (:gen-class))
+
+(def STATIC-BALL-IMAGES
+  (atom resources/BALL-IMAGES))
+
+(def LOADED-STATIC? (atom false))
+
+(defn load-static!
+  []
+  (if (not @LOADED-STATIC?)
+      (do
+      (swap! STATIC-BALL-IMAGES
+        (fn [static-map]
+          (reduce #(update-in %1 [%2]
+                      utils/load-image)
+                  static-map
+                  (keys static-map))))
+        (reset! LOADED-STATIC? true))))
 
 (defn- round-rect
   "create rounded rectangle with border
@@ -16,11 +34,15 @@
 
 (defn render-score
   "take graphics, render score"
-  [gr p1-score p2-score current]
+  [gr p1-score p2-score current p1-type p2-type]
   (let [rect-x config/INSET-MARGIN
         rect-y (+ config/POOL-HEIGHT-PX config/INSET-MARGIN)
         rect-width (int (/ config/POOL-WIDTH-PX 4))
-        rect-height (- config/INFO-HEIGHT-PX (* config/INSET-MARGIN 2))]
+        rect-height (- config/INFO-HEIGHT-PX (* config/INSET-MARGIN 2))
+        p1-score-x (- (+ rect-x (int (/ rect-width 4))) 15)
+        p1-score-y (+ rect-y (int (/ rect-height 2)) 15)
+        p2-score-x (+ rect-x (* (int (/ rect-width 4)) 3))
+        p2-score-y (+ rect-y (int (/ rect-height 2)) 15)]
     (round-rect gr rect-x rect-y rect-width rect-height
                     config/INSET-MARGIN config/INSET-MARGIN)
     (doto gr
@@ -29,10 +51,12 @@
       (.fillRect (- (+ rect-x (int (/ rect-width 2))) 10)
                  (+ rect-y (int (/ rect-height 2)))
                  20 5)
-      (.drawString (str p1-score) (- (+ rect-x (int (/ rect-width 4))) 15)
-                                  (+ rect-y (int (/ rect-height 2)) 15))
-      (.drawString (str p2-score) (+ rect-x (* (int (/ rect-width 4)) 3))
-                                  (+ rect-y (int (/ rect-height 2)) 15))
+      (.drawString (str p1-score) p1-score-x p1-score-y)
+      (utils/draw-image (- p1-score-x 52) (- p1-score-y 24)
+                        (p1-type @STATIC-BALL-IMAGES))
+      (.drawString (str p2-score) p2-score-x p2-score-y)
+      (utils/draw-image (+ p2-score-x 40) (- p2-score-y 24)
+                        (p2-type @STATIC-BALL-IMAGES))
       (.fillRect (if (= current :p1)
                     (- (+ rect-x (int (/ rect-width 4))) 17)
                     (+ rect-x (* (int (/ rect-width 4)) 3) -2))
