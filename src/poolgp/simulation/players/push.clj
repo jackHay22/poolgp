@@ -1,7 +1,8 @@
 (ns poolgp.simulation.players.push
   (:require [clojush.interpreter :as clojush-interp]
             [clojush.pushstate :as clojush-push]
-            [poolgp.config :as config])
+            [poolgp.config :as config]
+            [poolgp.simulation.resources :as resources])
   (:import poolgp.simulation.structs.Vector)
   (:gen-class))
 
@@ -61,7 +62,7 @@
 (clojush-push/define-registered pockets
   (fn [state]
     (push-vec-floats state
-      (:pockets (:table @TABLESTATE-CACHE)))))
+      resources/POCKET-OPENINGS)))
 
 (clojush-push/define-registered ball-diam
   (fn [state]
