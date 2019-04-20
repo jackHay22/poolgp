@@ -6,6 +6,12 @@
 
 (def NOT-BALL-TYPE {:striped :solid :solid :striped})
 
+(defn- safe-div
+  "safe division"
+  [a b]
+  (if (= 0 b)
+    b (/ a b)))
+
 (defn- ** ([x] (try (** x 2)
                     (catch java.lang.ArithmeticException e x)))
           ([x p] (reduce * (repeat p x))))
@@ -16,7 +22,7 @@
   (let [speed (Math/sqrt (+ (** (:x vector))
                             (** (:y vector))))]
         (if (> speed max)
-            (structs/scale vector (/ max speed))
+            (structs/scale vector (safe-div max speed))
             vector)))
 
 (defn distance
