@@ -31,6 +31,12 @@
 ;square fn
 (defn- ** [x] (* x x))
 
+(defn- safe-div
+  "safe division"
+  [a b]
+  (if (= 0 b)
+    a (/ a b)))
+
 (defrecord Vector [x y]
   VecOps
   (dot [v1 v2]
@@ -39,14 +45,14 @@
   (normalize [v]
     (let [mag (Math/sqrt (+ (** (:x v))
                             (** (:y v))))]
-              (Vector. (/ (:x v) mag) (/ (:y v) mag))))
+              (Vector. (safe-div (:x v) mag) (safe-div (:y v) mag))))
   (scale [v s]
     (Vector. (* s (:x v)) (* s (:y v))))
   (plus [v1 v2]
     (Vector. (+ (:x v1) (:x v2)) (+ (:y v1) (:y v2))))
   (minus [v1 v2]
     (Vector. (- (:x v1) (:x v2)) (- (:y v1) (:y v2))))
-  (proj [v1 v2] (scale v1 (/ (dot v1 v2) (** (len v1)))))
+  (proj [v1 v2] (scale v1 (safe-div (dot v1 v2) (** (len v1)))))
   (len-sqrd [v] (+ (** (:x v)) (** (:y v))))
   (len [v] (Math/sqrt (+ (** (:x v))
                          (** (:y v))))))

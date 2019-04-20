@@ -7,10 +7,9 @@
 
 (defn- safe-div
   "safe division"
-  [val1 val2]
-  (if (= 0 val2)
-    val1
-    (/ val1 val2)))
+  [a b]
+  (if (= 0 b)
+    a (/ a b)))
 
 (defn normal
   "normalize vector and optionally scale"
