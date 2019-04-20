@@ -5,7 +5,7 @@
 
 (defn- r2? [v] (>= (count v) 2))
 
-(defn- /s
+(defn- safe-div
   "safe division"
   [val1 val2]
   (if (= 0 val2)
@@ -19,7 +19,7 @@
       (let
         [mag (Math/sqrt (+ (** (first v))
                            (** (second v))))]
-        [(/s (first v) mag) (/s (second v) mag)])
+        [(safe-div (first v) mag) (safe-div (second v) mag)])
       v))
   ([v scale]
     (update
@@ -72,4 +72,4 @@
   "projection on two vectors"
   [v1 v2]
   (scale v1
-    (/s (dot v1 v2) (** (len v1)))))
+    (safe-div (dot v1 v2) (** (len v1)))))
