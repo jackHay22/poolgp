@@ -88,11 +88,12 @@
                                         ;penalty for no ball assignment
                                         config/ZERO-SCORE-PENALTY)
                                       ;opponent balls remaining
-                                      (- 8
-                                        (or
-                                          (:balls-remaining (:p2-analytics %2))
-                                          ;If player not even assigned a ball, zero error
-                                          8)))
+                                      ; (- 8
+                                      ;   (or
+                                      ;     (:balls-remaining (:p2-analytics %2))
+                                      ;     ;If player not even assigned a ball, zero error
+                                      ;     8))
+                                          )
                             errors (:analysis-states sim-state)))
                         [] final-simulation-states)
          ;extract opponent scores and create lookup
