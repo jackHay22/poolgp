@@ -9,7 +9,8 @@
   "safe division"
   [a b]
   (if (= 0 b)
-    a (/ a b)))
+    a (try (/ a b)
+           (catch Exception e a))))
 
 (defn normal
   "normalize vector and optionally scale"
