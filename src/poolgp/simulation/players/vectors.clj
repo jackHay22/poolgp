@@ -5,6 +5,13 @@
 
 (defn- r2? [v] (>= (count v) 2))
 
+(defn- /s
+  "safe division"
+  [val1 val2]
+  (if (= 0 val2)
+    val1
+    (/ val1 val2)))
+
 (defn normal
   "normalize vector and optionally scale"
   ([v]
@@ -12,7 +19,7 @@
       (let
         [mag (Math/sqrt (+ (** (first v))
                            (** (second v))))]
-        [(/ (first v) mag) (/ (second v) mag)])
+        [(/s (first v) mag) (/s (second v) mag)])
       v))
   ([v scale]
     (update
@@ -65,4 +72,4 @@
   "projection on two vectors"
   [v1 v2]
   (scale v1
-    (/ (dot v1 v2) (** (len v1)))))
+    (/s (dot v1 v2) (** (len v1)))))
