@@ -83,6 +83,14 @@
       (Vector. 71 552)
       (Vector. 52 572))))
 
+(def MAIN-WALL-SEGMENT-REFLECTORS
+  ;fn takes [x y] and reflects to [x1 y1]
+  ;TODO: add ball diameter?
+  {:left   #(vector (- 47 (first %)) (second %))
+   :right  #(vector (- 2308 (first %)) (second %))
+   :top    #(vector (first %) (- 48 (second %)))
+   :bottom #(vector (first %) (- 1104 (second %)))})
+
 (def POCKET-CENTERS
   (list (Vector. 32.0 32.0) (Vector. 600.0 32.0) (Vector. 1167.0 32.0)
         (Vector. 1167.0 571.0) (Vector. 600.0 571.0) (Vector. 32.0 571.0)))
@@ -91,7 +99,7 @@
   (list (Vector. 52.0 52.0) (Vector. 600.0 52.0) (Vector. 1147.0 52.0)
         (Vector. 1147.0 546.0) (Vector. 600.0 546.0) (Vector. 52.0 546.0)))
 
-(def TABLE (Table. 20,
+(def TABLE (Table. 20
             POCKET-CENTERS
             (list LEFT-WALL RIGHT-WALL
                   BOTTOM-LEFT-WALL BOTTOM-RIGHT-WALL

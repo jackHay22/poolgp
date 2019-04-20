@@ -39,18 +39,10 @@
        {"x":963, "y":326, "id":"14", "type":"solid"},
        {"x":963, "y":349, "id":"15", "type":"striped"}]}}}],
   "watching" : 0,
-  "p1":{"genetic":true, "strategy":" (float_tan vector_float_yankdup boolean_invert_second_then_and boolean_eq
-                                      vector_float_add integer_swap integer_flush exec_do*count () float_dec
-                                      opp-balls vector_float_yank integer_gte opp-balls integer_swap integer_rot
-                                      boolean_eq integer_gte float_eq boolean_or boolean_yankdup self-count ball-diam
-                                      float_add exec_dup_items self-balls ball-diam float_yank exec_yankdup
-                                      vector_float_yank integer_shove self-balls boolean_yank vector_float_sub
-                                      float_min self-count cue vector_float_rot boolean_pop vector_float_sub
-                                      float_dup_times self-count boolean_eq opp-count integer_max exec_flush
-                                      integer_div pockets exec_k () (vector_float_dot) self-balls exec_when
-                                      (pockets float_stackdepth opp-balls integer_yank float_inc vector_float_sub
-                                      integer_inc) float_yank exec_rot (vector_float_sub boolean_swap float_min
-                                      vector_float_sub) () ())"},
+  "p1":{"genetic":true, "strategy":" (exec_k () (opp-balls integer_yank) vector_float_sub exec_while (vector_float_shove
+                                      self-balls ball-diam ball-diam integer_gt) integer_empty float_cos self-balls
+                                      float_swap boolean_shove self-balls exec_rot (opp-count cue cue vector_float_scale
+                                      vector_float_yank) (vector_float_sub) (integer_fromboolean))"},
   "p2":{"genetic":true, "strategy":" (vector_float_yankdup exec_if () (float_stackdepth self-balls self-balls)
                                       opp-count float_cos exec_when () pockets integer_div vector_float_scale
                                       float_pop vector_float_add float_shove boolean_and float_lt float_pop
