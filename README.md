@@ -136,6 +136,7 @@ In your ns declaration: `(:require [poolgp.distribute :as poolgp])`
 ![Swarm Diagram](https://raw.githubusercontent.com/jackHay22/poolgp/master/docs/ec2_swarm_diagram.png)
 
 - Make sure you have an AWS account that can support charges incurred by running ec2 instances at high load.  (These costs add up)
+- Note: 8 c4.2xlarge instances requires a service limit increase from Amazon (support request)
 - Create an ec2 keypair.  In `ec2_launcher`, rename the keypair argument with this keypair name.
 - Download the keypair pem file for use during deployment.  
 - Change the profile name in in `ec2_launcher` to your own (remove arg if using default profile)
