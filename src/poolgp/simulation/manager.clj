@@ -106,9 +106,10 @@
                                         (:balls-remaining (:p2-analytics %2))
                                         config/ZERO-SCORE-PENALTY)
                                       ;own balls remaining
-                                      (- 8
-                                        (or
-                                          (:balls-remaining (:p1-analytics %2))
-                                          8)))
+                                      ; (- 8
+                                      ;   (or
+                                      ;     (:balls-remaining (:p1-analytics %2))
+                                      ;     8))
+                                          )
                               [] (:analysis-states sim-state))))
               (hash-map) final-simulation-states)})))
