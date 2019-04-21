@@ -4,48 +4,48 @@
     {"table":
      {"balls":
       [{"x":883, "y":302, "id":"cue", "type":"cue"},
-       {"x":316, "y":303, "id":"1", "type":"solid"},
-       {"x":296.1, "y":291.5, "id":"2", "type":"striped"},
-       {"x":296.1, "y":314.5, "id":"3", "type":"solid"},
-       {"x":276.2, "y":326, "id":"4", "type":"striped"},
-       {"x":276.2, "y":303, "id":"5", "type":"solid"},
-       {"x":276.2, "y":280, "id":"6", "type":"striped"},
-       {"x":256.3, "y":268.5, "id":"7", "type":"solid"},
-       {"x":256.3, "y":291.5, "id":"8", "type":"striped"},
-       {"x":256.3, "y":314.5, "id":"9", "type":"solid"},
-       {"x":256.3, "y":337.5, "id":"10", "type":"striped"},
-       {"x":236.4, "y":257, "id":"11", "type":"solid"},
-       {"x":236.4, "y":280, "id":"12", "type":"striped"},
-       {"x":236.4, "y":303, "id":"13", "type":"solid"},
-       {"x":236.4, "y":326, "id":"14", "type":"striped"},
-       {"x":236.4, "y":349, "id":"15", "type":"solid"}]}}},
+       {"x":361, "y":303, "id":"1", "type":"solid"},
+       {"x":341.1, "y":291.5, "id":"2", "type":"striped"},
+       {"x":341.1, "y":314.5, "id":"3", "type":"solid"},
+       {"x":321.2, "y":326, "id":"4", "type":"striped"},
+       {"x":321.2, "y":303, "id":"5", "type":"solid"},
+       {"x":321.2, "y":280, "id":"6", "type":"striped"},
+       {"x":301.3, "y":268.5, "id":"7", "type":"solid"},
+       {"x":301.3, "y":291.5, "id":"8", "type":"striped"},
+       {"x":301.3, "y":314.5, "id":"9", "type":"solid"},
+       {"x":301.3, "y":337.5, "id":"10", "type":"striped"},
+       {"x":281.4, "y":257, "id":"11", "type":"solid"},
+       {"x":281.4, "y":280, "id":"12", "type":"striped"},
+       {"x":281.4, "y":303, "id":"13", "type":"solid"},
+       {"x":281.4, "y":326, "id":"14", "type":"striped"},
+       {"x":281.4, "y":349, "id":"15", "type":"solid"}]}}},
    {"game":
     {"table":
      {"balls":
       [{"x":315, "y":302, "id":"cue", "type":"cue"},
-       {"x":883, "y":303, "id":"1", "type":"striped"},
-       {"x":903, "y":291.5, "id":"2", "type":"solid"},
-       {"x":903, "y":314.5, "id":"3", "type":"striped"},
-       {"x":923, "y":326, "id":"4", "type":"solid"},
-       {"x":923, "y":303, "id":"5", "type":"striped"},
-       {"x":923, "y":280, "id":"6", "type":"solid"},
-       {"x":943, "y":268.5, "id":"7", "type":"striped"},
-       {"x":943, "y":291.5, "id":"8", "type":"solid"},
-       {"x":943, "y":314.5, "id":"9", "type":"striped"},
-       {"x":943, "y":337.5, "id":"10", "type":"solid"},
-       {"x":963, "y":257, "id":"11", "type":"striped"},
-       {"x":963, "y":280, "id":"12", "type":"solid"},
-       {"x":963, "y":303, "id":"13", "type":"striped"},
-       {"x":963, "y":326, "id":"14", "type":"solid"},
-       {"x":963, "y":349, "id":"15", "type":"striped"}]}}}],
+       {"x":838, "y":303, "id":"1", "type":"striped"},
+       {"x":858, "y":291.5, "id":"2", "type":"solid"},
+       {"x":858, "y":314.5, "id":"3", "type":"striped"},
+       {"x":878, "y":326, "id":"4", "type":"solid"},
+       {"x":878, "y":303, "id":"5", "type":"striped"},
+       {"x":878, "y":280, "id":"6", "type":"solid"},
+       {"x":898, "y":268.5, "id":"7", "type":"striped"},
+       {"x":898, "y":291.5, "id":"8", "type":"solid"},
+       {"x":898, "y":314.5, "id":"9", "type":"striped"},
+       {"x":898, "y":337.5, "id":"10", "type":"solid"},
+       {"x":918, "y":257, "id":"11", "type":"striped"},
+       {"x":918, "y":280, "id":"12", "type":"solid"},
+       {"x":918, "y":303, "id":"13", "type":"striped"},
+       {"x":918, "y":326, "id":"14", "type":"solid"},
+       {"x":918, "y":349, "id":"15", "type":"striped"}]}}}],
   "watching" : 0,
-  "p1":{"genetic":true, "strategy":" (integer_max boolean_invert_first_then_and boolean_swap float_inc float_dup
-                                      integer_flush exec_do*times () boolean_or boolean_or exec_shove (float_yank)
-                                      pockets vector_float_scale boolean_and vector_float_len 34 opp-count float_sub
-                                      24 vector_float_add opp-balls vector_float_scale integer_shove exec_do*times
-                                      (self-balls self-balls float_max vector_float_scale) float_dup_times pt_glancing
-                                      vector_float_sub integer_dup_times cue vector_float_rot vector_float_sub
-                                      pt_glancing boolean_invert_first_then_and)"},
+  "p1":{"genetic":true, "strategy":" (boolean_swap will_collide? float_dup integer_pop boolean_or ball_diam_normal
+                                      exec_shove (pt_glancing vector_float_shove exec_do*while () float_shove
+                                      boolean_and 34) boolean_or opp-count vector_float_add float_frominteger
+                                      vector_float_mk cue vector_float_sub vector_float_dot self-balls self-balls
+                                      exec_if (float_empty float_max vector_float_scale) () vector_float_sub
+                                      pt_glancing cue vector_float_sub exec_yank cue vector_float_rot
+                                      vector_float_sub float_inc pt_glancing boolean_invert_first_then_and)"},
   "p2":{"genetic":true, "strategy":" (vector_float_yankdup exec_if () (float_stackdepth self-balls self-balls)
                                       opp-count float_cos exec_when () pockets integer_div vector_float_scale
                                       float_pop vector_float_add float_shove boolean_and float_lt float_pop

@@ -32,7 +32,7 @@
 
 ;ball radius in meters
 (def BALL-RADIUS-M 0.0286)
-(def BALL-RADIUS-PX (* BALL-RADIUS-M M-PX-RATIO))
+(def BALL-RADIUS-PX (* BALL-RADIUS-M M-PX-RATIO)) ;22.88
 
 ;ball masses in grams
 (def BALL-MASS-G 160) ;160
