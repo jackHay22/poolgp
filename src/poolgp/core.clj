@@ -35,4 +35,6 @@
         (:builder options)   (tablebuilder/edit-tables (:builder options))
         (:new options)       (utils/write-json-file (:new options) resources/EMPTY-CONFIG-STATE)
         (:eval options)      (server/start-server (utils/read-json-file (:eval options)))
-        :no-opts             (log/write-error "please specify a run configuration"))))
+        :no-opts             (do
+                              (log/write-error "please use one of the following options:")
+                              (println (:summary run-args))))))
