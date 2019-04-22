@@ -39,15 +39,9 @@
        {"x":918, "y":326, "id":"14", "type":"solid"},
        {"x":918, "y":349, "id":"15", "type":"striped"}]}}}],
   "watching" : 0,
-  "p1":{"genetic":true, "strategy":" (vector_float_scale vector_float_dot ball-diam vector_float_sub opp-balls
-                                      exec_swap () (float_dup_times vector_float_swap boolean_or exec_do*while
-                                      (float_lt float_rot cue integer_gt float_stackdepth float_dup_items
-                                      ball_diam_normal integer_dup self-balls vector_float_dup_times
-                                      boolean_dup_items boolean_yankdup exec_y_when_autoconstructing
-                                      (float_yankdup) exec_noop vector_float_dot) vector_float_rot will_collide?
-                                      vector_float_len exec_empty vector_float_dot vector_float_mk) self-balls
-                                      ball-diam boolean_invert_first_then_and boolean_yank vector_float_scale
-                                      cue vector_float_rot vector_float_sub pt_glancing)"},
+  "p1":{"genetic":true, "strategy":" (self-balls vector_float_pop [52.0 52.0]
+                                      vector_float_swap pt_glancing cue
+                                      vector_float_swap vector_float_sub)"},
   "p2":{"genetic":true, "strategy":" (vector_float_yankdup exec_if () (float_stackdepth self-balls self-balls)
                                       opp-count float_cos exec_when () pockets integer_div vector_float_scale
                                       float_pop vector_float_add float_shove boolean_and float_lt float_pop
