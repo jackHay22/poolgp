@@ -19,7 +19,7 @@
 
 (def VEC-TYPE :vector_float)
 
-(def BALL-DIAM (* 2 config/BALL-RADIUS-M))
+(def BALL-DIAM (* 2 config/BALL-RADIUS-PX))
 
 (defn- make-clojush-vec
   "turn a vector into a clojush vec"

@@ -1,0 +1,17 @@
+{"simulation":
+ {"analysis":
+  [{"game":
+    {"table":
+     {"balls":
+      [{"x":241, "y":194, "id":"cue", "type":"cue"},
+       {"x":134, "y":163, "id":"1", "type":"solid"},
+       {"x":394, "y":439, "id":"2", "type":"striped"}]}}}],
+  "p1":{"genetic":true, "strategy":"(self-balls vector_float_pop [52.0 52.0]
+                                     vector_float_swap pt_glancing cue
+                                     vector_float_swap vector_float_sub)"},
+  "p2":{"genetic":true, "strategy":"()"}},
+ "eval-worker":
+ {"indiv-ingress-p":9999,
+  "indiv-egress-p":8000,
+  "opp-pool-req-p":8888,
+  "engine-hostname":"engine"}}
