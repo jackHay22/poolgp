@@ -70,7 +70,8 @@ Tournament task defn structure:
 
 {
   "entrants" : [
-    {"uuid": "edfc5bb5-7d5b-4478-87e2-46165630aa0e", "strategy" : "(float_pop integer_mult float_mult boolean_not...)"},
+    {"id": "edfc5bb5-7d5b-4478-87e2-46165630aa0e", "strategy" : "(float_pop integer_mult float_mult boolean_not...)"},
+    {"id": "Ronnie O' Sullivan", "strategy" : "(float_pop float_mult integer_mult boolean_not...)"},
     ...
   ]
 }

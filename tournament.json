@@ -1,8 +1,16 @@
 {"entrants" :
   [
-    {"uuid": "temp", "strategy" : "()"},
-    {"uuid": "temp", "strategy" : "()"},
-    {"uuid": "temp", "strategy" : "()"},
-    {"uuid": "temp", "strategy" : "()"}
+    {"id": "ronnie_sullivan",
+     "strategy" : "(float_inc vector_float_add float_sin float_tan float_div
+                    float_dec float_cos ball-diam vector_float_add float_cos
+                    float_sub self-count float_tan float_tan pockets float_mod
+                    float_add float_mult ball-diam float_rot 7 vector_float_dot
+                    float_lte float_div opp-count vector_float_mk opp-balls
+                    float_pop float_sin vector_float_dot self-balls self-count
+                    float_cos vector_float_len float_sub float_lte cue float_div
+                    vector_float_sub vector_float_scale)"},
+    {"id": "temp", "strategy" : "()"},
+    {"id": "temp", "strategy" : "()"},
+    {"id": "temp", "strategy" : "()"}
   ]
 }
