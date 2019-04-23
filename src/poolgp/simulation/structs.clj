@@ -6,11 +6,10 @@
 ; {
 ;   :id :p1/:p2
 ;   :clojush-indiv (individual.)
-;   :type :genetic/:interactive
 ;   :strategy (push code)
 ; }
 
-(defrecord Player [id clojush-indiv type strategy])
+(defrecord Player [id clojush-indiv strategy])
 
 (defprotocol VecOps
   (dot [v1 v2])

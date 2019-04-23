@@ -12,7 +12,6 @@
   (Player.
     id
     nil ;clojush-indiv
-    (if (:genetic player-json) :genetic :interactive)
     (read-string
       (:strategy player-json))))
 
@@ -23,7 +22,6 @@
    (Player.
      id
      clojush-p
-     :genetic
      (:program clojush-p)))
 
 (defn configure-clojush!
@@ -42,18 +40,14 @@
   (controller is nil when not in demo)"
   [gamestate current-player controller]
   (if (:ready? gamestate)
-        (if (= (:type current-player) :genetic)
-            ;do push evaluation
-            (assoc
-              (update-in gamestate
-                [:table-state] push/eval-push (:strategy current-player)
-                                              (:push-inputs gamestate)
-                                              (:ball-type
-                                                  (:current gamestate)))
-              :ready? false)
-            ;allow controller interaction
-            ;(interaction/update-interaction gamestate controller)
-            )
+    ;do push evaluation
+    (assoc
+      (update-in gamestate
+        [:table-state] push/eval-push (:strategy current-player)
+                                      (:push-inputs gamestate)
+                                      (:ball-type
+                                          (:current gamestate)))
+      :ready? false)
       gamestate))
 
 (defn display-operations

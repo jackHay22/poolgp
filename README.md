@@ -49,11 +49,9 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
     "max-iterations" : 100000,        (optional)
     "watching" : 0,                   (optional)
     "p1" : {
-      "genetic" : true,
       "strategy" : "(integer_**)"
     },
     "p2" : {
-      "genetic" : true,
       "strategy" : "(integer_+)"
     }
   },
