@@ -9,8 +9,23 @@
                     float_pop float_sin vector_float_dot self-balls self-count
                     float_cos vector_float_len float_sub float_lte cue float_div
                     vector_float_sub vector_float_scale)"},
-    {"id": "temp", "strategy" : "()"},
-    {"id": "temp", "strategy" : "()"},
-    {"id": "temp", "strategy" : "()"}
+    {"id": "run2_gen94",
+     "strategy" : "(boolean_invert_second_then_and float_empty exec_swap () () float_stackdepth
+                    vector_float_scale self-balls self-balls integer_fromfloat integer_div
+                    vector_float_scale integer_rot float_pop float_shove float_fromboolean
+                    integer_empty float_gt self-balls float_dup float_gte self-balls float_tan
+                    float_mult boolean_frominteger integer_lte integer_dup boolean_flush
+                    vector_float_sub exec_do*while () ball-diam vector_float_scale float_inc
+                    vector_float_mk cue opp-count vector_float_yankdup vector_float_sub
+                    integer_lt 45 opp-count exec_flush self-count integer_dup_items
+                    integer_fromfloat integer_rot float_shove vector_float_shove boolean_swap
+                    integer_mod float_stackdepth opp-balls cue float_frominteger opp-balls
+                    ball-diam vector_float_add boolean_pop self-balls pockets vector_float_sub
+                    float_eq vector_float_scale float_swap self-count vector_float_scale
+                    self-balls self-balls ball-diam vector_float_sub)"},
+    {"id": "temp",
+     "strategy" : "()"},
+    {"id": "temp",
+     "strategy" : "()"}
   ]
 }
