@@ -16,6 +16,7 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
 - `-d --demo PATH` Runs in demo mode given configuration
 - `-e --eval PATH` Runs in server mode with specified task definition
 - `-b --builder PATH` Opens editing mode and writes to file provided (must exist)
+- `-t --tournament PATH` Runs a tournament simulation if the given config contains a tournament key value pair (tournament config has a separate json format)
 - `-n --new FILENAME` Creates a blank configuration file (with required fields) (this is meant to be subsequently edited)
 
 ### Project Dependencies
@@ -45,8 +46,8 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
         }
       },
     ],
-    "max-iterations" : 100000,  (optional)
-    "watching" : 0,             (optional)
+    "max-iterations" : 100000,        (optional)
+    "watching" : 0,                   (optional)
     "p1" : {
       "genetic" : true,
       "strategy" : "(integer_**)"
@@ -56,12 +57,24 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
       "strategy" : "(integer_+)"
     }
   },
+  "tournament" : "tournament.json", (optional)
   "eval-worker" : {
     "indiv-ingress" : 9999,
     "indiv-egress" : 8000,
     "opp-pool-req" : 8888,
     "engine-hostname" : "engine"
   }
+}
+```
+
+Tournament task defn structure:
+```json
+
+{
+  "entrants" : [
+    {"uuid": "edfc5bb5-7d5b-4478-87e2-46165630aa0e", "strategy" : "(float_pop integer_mult float_mult boolean_not...)"},
+    ...
+  ]
 }
 ```
 

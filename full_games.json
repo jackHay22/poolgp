@@ -39,12 +39,17 @@
        {"x":918, "y":326, "id":"14", "type":"solid"},
        {"x":918, "y":349, "id":"15", "type":"striped"}]}}}],
   "watching" : 0,
-  "p1":{"genetic":true, "strategy":" (vector_float_scale float_gt vector_float_mk float_sin integer_flush
-                                      integer_lt ball_diam_normal vector_float_add vector_float_mk self-count
-                                      cue self-balls boolean_swap self-count vector_float_proj opp-balls
-                                      float_gt cue pt_glancing vector_float_rot ball-diam float_mod self-balls
-                                      self-balls cue vector_float_sub boolean_frominteger ball_diam_normal
-                                      float_cos float_dec boolean_invert_first_then_and vector_float_scale)"},
+  "max-iterations" : 18000,
+  "p1":{"genetic":true, "strategy":" (float_pop integer_mult float_mult boolean_not exec_if () (vector_float_proj
+                                      exec_when (boolean_shove integer_rot float_gt)) integer_flush float_yankdup
+                                      vector_float_mk vector_float_scale vector_float_scale cue exec_do*count
+                                      (pockets) cue integer_rot vector_float_decomp integer_fromfloat integer_pop
+                                      integer_rot integer_mod ball_diam_normal float_yankdup vector_float_rot
+                                      ball-diam self-balls cue vector_float_sub integer_eq exec_dup (integer_mod)
+                                      float_cos exec_y (exec_when () vector_float_scale) exec_k (float_gte
+                                      vector_float_mk integer_stackdepth self-balls float_eq exec_yank) (cue
+                                      vector_float_mk) float_pop exec_k_when_autoconstructing () (integer_dup)
+                                      vector_float_scale)"},
   "p2":{"genetic":true, "strategy":" (vector_float_yankdup exec_if () (float_stackdepth self-balls self-balls)
                                       opp-count float_cos exec_when () pockets integer_div vector_float_scale
                                       float_pop vector_float_add float_shove boolean_and float_lt float_pop
@@ -59,6 +64,7 @@
                                       vector_float_scale float_swap boolean_fromfloat self-balls self-balls
                                       integer_fromboolean self-count vector_float_scale exec_k (float_dec)
                                       (self-balls self-balls boolean_dup integer_stackdepth vector_float_sub))"}},
+ "tournament" : "tournament.json",
  "eval-worker":
  {"indiv-ingress-p":9999,
   "indiv-egress-p":8000,
