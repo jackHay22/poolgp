@@ -50,20 +50,14 @@
                        vector_float_mk integer_stackdepth self-balls float_eq exec_yank) (cue
                        vector_float_mk) float_pop exec_k_when_autoconstructing () (integer_dup)
                        vector_float_scale)"},
-  "p2":{ "strategy":" (vector_float_yankdup exec_if () (float_stackdepth self-balls self-balls)
-                       opp-count float_cos exec_when () pockets integer_div vector_float_scale
-                       float_pop vector_float_add float_shove boolean_and float_lt float_pop
-                       float_tan exec_dup_items vector_float_yank float_mult pockets
-                       boolean_frominteger ball-diam integer_lte vector_float_sub pockets 35
-                       integer_mult vector_float_sub integer_min vector_float_dup vector_float_add
-                       integer_max boolean_fromfloat vector_float_sub ball-diam vector_float_mk
-                       cue vector_float_yankdup vector_float_sub exec_do*while (integer_lt)
-                       boolean_dup float_dup opp-count boolean_dup float_flush exec_flush
-                       integer_fromfloat boolean_shove integer_mod float_frominteger opp-balls
-                       integer_dup_items self-balls vector_float_sub pockets vector_float_sub
-                       vector_float_scale float_swap boolean_fromfloat self-balls self-balls
-                       integer_fromboolean self-count vector_float_scale exec_k (float_dec)
-                       (self-balls self-balls boolean_dup integer_stackdepth vector_float_sub))"}},
+  "p2":{ "strategy":" (vector_float_sub self-count float_mult vector_float_sub float_gt self-balls
+                       integer_flush integer_shove vector_float_mk vector_float_decomp self-count
+                       boolean_eq integer_fromboolean boolean_yankdup vector_float_sub
+                       vector_float_scale boolean_swap cue integer_fromfloat vector_float_proj cue
+                       pt_glancing boolean_pop vector_float_dot boolean_dup vector_float_rot
+                       ball-diam self-balls cue vector_float_sub ball_diam_normal float_cos
+                       vector_float_scale vector_float_scale vector_float_scale ball_diam_normal
+                       float_eq vector_float_scale boolean_swap)"}},
  "tournament" : "tournament.json",
  "eval-worker":
  {"indiv-ingress-p":9999,

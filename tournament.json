@@ -1,6 +1,6 @@
 {"entrants" :
   [
-    {"id": "ronnie_sullivan",
+    {"id": "Ronnie O'Sullivan",
      "strategy" : "(float_inc vector_float_add float_sin float_tan float_div
                     float_dec float_cos ball-diam vector_float_add float_cos
                     float_sub self-count float_tan float_tan pockets float_mod
@@ -41,6 +41,15 @@
     {"id": "hand-coded glancing",
      "strategy" : "(self-balls vector_float_pop [52.0 52.0]
                     vector_float_swap pt_glancing cue
-                    vector_float_swap vector_float_sub)"}
+                    vector_float_swap vector_float_sub)"},
+    {"id" : "run6_gen31",
+     "strategy" : "(vector_float_sub self-count float_mult vector_float_sub float_gt self-balls
+                    integer_flush integer_shove vector_float_mk vector_float_decomp self-count
+                    boolean_eq integer_fromboolean boolean_yankdup vector_float_sub
+                    vector_float_scale boolean_swap cue integer_fromfloat vector_float_proj cue
+                    pt_glancing boolean_pop vector_float_dot boolean_dup vector_float_rot
+                    ball-diam self-balls cue vector_float_sub ball_diam_normal float_cos
+                    vector_float_scale vector_float_scale vector_float_scale ball_diam_normal
+                    float_eq vector_float_scale boolean_swap)"}
   ]
 }
