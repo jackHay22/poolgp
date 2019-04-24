@@ -15,21 +15,25 @@
   through structure"
   [task-definition demo?]
   (let [simulation-json (:simulation task-definition)]
-        (SimulationState.
-          ;analysis states
-          (analysis-manager/analysis-init
-            (:analysis simulation-json) demo?)
-          ;supports a default value if not included
-          (or (:max-iterations simulation-json)
-              config/DEFAULT-MAX-ITERATIONS)
-          0 ;current iteration
-          (or (:watching simulation-json) 0)
-          (player-manager/init-player (:p1 simulation-json) :p1)
-          (player-manager/init-player (:p2 simulation-json) :p2)
-          (if demo?
-            (update-in resources/CONTROLLER
-                    [:cue] utils/load-image)
-            nil))))
+        (try
+          (SimulationState.
+            ;analysis states
+            (analysis-manager/analysis-init
+              (:analysis simulation-json) demo?)
+            ;supports a default value if not included
+            (or (:max-iterations simulation-json)
+                config/DEFAULT-MAX-ITERATIONS)
+            0 ;current iteration
+            (or (:watching simulation-json) 0)
+            (player-manager/init-player (:p1 simulation-json) :p1)
+            (player-manager/init-player (:p2 simulation-json) :p2)
+            (if demo?
+              (update-in resources/CONTROLLER
+                      [:cue] utils/load-image)
+              nil))
+            (catch Exception e
+              (log/write-error "Failed to load task defn, is the file the right format?")
+              (System/exit 1)))))
 
 (defn simulation-update
   "update transform on simulation state"
