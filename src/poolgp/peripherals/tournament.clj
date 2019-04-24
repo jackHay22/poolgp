@@ -70,7 +70,7 @@
                               0))
                          indiv-pool)))))
                 indiv-pool)))
-                ;display best 3 individuals
-                3)
+            ;display best 3 individuals
+            3)
       (log/write-error
         "The task definition must include a tournament file to use this mode"))))
