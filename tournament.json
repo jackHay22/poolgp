@@ -50,6 +50,15 @@
                     pt_glancing boolean_pop vector_float_dot boolean_dup vector_float_rot
                     ball-diam self-balls cue vector_float_sub ball_diam_normal float_cos
                     vector_float_scale vector_float_scale vector_float_scale ball_diam_normal
-                    float_eq vector_float_scale boolean_swap)"}
+                    float_eq vector_float_scale boolean_swap)"},
+    {"id": "run6_gen76",
+     "strategy" : "(float_gt vector_float_scale vector_float_sub self-balls self-count
+                    integer_stackdepth vector_float_add ball_diam_normal integer_dec opp-balls
+                    boolean_rot integer_dec integer_gte pt_glancing float_sin vector_float_sub
+                    pt_glancing vector_float_add ball-diam float_inc integer_empty pt_glancing
+                    float_inc ball-diam boolean_not self-balls integer_flush cue
+                    vector_float_stackdepth vector_float_sub opp-count ball_diam_normal float_add
+                    exec_dup_items float_cos exec_k_when_autoconstructing (vector_float_scale)
+                    (boolean_and vector_float_scale) exec_eq ball-diam vector_float_scale)"}
   ]
 }

@@ -6,6 +6,8 @@
             [poolgp.log :as log])
   (:gen-class))
 
+(def load-cache (memoize player-manager/init-player))
+
 (defn- calc-pts
   "takes final simulation state and
   returns 1 or 0"
@@ -61,8 +63,8 @@
                             (calc-pts
                               (loop [current 0
                                      state (assoc simulation-state
-                                              :p1 (player-manager/init-player i1 :p1)
-                                              :p2 (player-manager/init-player i2 :p2))]
+                                              :p1 (load-cache i1 :p1)
+                                              :p2 (load-cache i2 :p2))]
                                      (if (> max-cycles current)
                                          (recur (inc current)
                                                 (simulation/simulation-update state))
