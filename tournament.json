@@ -57,6 +57,18 @@
                     float_dup_items float_gt boolean_and vector_float_rot cue pockets
                     boolean_dup_items exec_rot () (float_inc boolean_invert_second_then_and
                     vector_float_yank integer_empty) (vector_float_add) float_max will_collide?
-                    boolean_yankdup)"}
+                    boolean_yankdup)"},
+    {"id" : "run7_gen94",
+    "strategy": "(boolean_dup self-balls vector_float_add float_frominteger vector_float_add
+                  vector_float_scale integer_lte boolean_dup exec_do*while (vector_float_add)
+                  boolean_frominteger opp-count integer_fromfloat integer_fromboolean
+                  float_frominteger integer_fromfloat vector_float_dot float_gte float_lte
+                  exec_dup (self-count vector_float_scale boolean_dup) exec_dup_times ()
+                  float_dup pockets self-count vector_float_sub integer_fromfloat boolean_dup
+                  exec_dup_times (float_dup cue self-balls vector_float_rot) exec_dup
+                  (exec_dup_times () vector_float_proj) integer_rot vector_float_len
+                  ball_diam_normal self-balls exec_dup (exec_rot (boolean_yankdup boolean_empty
+                  vector_float_sub) (vector_float_yankdup float_add vector_float_scale) (cue)
+                  vector_float_mk self-count))"}
   ]
 }
