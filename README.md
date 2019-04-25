@@ -19,6 +19,8 @@ Optional: `-d TASK_DEFN` builds a docker image and pushes it to docker hub
 - `-t --tournament PATH` Runs a tournament simulation if the given config contains a tournament key value pair (tournament config has a separate json format)
 - `-n --new FILENAME` Creates a blank configuration file (with required fields) (this is meant to be subsequently edited)
 
+Note: When running tournament mode, specify a normal run configuration (i.e. `full_games.json`) that _contains_ a `"tournament"` entry specifying a tournament file (i.e. `"tournament" : "tournament.json"`)
+
 ### Project Dependencies
 (Run `lein deps`)
 ```clojure

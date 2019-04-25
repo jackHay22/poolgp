@@ -23,21 +23,6 @@
                     ball-diam vector_float_add boolean_pop self-balls pockets vector_float_sub
                     float_eq vector_float_scale float_swap self-count vector_float_scale
                     self-balls self-balls ball-diam vector_float_sub)"},
-    {"id": "std. opponent",
-     "strategy" : "(vector_float_yankdup exec_if () (float_stackdepth self-balls self-balls)
-                    opp-count float_cos exec_when () pockets integer_div vector_float_scale
-                    float_pop vector_float_add float_shove boolean_and float_lt float_pop
-                    float_tan exec_dup_items vector_float_yank float_mult pockets
-                    boolean_frominteger ball-diam integer_lte vector_float_sub pockets 35
-                    integer_mult vector_float_sub integer_min vector_float_dup vector_float_add
-                    integer_max boolean_fromfloat vector_float_sub ball-diam vector_float_mk
-                    cue vector_float_yankdup vector_float_sub exec_do*while (integer_lt)
-                    boolean_dup float_dup opp-count boolean_dup float_flush exec_flush
-                    integer_fromfloat boolean_shove integer_mod float_frominteger opp-balls
-                    integer_dup_items self-balls vector_float_sub pockets vector_float_sub
-                    vector_float_scale float_swap boolean_fromfloat self-balls self-balls
-                    integer_fromboolean self-count vector_float_scale exec_k (float_dec)
-                    (self-balls self-balls boolean_dup integer_stackdepth vector_float_sub))"},
     {"id": "hand-coded glancing",
      "strategy" : "(self-balls vector_float_pop [52.0 52.0]
                     vector_float_swap pt_glancing cue
@@ -59,6 +44,19 @@
                     float_inc ball-diam boolean_not self-balls integer_flush cue
                     vector_float_stackdepth vector_float_sub opp-count ball_diam_normal float_add
                     exec_dup_items float_cos exec_k_when_autoconstructing (vector_float_scale)
-                    (boolean_and vector_float_scale) exec_eq ball-diam vector_float_scale)"}
+                    (boolean_and vector_float_scale) exec_eq ball-diam vector_float_scale)"},
+    {"id": "run7_gen77",
+     "strategy" : "(boolean_dup self-balls vector_float_add float_frominteger vector_float_add
+                    exec_do*count (integer_lte boolean_dup) exec_do*while (vector_float_add)
+                    integer_fromboolean float_frominteger integer_fromfloat integer_fromboolean
+                    float_frominteger integer_fromfloat vector_float_dot float_gte float_lte
+                    exec_dup () self-count vector_float_scale boolean_dup exec_dup_times
+                    (float_dup) pockets self-count vector_float_sub integer_fromfloat cue
+                    float_dup_times will_collide? opp-balls vector_float_sub float_gt boolean_xor
+                    vector_float_add float_rot float_swap vector_float_dup vector_float_eq
+                    float_dup_items float_gt boolean_and vector_float_rot cue pockets
+                    boolean_dup_items exec_rot () (float_inc boolean_invert_second_then_and
+                    vector_float_yank integer_empty) (vector_float_add) float_max will_collide?
+                    boolean_yankdup)"}
   ]
 }
