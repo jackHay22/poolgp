@@ -31,8 +31,7 @@ Note: When running tournament mode, specify a normal run configuration (i.e. `fu
 ```
 
 ### Task Definition Structure
-- Warning: if using `:interactive` as a player type, there should only be one analysis state
-  (only one state is visible to demo)
+
 ```json
 {
   "simulation": {
