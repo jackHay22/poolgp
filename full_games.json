@@ -38,18 +38,17 @@
        {"x":918, "y":303, "id":"13", "type":"striped"},
        {"x":918, "y":326, "id":"14", "type":"solid"},
        {"x":918, "y":349, "id":"15", "type":"striped"}]}}}],
-  "watching" : 0,
+  "watching" : 1,
   "max-iterations" : 18000,
-  "p1":{ "strategy":" (boolean_dup boolean_dup self-balls vector_float_add float_frominteger
-                       vector_float_add vector_float_scale integer_lte boolean_dup exec_do*while
-                       (vector_float_add) boolean_frominteger vector_float_mk integer_fromfloat
-                       integer_fromboolean float_frominteger integer_fromfloat vector_float_dot
-                       float_lte exec_dup (exec_do*range (vector_float_scale) vector_float_scale)
-                       exec_dup_times () vector_float_scale boolean_dup exec_dup_times ()
-                       boolean_dup exec_dup_times (float_dup opp-balls self-balls vector_float_rot)
-                       exec_dup (exec_dup_times () vector_float_proj) integer_rot vector_float_len
-                       float_lte self-balls exec_dup (exec_rot (boolean_yankdup boolean_stackdepth
-                       vector_float_sub) (vector_float_yankdup float_add vector_float_scale) (cue)))"},
+  "p1":{ "strategy":"(boolean_dup vector_float_stackdepth self-balls boolean_dup vector_float_stackdepth
+                      boolean_xor integer_mod exec_do*range (float_frominteger) boolean_yankdup boolean_dup
+                      vector_float_dot exec_noop vector_float_scale boolean_swap exec_s (vector_float_scale)
+                      (exec_dup (boolean_yankdup boolean_or vector_float_mk pt_glancing boolean_dup_times
+                      pockets)) (vector_float_scale vector_float_sub vector_float_mk exec_do*times ()
+                      vector_float_len vector_float_dot self-balls) exec_dup (exec_rot () () (boolean_yankdup
+                      boolean_empty exec_dup () exec_rot (boolean_invert_first_then_and boolean_empty
+                      vector_float_sub self-count opp-count float_add) (vector_float_scale) (cue 33))))
+                     (vector_float_yankdup float_add vector_float_scale) (cue) 33)))"},
   "p2":{ "strategy":" (vector_float_sub self-count float_mult vector_float_sub float_gt self-balls
                        integer_flush integer_shove vector_float_mk vector_float_decomp self-count
                        boolean_eq integer_fromboolean boolean_yankdup vector_float_sub

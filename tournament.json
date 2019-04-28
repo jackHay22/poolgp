@@ -45,32 +45,7 @@
                     vector_float_stackdepth vector_float_sub opp-count ball_diam_normal float_add
                     exec_dup_items float_cos exec_k_when_autoconstructing (vector_float_scale)
                     (boolean_and vector_float_scale) exec_eq ball-diam vector_float_scale)"},
-    {"id": "run7_gen77",
-     "strategy" : "(boolean_dup self-balls vector_float_add float_frominteger vector_float_add
-                    exec_do*count (integer_lte boolean_dup) exec_do*while (vector_float_add)
-                    integer_fromboolean float_frominteger integer_fromfloat integer_fromboolean
-                    float_frominteger integer_fromfloat vector_float_dot float_gte float_lte
-                    exec_dup () self-count vector_float_scale boolean_dup exec_dup_times
-                    (float_dup) pockets self-count vector_float_sub integer_fromfloat cue
-                    float_dup_times will_collide? opp-balls vector_float_sub float_gt boolean_xor
-                    vector_float_add float_rot float_swap vector_float_dup vector_float_eq
-                    float_dup_items float_gt boolean_and vector_float_rot cue pockets
-                    boolean_dup_items exec_rot () (float_inc boolean_invert_second_then_and
-                    vector_float_yank integer_empty) (vector_float_add) float_max will_collide?
-                    boolean_yankdup)"},
-    {"id" : "run7_gen94",
-    "strategy": "(boolean_dup self-balls vector_float_add float_frominteger vector_float_add
-                  vector_float_scale integer_lte boolean_dup exec_do*while (vector_float_add)
-                  boolean_frominteger opp-count integer_fromfloat integer_fromboolean
-                  float_frominteger integer_fromfloat vector_float_dot float_gte float_lte
-                  exec_dup (self-count vector_float_scale boolean_dup) exec_dup_times ()
-                  float_dup pockets self-count vector_float_sub integer_fromfloat boolean_dup
-                  exec_dup_times (float_dup cue self-balls vector_float_rot) exec_dup
-                  (exec_dup_times () vector_float_proj) integer_rot vector_float_len
-                  ball_diam_normal self-balls exec_dup (exec_rot (boolean_yankdup boolean_empty
-                  vector_float_sub) (vector_float_yankdup float_add vector_float_scale) (cue)
-                  vector_float_mk self-count))"},
-    {"id" : "run7_gen113",
+    {"id" : "run7_gen117",
      "strategy" : "(boolean_dup boolean_dup self-balls vector_float_add float_frominteger
                     vector_float_add vector_float_scale integer_lte boolean_dup exec_do*while
                     (vector_float_add) boolean_frominteger vector_float_mk integer_fromfloat
@@ -80,6 +55,27 @@
                     boolean_dup exec_dup_times (float_dup opp-balls self-balls vector_float_rot)
                     exec_dup (exec_dup_times () vector_float_proj) integer_rot vector_float_len
                     float_lte self-balls exec_dup (exec_rot (boolean_yankdup boolean_stackdepth
-                    vector_float_sub) (vector_float_yankdup float_add vector_float_scale) (cue)))"}
+                    vector_float_sub) (vector_float_yankdup float_add vector_float_scale) (cue)))"},
+    {"id" : "run7_gen266",
+     "strategy" : "(vector_float_yank vector_float_stackdepth self-balls integer_mod exec_do*range
+                    (float_frominteger) boolean_yankdup boolean_dup vector_float_dot float_lte
+                    vector_float_scale boolean_dup vector_float_dot vector_float_scale exec_dup
+                    (boolean_yankdup vector_float_add) integer_swap integer_dup_times vector_float_scale
+                    float_gt vector_float_dot vector_float_scale vector_float_sub integer_swap pt_glancing
+                    vector_float_scale float_gt vector_float_scale float_frominteger boolean_or
+                    vector_float_mk exec_do*times (cue boolean_or) vector_float_eq exec_do*times
+                    (self-balls cue pockets) pockets vector_float_sub vector_float_mk exec_do*times
+                    () vector_float_len vector_float_dot self-balls exec_dup (float_yank boolean_yankdup
+                    boolean_empty exec_dup (exec_rot (boolean_yankdup boolean_empty vector_float_sub)
+                    (vector_float_yankdup float_add vector_float_scale) (cue) 33)))"},
+    {"id" : "run7_gen325",
+     "strategy" : "(boolean_dup vector_float_stackdepth self-balls boolean_dup vector_float_stackdepth
+                    boolean_xor integer_mod exec_do*range (float_frominteger) boolean_yankdup boolean_dup
+                    vector_float_dot exec_noop vector_float_scale boolean_swap exec_s (vector_float_scale)
+                    (exec_dup (boolean_yankdup boolean_or vector_float_mk pt_glancing boolean_dup_times
+                    pockets)) (vector_float_scale vector_float_sub vector_float_mk exec_do*times ()
+                    vector_float_len vector_float_dot self-balls) exec_dup (exec_rot () () (boolean_yankdup
+                    boolean_empty exec_dup () exec_rot (boolean_invert_first_then_and boolean_empty
+                    vector_float_sub self-count opp-count float_add) (vector_float_scale) (cue 33))))"}
   ]
 }
