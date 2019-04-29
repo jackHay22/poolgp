@@ -38,7 +38,7 @@
        {"x":918, "y":303, "id":"13", "type":"striped"},
        {"x":918, "y":326, "id":"14", "type":"solid"},
        {"x":918, "y":349, "id":"15", "type":"striped"}]}}}],
-  "watching" : 1,
+  "watching" : 0,
   "max-iterations" : 18000,
   "p1":{ "strategy":"(boolean_dup vector_float_stackdepth self-balls boolean_dup vector_float_stackdepth
                       boolean_xor integer_mod exec_do*range (float_frominteger) boolean_yankdup boolean_dup
