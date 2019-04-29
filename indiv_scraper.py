@@ -31,8 +31,7 @@ for l in range(len(all_lines)):
         if error < args.max_fit:
             #14 removes "Best Program:"
             program = all_lines[l][14:].rstrip()
-            id = error #temporary
-            tournament_map["entrants"].append({"id" : id,
+            tournament_map["entrants"].append({"id" : error,
                                                "strategy" : program})
 
 #write dict
